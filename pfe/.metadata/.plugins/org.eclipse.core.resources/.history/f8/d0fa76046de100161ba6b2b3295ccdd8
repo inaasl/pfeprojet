@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Accès administrateur</title>
+    <meta charset="UTF-8" />
+    <link href="style.css" rel="stylesheet" type="text/css">
+  </head>
+
+ <body>	
+ <div id="bloc_page">
+ <center>
+  <table>
+  <td><a href="rechercheentreprise.html">Recherche d'une entreprise</a></td>
+  <tr><td><a href="affichertoutesentreprises.jsp">Afficher toutes les entreprises</a></td></tr>
+  <tr><td><a href="ajoutentreprise.html">Ajout d'une entreprise</a></td></tr>
+  <tr><td><a href="ajouttechnicien.html">Ajout d'un technicien </a></tr></td></tr>
+  <tr><td><a href="affichertouslestechniciens.jsp">Afficher tous les techniciens</a></td></tr>
+  </table>
+</form> 
+<hr />
+</center>
+</div>
+  </body>
+</html>

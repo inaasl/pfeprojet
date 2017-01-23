@@ -1,0 +1,26 @@
+package ejb.entites;
+
+import javax.persistence.*;
+
+@Table(name="typeextincteur")
+@Entity
+public class TypeExtincteur implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
+	private int numero;
+	private String nom;
+	public TypeExtincteur () { };
+	@Id
+	public String getNom () {
+		return nom;
+	}
+	public void setNom (String newnom) {
+		this.nom = newnom;
+	}
+	public int getNumero() {
+		return numero;
+	}
+	public void setNumero(int numero) {
+		this.numero = numero;
+	}
+}

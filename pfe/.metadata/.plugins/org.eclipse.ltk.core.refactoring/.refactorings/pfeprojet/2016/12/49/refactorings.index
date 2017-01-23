@@ -1,0 +1,9 @@
+1481491183386	Move 3 resources to 'projet'
+1481491188416	Move 'build.xml' to 'projet'
+1481491354427	Delete element
+1481491381934	Move 22 resources to 'entites'
+1481491437700	Move 6 resources to 'sessions'
+1481491454131	Move 'application.xml' to 'src'
+1481491511707	Move 'web.xml' to 'web'
+1481493034564	Encapsulate field 'installationcoupefeu'
+1481493124211	Encapsulate field 'maintenancespreventivescoupefeu'

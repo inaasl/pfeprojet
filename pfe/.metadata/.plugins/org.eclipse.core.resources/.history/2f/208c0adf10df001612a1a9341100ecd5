@@ -1,0 +1,70 @@
+<html>
+
+   <head>
+    <title>Résultat de la recherche </title>
+    <meta charset="UTF-8" />
+    <link href="style.css" rel="stylesheet" type="text/css">
+  </head>
+  
+
+<body>
+
+	 
+	 
+		<%@ page import="java.net.URL" %>
+        <%@ page import="java.net.URLConnection" %>
+        <%@ page import="java.io.* " %>
+		<%@ page import= "ejb.sessions.*"%>
+		<%@ page import= "ejb.entites.* "%>
+		<%@ page import= "java.util.Collection"%>
+		<%@ page import= "java.util.Set"%>
+		<%@ page import= "javax.naming.InitialContext"%>
+		<%@ page import= "javax.naming.NamingException"%>
+		<%@ page import= "java.util.Date"%>
+		<%@ page import= "java.text.SimpleDateFormat"%>
+		<%@ page import= "java.text.DateFormat"%>
+		<%@ page import= "java.util.HashSet"%>
+		<%@ page import= "java.util.List" %>
+		
+		
+        <%! String nomEntreprise;
+        	List<Entreprise> E;
+        	int i;
+        %>
+        
+  
+        <%
+        		out.println("Résultat de la recherche : ");
+           		
+        		nomEntreprise =request.getParameter("nomEntreprise");
+           		
+        		InitialContext ctx = new InitialContext();
+    			Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
+    			ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
+    			//E=service.rechercheEntrepriseparNom(nomEntreprise);
+    			/* for(i=0;i<service.rechercheEntrepriseparNom(nomEntreprise).size();i++){
+    				out.println("<a href=\"ficheentreprise.jsp\">"+service.rechercheEntrepriseparNom(nomEntreprise).get(i).getNomEntreprise().toString()+"</a>");
+        			session.setAttribute("entreprisenom", service.rechercheEntrepriseparNom(nomEntreprise).get(i).getNomEntreprise().toString());
+        			session.setAttribute("entreprisetel", service.rechercheEntrepriseparNom(nomEntreprise).get(i).getTelEntreprise().toString());
+        			session.setAttribute("entrepriseadresse", service.rechercheEntrepriseparNom(nomEntreprise).get(i).getAdresseEntreprise().toString());
+             
+        			*/
+        			for(i=0;i<service.rechercheEntreprise(nomEntreprise).size();i++)
+    					out.println("<br> <a href=\"ficheentreprise.jsp\">"+service.rechercheEntreprise(nomEntreprise).get(i).getNom().toString()+"</a>");
+                    session.setAttribute("entreprisenom", service.rechercheEntreprise(nomEntreprise).get(i).getNom().toString());
+        			session.setAttribute("entreprisetel", service.rechercheEntreprise(nomEntreprise).get(i).getTel().toString());
+        			session.setAttribute("entrepriseadresse", service.rechercheEntreprise(nomEntreprise).get(i).getAdresse().toString());
+    			
+    			
+        %>
+		         
+		
+
+</body>
+</html>
+
+
+
+
+
+

@@ -1,0 +1,51 @@
+<html>
+
+   <head>
+    <title>Fiche : entreprise </title>
+    <meta charset="UTF-8" />
+    <link href="style.css" rel="stylesheet" type="text/css">
+  </head>
+  
+
+<body>
+
+	 
+	 
+		<%@ page import="java.net.URL" %>
+        <%@ page import="java.net.URLConnection" %>
+        <%@ page import="java.io.* " %>
+		<%@ page import= "ejb.sessions.*"%>
+		<%@ page import= "ejb.entites.* "%>
+		<%@ page import= "java.util.Collection"%>
+		<%@ page import= "java.util.Set"%>
+		<%@ page import= "javax.naming.InitialContext"%>
+		<%@ page import= "javax.naming.NamingException"%>
+		<%@ page import= "java.util.Date"%>
+		<%@ page import= "java.text.SimpleDateFormat"%>
+		<%@ page import= "java.text.DateFormat"%>
+		<%@ page import= "java.util.HashSet"%>
+
+		
+		
+        <%! String numEntreprise;
+        	Entreprise E;
+        
+        %>
+        
+  
+        <%
+           		numEntreprise =request.getParameter("numEntreprise");
+           		
+           		InitialContext ctx = new InitialContext();
+    			Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
+    			ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
+    			out.println("Fiche de l'entreprise : <br> ");
+    			//out.println("Nom de l'entreprise : "+session.getAttribute("entreprisenom")+"<br> Adresse de l'entreprise : "+session.getAttribute("entrepriseadresse")+"<br> Numéro de téléphone de l'entreprise : "+session.getAttribute("entreprisetel"));
+				//E=service.rechercheEntreprisenum(numEntreprise);
+				out.println("Nom de l'entreprise : "+numEntreprise);
+        %>
+		        Nom de l'entreprise <%=numEntreprise %> 
+		
+
+</body>
+</html>

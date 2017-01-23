@@ -1,0 +1,21 @@
+package ejb.entites;
+
+import javax.persistence.*;
+
+
+@Table(name="typeria")
+@Entity
+public class TypeRia implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
+	private int numero;
+	private String nom;
+	public TypeRia () { };
+	@Id
+	public String getNom () {
+		return nom;
+	}
+	public void setNom (String newnom) {
+		this.nom = newnom;
+	}
+}

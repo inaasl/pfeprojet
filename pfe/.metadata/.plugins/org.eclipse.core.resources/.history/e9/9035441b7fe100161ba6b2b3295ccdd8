@@ -1,0 +1,32 @@
+<html>
+
+   <head>
+    <title>Intervention -- Choix de l'intervention </title>
+    <meta charset="UTF-8" />
+    <link href="style.css" rel="stylesheet" type="text/css">
+  </head>
+  
+
+<body>
+ <header class="header">
+    	        <a class="logo" href="http://www.desentec.fr/"><img src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png"> </a>
+    	       <p class="head"><center><strong>Desentec - Protection incendie</strong></center></p>
+ </header>
+<center>Type de l'intervention
+ <FORM action="intervention">
+	<br><INPUT id="choixinterv" type= "radio" name="installation" value="installation"> Installation
+	<br><INPUT id="choixinterv" type= "radio" name="verification" value="verification"> Vérification
+	<br><INPUT id="choixinterv" type= "radio" name="maintenanceprev" value="maintenanceprev"> Maintenance Préventive
+	<br><INPUT id="choixinterv" type= "radio" name="maintenancecorr" value="maintenancecorr"> Maintenance Corrective
+
+<br>Type de l'organe de sécurité 
+	<br><INPUT id="choixorg" type= "radio" name="extincteur" value="extincteur"> Extincteur
+	<br><INPUT id="choixorg" type= "radio" name="eclairage" value="eclairage"> Eclairage
+	<br><INPUT id="choixorg" type= "radio" name="pharmacie" value="pharmacie"> Pharmacie
+	<br><INPUT id="choixorg" type= "radio" name="signaletique" value="signaletique"> Signalétique
+	
+	<br><br><input type="submit" value="Valider">
+</FORM>
+</center> 
+ </body>
+ </html>

@@ -1,0 +1,27 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Ajout d'un technicien</title>
+    <meta charset="UTF-8" />
+    <link href="style.css" rel="stylesheet" type="text/css">
+  </head>
+
+ <body>	
+ <div id="bloc_page">
+ <center>
+ <h1>Remplir les champs du formulaire</h1>   
+    
+
+<form action="ajouttechnicien">
+  <p>Nom du technicien : <input type="text" name="nomTechnicien" required placeholder="Nom..." />
+  Prenom du technicien : <input type="text" name="prenomTechnicien" required placeholder="Nom..." /></p>
+  <p>Adresse: <input type="text" name="adresse" required placeholder="Adresse ..."> 
+     numéro de téléphone : <input type="text" name="telTechnicien" required placeholder="Telephone..."> </p>
+  <input type="submit" value="Valider">
+  
+</form> 
+<hr />
+</center>
+</div>
+  </body>
+</html>

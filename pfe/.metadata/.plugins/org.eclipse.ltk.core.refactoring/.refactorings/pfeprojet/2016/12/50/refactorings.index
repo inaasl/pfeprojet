@@ -1,0 +1,13 @@
+1481552343696	Rename type 'TechnicienInconnueException'
+1481554339956	Rename type 'ServicePFEprojet'
+1481554352211	Rename type 'ServicePFEprojetBean'
+1481554371875	Rename type 'ServicePFEprojetLocal'
+1481554395964	Rename type 'ServicePFEprojetRemote'
+1481558742052	Move 'jboss-ejb-client.properties' to 'pfeprojet'
+1481569802809	Rename resource 'pfe.jsp'
+1481570855997	Rename resource 'technicien.jsp'
+1481571009366	Rename resource 'RechercheBatiment.jsp'
+1481573501547	Rename resource 'recherchebatiment.jsp'
+1481575279659	Rename resource 'admin.html'
+1481575780349	Delete element
+1481630793092	Rename resource 'affichertoutesentreprises'

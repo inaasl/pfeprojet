@@ -1,0 +1,56 @@
+<html>
+
+   <head>
+    <title>Fiche : entreprise </title>
+    <meta charset="UTF-8" />
+    <link href="style.css" rel="stylesheet" type="text/css">
+  </head>
+  
+
+<body>
+
+	 
+	 
+		<%@ page import="java.net.URL" %>
+        <%@ page import="java.net.URLConnection" %>
+        <%@ page import="java.io.* " %>
+		<%@ page import= "ejb.sessions.*"%>
+		<%@ page import= "ejb.entites.* "%>
+		<%@ page import= "java.util.Collection"%>
+		<%@ page import= "java.util.Set"%>
+		<%@ page import= "javax.naming.InitialContext"%>
+		<%@ page import= "javax.naming.NamingException"%>
+		<%@ page import= "java.util.Date"%>
+		<%@ page import= "java.text.SimpleDateFormat"%>
+		<%@ page import= "java.text.DateFormat"%>
+		<%@ page import= "java.util.HashSet"%>
+
+		
+		
+        <%! String numEntreprise;
+        	Entreprise E;
+        	int num,i;
+        
+        %>
+        
+  
+        <%
+           		numEntreprise =request.getParameter("numEntreprise");
+           		num = Integer.parseInt(numEntreprise);
+           		InitialContext ctx = new InitialContext();
+    			Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
+    			ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
+    			out.println("Fiche de l'entreprise : <br> <br> ");
+				out.println("Numero de l'entreprise : "+numEntreprise);
+				E=service.rechercheEntreprisenum(num);
+				out.println("Nom de l'entreprise : "+E.getNom()+"<br> Adresse de l'entreprise : "+E.getAdresse()+"<br> Numéro de téléphone de l'entreprise : "+E.getNumero());
+				out.print("<br> <table border=\"1\" cellpadding=\"10\" cellspacing=\"1\" width=\"100%\"> <tr><th width=\"20%\" align=\"center\"> Nom du batiment </th><th width=\"60%\" align=\"center\"> Adresse du batiment </th><th width=\"20%\" align=\"center\">  </th></tr>");
+				for(i=0;i<E.getBatiments().size();i++){
+					out.print(" <tr><td align=\"center\"> "+E.getBatiments().get(i).getNom() +"</td><td <td align=\"center\">"+E.getBatiments().get(i).getAdresse()+"</td><td align=\"center\"> <form action=\"fichebatiment\" method=\"GET\" ><input type=\"hidden\" id=\"idfichebat\" name=\"numBatiment\" value="+E.getBatiments().get(i).getNumero()+"> <input type=\"submit\" name=\" Consulter la fiche \" value=\" Consulter la fiche \" /></form></td></tr>");
+    			}
+				}
+        %>
+		
+
+</body>
+</html>
