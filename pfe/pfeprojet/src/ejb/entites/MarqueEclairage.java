@@ -10,6 +10,8 @@ public class MarqueEclairage implements java.io.Serializable {
 	private String nom;
 	
 	public MarqueEclairage () { };
+	
+	@Column(unique=true, nullable=false) 
 	public String getNom () {
 		return nom;
 	}

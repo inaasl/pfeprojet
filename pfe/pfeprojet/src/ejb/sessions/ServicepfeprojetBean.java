@@ -115,19 +115,25 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 
 	//Interventions sur les extincteurs
 	// Installation
-	public void InstallationExtincteur(int Annee, String Emp, String Obs, String Obsraj, java.sql.Date date, int numtechnicien, int numbatiment) throws TechnicienInconnuException, BatimentInconnuException, EntrepriseInconnueException{
+	public void InstallationExtincteur(int Annee, String Emp, String Obs, java.sql.Date date, int numtechnicien, int numbatiment,String nomtype,String nommarque) throws TechnicienInconnuException, BatimentInconnuException, EntrepriseInconnueException{
 		Technicien T = rechercheTechniciennum(numtechnicien);
 		Batiment B = rechercheBatimentnum(numbatiment);
 		Extincteur E = new Extincteur();
 		E.setAnnee(Annee);
 		E.setEmplacement(Emp);
 		E.setObservation(Obs);
-		E.setConclusion(Obsraj);
 		E.setBatiment(B);
+		
+		
+		MarqueExtincteur M = rechercheMarqueExtincteur(nommarque);
+		E.setMarque(M);
+		
+		TypeExtincteur Tp = rechercheTypeExtincteur(nomtype);
+		E.setType(Tp);
+		
 		Installation Inst = new Installation();
 		Inst.setDate(date);
 		Inst.setObservation(Obs);
-		Inst.setConclusion(Obsraj);
 		Inst.setOrgane(E);
 		Inst.setTechnicien(T);
 		em.persist(Inst);
@@ -142,6 +148,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		em.merge(B);
 		
 	}
+
 	// Verification
 	public void VerificationExtincteur(int numero,String Obs, String Obsraj, int numerotechnicien, java.sql.Date date/*, List<Piece> piecesajoutees*/) throws OrganeInconnuException,TechnicienInconnuException{
 		Extincteur E =em.find(Extincteur.class, numero);
@@ -231,11 +238,19 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		em.persist(MP);
 		em.persist(E);
 	}
-
+	// Intervention groupee
+	public void listeIntervention(List<Intervention> interv,String conclu) {
+		for(int i=0;i<interv.size();i++){
+			interv.get(i).setConclusion(conclu);
+			interv.get(i).getOrgane().setConclusion(conclu);
+		}
+	}
+	
 	// Affichages des Informations
 	// Affichage de la liste des entreprises
 	@SuppressWarnings("unchecked")
 	public List<Entreprise> getlisteEntreprises()  {
+		
 		return em.createQuery("from Entreprise e ").getResultList();
 	}
 	public void affichagelisteEntreprise(){
@@ -282,19 +297,33 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		T.setNom(nom);
 		em.persist(T);
 	}
-	// recherche liste de tous les types d'extincteurs
+	//  liste de tous les types d'extincteurs
 	public List<TypeExtincteur> touslesTypeExtincteur(){
-		List <TypeExtincteur> T = (List<TypeExtincteur>) em.createQuery("from TypeExtincteur t");
+		List <TypeExtincteur> T = em.createQuery("from TypeExtincteur t").getResultList();
 		return T;
 	}
+	// Recherche du type
+	public TypeExtincteur rechercheTypeExtincteur(String Num) {
+		int Numero = Integer.parseInt(Num);
+		TypeExtincteur T = em.find(TypeExtincteur.class, Numero);
+			return T;
+	}
+
 	// Ajout Marque Extincteur
 	public void ajoutmarqueextincteur(String nom) {
 		MarqueExtincteur M = new MarqueExtincteur();
 		M.setNom(nom);
 		em.persist(M);
 	}
+	// liste de toutes les marques d'extincteurs
 	public List<MarqueExtincteur> touteslesMarqueExtincteur(){
-		List <MarqueExtincteur> M = (List<MarqueExtincteur>) em.createQuery("from MarqueExtincteur m");
+		List <MarqueExtincteur> M = em.createQuery("from MarqueExtincteur m").getResultList();
 		return M;
+	}
+	 // recherche de la marque
+	public MarqueExtincteur rechercheMarqueExtincteur(String Num) {
+		int Numero = Integer.parseInt(Num);
+		MarqueExtincteur M = em.find(MarqueExtincteur.class, Numero);
+			return M;
 	}
 }

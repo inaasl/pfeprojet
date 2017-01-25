@@ -10,10 +10,12 @@ public class MarqueExtincteur implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private int numero;
+	
 	private String nom;
 
 	public MarqueExtincteur () { };
 	
+	@Column(unique=true, nullable=false) 
 	public String getNom () {
 		return nom;
 	}

@@ -11,7 +11,7 @@ public class TypeRia implements java.io.Serializable {
 	private int numero;
 	private String nom;
 	public TypeRia () { };
-	
+	@Column(unique=true, nullable=false) 
 	public String getNom () {
 		return nom;
 	}

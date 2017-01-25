@@ -10,7 +10,7 @@ public class TypeExtincteur implements java.io.Serializable {
 	private int numero;
 	private String nom;
 	public TypeExtincteur () { };
-	
+	@Column(unique=true, nullable=false) 
 	public String getNom () {
 		return nom;
 	}

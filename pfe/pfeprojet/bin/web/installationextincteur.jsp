@@ -23,17 +23,8 @@
 		<%@ page import= "java.text.SimpleDateFormat"%>
 		<%@ page import= "java.text.DateFormat"%>
 		<%@ page import= "java.util.HashSet"%>
-<%! String numBat;
-	int num;
 
-%>
-<%
-	InitialContext ctx = new InitialContext();
-	Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
-	ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
-	numBat=String.valueOf(session.getAttribute("num"));
-	session.setAttribute("num",numBat);
-%>
+
 <center>
 <form action="installationextincteurvalidee">
 <p> Annee de fabrication de l'extincteur : <input type="text" name="annee" required placeholder="Annee..." /></p>
@@ -41,9 +32,26 @@
 <p> Observations : <input type="text" name="observations" required placeholder="observations..." /></p>
 <p> Numero du Technicien : <input type="text" name="technicien" required placeholder="numero du technicien..." /></p>
 <p> Conclusion : <input type="text" name="conclusion" required placeholder="Conclusion..."> </p>
-<input type="submit" value="Valider">
+<p> Type de l'extincteur : <select name="typeextincteur">
+<%! String numBat;
+	int num,i;
+%>
+<%
+	InitialContext ctx = new InitialContext();
+	Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
+	ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
+	numBat=String.valueOf(session.getAttribute("num"));
+	session.setAttribute("num",numBat);
+	for(i=0;i<service.touslesTypeExtincteur().size();i++)
+		out.println("<option value="+service.touslesTypeExtincteur().get(i).getNumero()+">"+service.touslesTypeExtincteur().get(i).getNom()+"</option>");
+%> </select></p>
 
-
+<p> Marque de l'extincteur : <select name="marqueextincteur">
+<%
+	for(i=0;i<service.touteslesMarqueExtincteur().size();i++)
+		out.println("<option value="+service.touteslesMarqueExtincteur().get(i).getNumero()+">"+service.touteslesMarqueExtincteur().get(i).getNom()+"</option>");
+%> </select></p>
+<br><input type="submit" value="Valider">
 </form>
 </center>
 

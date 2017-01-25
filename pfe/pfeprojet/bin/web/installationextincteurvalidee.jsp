@@ -23,7 +23,14 @@
 		<%@ page import= "java.text.SimpleDateFormat"%>
 		<%@ page import= "java.text.DateFormat"%>
 		<%@ page import= "java.util.HashSet"%>
-<%! String numBat, annee,observ,numtech,conclu,empla;
+		<%@ page import= "javax.servlet.ServletException" %>
+		<%@ page import= "javax.servlet.http.HttpServlet"%>
+		<%@ page import= "javax.servlet.http.HttpServletRequest" %> 
+		<%@ page import= "javax.servlet.http.HttpServletResponse"%>
+		<%@ page import= "javax.servlet.http.HttpSession"%>
+		
+		
+<%! String numBat, annee,observ,numtech,conclu,empla, type,marque;
 	int numB,numT,anneeInt;
 %>
 <%
@@ -32,6 +39,9 @@
 	numtech =request.getParameter("technicien");
 	conclu =request.getParameter("conclusion");
 	empla=request.getParameter("emplacement");
+	type=request.getParameter("typeextincteur");
+	marque=request.getParameter("marqueextincteur");
+	
 	
 	numBat=String.valueOf(session.getAttribute("num"));
 	numB=Integer.parseInt(numBat);
@@ -45,9 +55,12 @@
 	String format = "yyyy-MM-dd";
 	java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
 	java.util.Date date = new java.util.Date();
+	service.InstallationExtincteur(anneeInt, empla, observ,Date.valueOf(formater.format(date)),numT,numB,type,marque);
 	
-	service.InstallationExtincteur(anneeInt, empla, observ, conclu, Date.valueOf(formater.format(date)),numT,numB);
-
+	HttpSession session = request.getSession();
+	
+	
 	out.println("<center> Installation effectuée avec succès </center>");
+	out.println("<form action=\"interventionvalidee.jsp\"> <p> Conclusion : <input type=text");
 	out.println("<a href=\"index.html\">retour à la page d'accueil</a></center>");
 %>

@@ -10,7 +10,7 @@ public class Typetelecommande implements java.io.Serializable {
 	private int numero;
 	private String nom;
 	public Typetelecommande () { };
-	
+	@Column(unique=true, nullable=false) 
 	public String getNom () {
 		return nom;
 	}

@@ -43,13 +43,11 @@
         		InitialContext ctx = new InitialContext();
     			Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
     			ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
+    			out.print("<br> <table border=\"1\" cellpadding=\"10\" cellspacing=\"1\" width=\"100%\"> <tr><th width=\"20%\" align=\"center\"> Nom de l'entreprise </th><th width=\"40%\" align=\"center\"> Adresse de l'entreprise </th><th width=\"20%\" align=\"center\"> Numero de telephone de l'entreprise </th><thth width=\"20%\" align=\"center\">  </th></tr>");
     			for(i=0;i<service.getlisteEntreprises().size();i++){
-    				out.println("<a href=\"ficheentreprise.jsp\">"+service.getlisteEntreprises().get(i).getNom().toString()+"</a><br>");
-        			session.setAttribute("entreprisenom", service.getlisteEntreprises().get(i).getNom().toString());
-        			session.setAttribute("entreprisetel", service.getlisteEntreprises().get(i).getTel().toString());
-        			session.setAttribute("entrepriseadresse", service.getlisteEntreprises().get(i).getAdresse().toString());
-            
+    				out.print(" <tr><td align=\"center\"> "+service.getlisteEntreprises().get(i).getNom()+"</td><td <td align=\"center\">"+service.getlisteEntreprises().get(i).getAdresse()+"</td><td align=\"center\">"+service.getlisteEntreprises().get(i).getTel()+"</td><td align=\"center\"> <form action=\"ficheentreprise\" method=\"GET\" ><input type=\"hidden\" id=\"thisField\" name=\"numEntreprise\" value="+service.getlisteEntreprises().get(i).getNumero()+"> <input type=\"submit\" name=\" Consulter la fiche \" value=\" Consulter la fiche \" /></form></td></tr>");
     			}
+    			out.print("</table>");
     			
         %>
 		         

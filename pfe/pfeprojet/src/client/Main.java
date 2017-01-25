@@ -34,8 +34,10 @@ public class Main {
 			service.ajouttypeextincteur("CO² 2KG");
 			service.ajouttypeextincteur("P6 KG pp");
 			
-			// Ajout Observations
-			
+			// Ajout Marques extincteurs
+			service.ajoutmarqueextincteur("Marque 1");
+			service.ajoutmarqueextincteur("Marque 2");			
+			service.ajoutmarqueextincteur("Marque 3");
 			
 			// Ajout Techniciens
 			service.ajouterTechnicien("Dupont","Ronaldo", "1,Villeneuve d'ascq","0611223344");
