@@ -1,5 +1,6 @@
 package client;
 
+import java.io.IOException;
 import java.sql.Date;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -13,7 +14,7 @@ import ejb.sessions.TechnicienInconnuException;
 
 
 public class Main {
-	public static void main(String[] args) throws EntrepriseDejaExistanteException, EntrepriseInconnueException, BatimentInconnuException, TechnicienInconnuException, OrganeInconnuException{
+	public static void main(String[] args) throws EntrepriseDejaExistanteException, EntrepriseInconnueException, BatimentInconnuException, TechnicienInconnuException, OrganeInconnuException, IOException{
 		try {
 			InitialContext ctx = new InitialContext();
 			System.out.println("Acces au service Remote");
@@ -42,14 +43,7 @@ public class Main {
 			// Ajout Techniciens
 			service.ajouterTechnicien("Dupont","Ronaldo", "1,Villeneuve d'ascq","0611223344");
 			service.ajouterTechnicien("Dubois","CR7", "10, Villeneuve d'ascq", "0655667788");
-			//Installation Extincteurs
-			//service.InstallationExtincteur(2016, "Entree", "RAS", "Installation effectue", Date.valueOf("2016-04-28"),"Dupont","BatimentA","Euratech");
-			// Verification Extincteurs
-			//service.VerificationExtincteur(1, "RAS", "Verification effectuee", 1, Date.valueOf("2017-01-08"));
-			// Maintenance Corrective Extincteurs
-			//service.MaintenanceCorrectiveExtincteur(1, "RAS", "Maintenance C effectuee", 1, Date.valueOf("2017-01-01"));
-			// Maintenance Preventive Extincteurs
-			//service.MaintenancePreventiveExtincteur(1, "RAS", "Maintenance P effectuee", 1, Date.valueOf("2017-01-11"));
+			
 
 		}
 		catch (NamingException e) {

@@ -11,10 +11,6 @@
     	        <a class="logo" href="http://www.desentec.fr/"><img src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png"> </a>
     	       <p class="head"><center><strong>Desentec - Protection incendie</strong></center></p>
  </header>
-  <br><br><br><br><br><br><br>
-
-	 
-	 
 		<%@ page import="java.net.URL" %>
         <%@ page import="java.net.URLConnection" %>
         <%@ page import="java.io.* " %>
@@ -41,9 +37,11 @@
            		adresseEntreprise=request.getParameter("adresse");
            		telEntreprise=request.getParameter("telEntreprise");
            		
+           		session = request.getSession();
            		InitialContext ctx = new InitialContext();
     			Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
     			ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
+    			
     			service.ajouterEntreprise(nomEntreprise,adresseEntreprise,telEntreprise);    			
         		out.println("<center>Ajout effectué avec succès <br>");
         		out.println("<a href=\"index.html\">retour à la page d'accueil</a></center>");

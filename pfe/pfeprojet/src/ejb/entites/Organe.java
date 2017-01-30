@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
@@ -27,6 +28,7 @@ public abstract class Organe implements java.io.Serializable {
 	private String conclusion;
 	private String observation;
 	private List<Intervention> interventions;
+
 	
 	private Batiment batiment; 
 	
@@ -78,4 +80,5 @@ public abstract class Organe implements java.io.Serializable {
 	public void setBatiment(Batiment batiment) {
 		this.batiment = batiment;
 	}
+
 }

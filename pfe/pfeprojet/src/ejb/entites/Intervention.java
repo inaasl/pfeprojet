@@ -1,11 +1,13 @@
 package ejb.entites;
 
 import java.sql.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -23,7 +25,6 @@ public abstract class Intervention implements java.io.Serializable {
 	private String observation;
 	private Technicien technicien;
 	private Organe organe;
-	
 	public Intervention() { }
 	
 
@@ -72,4 +73,5 @@ public abstract class Intervention implements java.io.Serializable {
 	public void setOrgane(Organe organe) {
 		this.organe = organe;
 	}
+
 }

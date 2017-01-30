@@ -7,16 +7,24 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
 import ejb.entites.*;
+
+
+
+
 
 
 @Stateless
 public class ServicepfeprojetBean implements ServicepfeprojetLocal, ServicepfeprojetRemote {
 	@PersistenceContext(unitName = "pfeprojet")
 	protected EntityManager em;
-	public ServicepfeprojetBean(){
 
+	public ServicepfeprojetBean(){
 	}
+	
+	
+	
 	// Recherche d'informations
 	// Recherche d'une entreprise
 	public List<Entreprise> rechercheEntreprise(String Nom) throws EntrepriseInconnueException{
@@ -150,38 +158,46 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	}
 
 	// Verification
-	public void VerificationExtincteur(int numero,String Obs, String Obsraj, int numerotechnicien, java.sql.Date date/*, List<Piece> piecesajoutees*/) throws OrganeInconnuException,TechnicienInconnuException{
-		Extincteur E =em.find(Extincteur.class, numero);
-		if(E==null){
+	public void Verification(int numero,String Obs, String conclusion, int numerotechnicien, java.sql.Date date) throws OrganeInconnuException,TechnicienInconnuException{
+		Organe O =em.find(Organe.class, numero);
+		if(O==null){
 			throw new OrganeInconnuException();
 		}
-
 		Technicien T = em.find(Technicien.class,numerotechnicien);
 		if(T==null){
 			throw new TechnicienInconnuException();
 		}
-
-		E.setObservation(Obs);
-		E.setConclusion(Obsraj);
-
-		//		for(int i=0; i<piecesajoutees.size();i++){
-		//			E.getPieces().add(piecesajoutees.get(i));
-		//		}
-		//		
+		
+		O.setObservation(Obs);
+		O.setConclusion(conclusion);
+		
 		Verification V = new Verification();
 		V.setDate(date);
 		V.setObservation(Obs);
-		V.setConclusion(Obsraj);
+		V.setConclusion(conclusion);
 		V.setTechnicien(T);
-		V.setOrgane(E);
-		if(E.getInterventions()==null) {
+		V.setOrgane(O);
+		
+		if(O.getInterventions()==null) {
 			List<Intervention> interv =new ArrayList<Intervention>();
-			E.setInterventions(interv);
+			O.setInterventions(interv);
 		}
-		E.addInterventions(V);
+		O.addInterventions(V);
+		
 		em.persist(V);
-		em.merge(E);
+		em.merge(O);
 	}
+	// Recherche Verifications
+	public List<Verification> getVerification(Organe o){
+		int i;
+		List<Verification> Result = new ArrayList<Verification>();
+		for(i=0;i<o.getInterventions().size();i++){
+			if(o.getInterventions().get(i) instanceof Verification )
+				Result.add((Verification)o.getInterventions().get(i));
+		}
+		return Result;
+	}
+	
 	//Maintenance
 	//Maintenance Corrective
 	public void MaintenanceCorrectiveExtincteur(int numeroExtincteur,String Obs, String Obsraj, int numerotechnicien, java.sql.Date date) throws OrganeInconnuException,TechnicienInconnuException{
@@ -207,7 +223,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		}
 		E.addInterventions(MC);
 		em.persist(MC);
-		em.persist(E);
+		em.merge(E);
 	}
 	//Maintenance Preventive
 	public void MaintenancePreventiveExtincteur(int numeroextincteur ,String Obs, String Obsraj, int numerotechnicien, java.sql.Date date/*,List<Piece> piecesajoutees*/) throws OrganeInconnuException,TechnicienInconnuException{
@@ -242,8 +258,15 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	public void listeIntervention(List<Intervention> interv,String conclu) {
 		for(int i=0;i<interv.size();i++){
 			interv.get(i).setConclusion(conclu);
+			em.merge(interv.get(i));
 			interv.get(i).getOrgane().setConclusion(conclu);
+			em.merge(interv.get(i).getOrgane());
 		}
+		
+	}
+	// Liste des installations
+	public List<Installation> getlisteInstallation(){
+		return em.createQuery("from Installation I ").getResultList();
 	}
 	
 	// Affichages des Informations
@@ -326,4 +349,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		MarqueExtincteur M = em.find(MarqueExtincteur.class, Numero);
 			return M;
 	}
+	
+
+
 }
