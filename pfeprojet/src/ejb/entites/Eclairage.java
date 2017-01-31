@@ -12,6 +12,7 @@ public class Eclairage extends Organe implements java.io.Serializable {
 	private String categorie;
 	private boolean presencetelecommande;
 	private boolean fonctionnementtelecommande;
+	
 	private MarqueEclairage marqueeclairage;
 	private Typetelecommande typetelecommande;
 

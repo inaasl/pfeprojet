@@ -11,6 +11,7 @@ public class Piece implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	private int numero;
 	private String nom;
+	
 	private Extincteur extincteur;
 	private Preventive preventive;
 

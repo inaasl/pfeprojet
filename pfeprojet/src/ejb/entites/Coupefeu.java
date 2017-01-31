@@ -12,6 +12,7 @@ public class Coupefeu extends Organe implements java.io.Serializable {
 	private String Type;
 
 	public Coupefeu () { };
+	
 	public void setTypeCoupefeu (String newVar) {
 		this.Type = newVar;
 	}

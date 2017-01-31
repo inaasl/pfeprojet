@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -27,6 +28,8 @@ public abstract class Organe implements java.io.Serializable {
 	private String emplacement;
 	private String conclusion;
 	private String observation;
+	
+
 	private List<Intervention> interventions;
 
 	
@@ -73,6 +76,8 @@ public abstract class Organe implements java.io.Serializable {
 		this.interventions = interventions;
 	}
 	public abstract void addInterventions (Intervention intervention);
+	
+	@JoinColumn(name="numerobat")
 	@ManyToOne
 	public Batiment getBatiment() {
 		return batiment;

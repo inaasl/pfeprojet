@@ -15,6 +15,7 @@ public class Technicien implements java.io.Serializable {
 	private String prenom;
 	private String adresse;
 	private String tel;
+	
 	private List<Formation> formation;
 	
 	public Technicien () { };

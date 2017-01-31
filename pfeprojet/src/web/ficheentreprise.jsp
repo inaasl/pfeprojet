@@ -40,15 +40,14 @@
 
 	<%
 		session = request.getSession();
-		numeroE = (String) session.getAttribute("numeroE");
-		if(numeroE==null){
-			numEntreprise = request.getParameter("numEntreprise");
-			num = Integer.parseInt(numEntreprise);
-		}
-		else 
-			num=Integer.parseInt(numeroE);
-		session.setAttribute("numeroE",String.valueOf(num));
-		
+		 numEntreprise = request.getParameter("numEntreprise");
+		 if(numEntreprise==null){
+			 numeroE = (String)session.getAttribute("numeroE");
+			 num=Integer.parseInt(numeroE);
+		 }
+		 else
+			 num = Integer.parseInt(numEntreprise);
+		 session.setAttribute("numeroE",String.valueOf(num));
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");

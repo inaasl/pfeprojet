@@ -25,8 +25,8 @@
 	<%@ page import="javax.naming.InitialContext"%>
 	<%@ page import="javax.naming.NamingException"%>
 
-	<%!String numBat, observation;
-	int num, i,j;
+	<%!String numBat,conclusion, observation;
+	int num, i,j,cpt;
 	List<Extincteur> E = new ArrayList<Extincteur>();
 	%>
 	<%
@@ -40,33 +40,38 @@
 		session.setAttribute("num", numBat);
 		num=Integer.parseInt(numBat);
 		
-		// Verification de la liste des organes
 		out.println("<br>numero du batiment"+service.rechercheBatimentnum(num).getNumero());
-		out.println("<br>liste des extincteurs du batiment : ");
-		for(i=0;i<service.rechercheBatimentnum(num).getOrganes().size();i++){
-			out.println("<br> Numero de l'extincteur"+service.rechercheBatimentnum(num).getOrganes().get(i).getNumero());
-		}
+
+		E.clear();
+		
 		for(i=0;i<service.rechercheBatimentnum(num).getOrganes().size();i++){
 			if(service.rechercheBatimentnum(num).getOrganes().get(i) instanceof Extincteur){
-				E.add((Extincteur)service.rechercheBatimentnum(num).getOrganes().get(i));
+				cpt=0;
+				for(j=0;j<E.size();j++){
+					if(E.get(j).getNumero()==service.rechercheBatimentnum(num).getOrganes().get(i).getNumero())
+						cpt++;
+				}
+				if(cpt==0)
+					E.add((Extincteur)service.rechercheBatimentnum(num).getOrganes().get(i));
 			}
+		}
+		for(i=0;i<service.rechercheBatimentnum(num).getOrganes().size();i++){
 		}
 		// Tableau
 		out.println("<br><form action=\"verificationextincteurvalidee.jsp\"> <table border=\"1\" cellpadding=\"10\" cellspacing=\"1\" width=\"100%\"> <tr><th width=\"10%\" align=\"center\"> Numero de l'organe </th><th width=\"20%\" align=\"center\"> Emplacement </th> <th width=\"40%\" align=\"center\"> Observation </th></tr>");
 		for(i=0;i<E.size();i++){
-				if(service.getVerification(service.rechercheBatimentnum(num).getOrganes().get(i)).size()==0)
-					observation="--";
-				else
-					observation=service.getVerification(E.get(i)).get(service.getVerification(E.get(i)).size()-1).getObservation();
-				
-				out.println(" <tr><td align=\"center\"> " + E.get(i).getNumero()+
-						"</td> <td align=\"center\">" + E.get(i).getEmplacement()+
+					
+					observation=service.rechercheObservationVerification(service.rechercheOrgane(E.get(i).getNumero()).getNumero());
+					conclusion=service.rechercheConclusionVerification(service.rechercheOrgane(E.get(i).getNumero()).getNumero());
+					out.println(" <tr><td align=\"center\"> " + service.rechercheOrgane(E.get(i).getNumero()).getNumero()+
+						"</td> <td align=\"center\">" + service.rechercheOrgane(E.get(i).getNumero()).getEmplacement()+
 						"</td> <td align=\"center\"> <input type=\"text\" name="+i+" value="+observation+"><t/d></tr>"
 						);
 		}
 		out.println("</table>");
-		out.println("<center>Conclusion <input type=\"text\" name=\"Conclusion\" value=\"Conclusion\">");
+		out.println("<center>Conclusion <input type=\"text\" name=\"Conclusion\" value="+conclusion+">");
 		out.println("<br><input type=\"submit\" value=\"Valider\"></center></form>");
+		session.setAttribute("Extincteurs",E);
 	%>
 </body>
 </html>

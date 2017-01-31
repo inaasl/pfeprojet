@@ -3,8 +3,6 @@ package ejb.entites;
 
 import java.util.*;
 import javax.persistence.*;
-
-
 @Table(name="batiment")
 @Entity
 
@@ -14,7 +12,9 @@ public class Batiment implements java.io.Serializable {
 	private int numero;
 	private String nom;
 	private String adresse;
+	
 	private List<Organe> organes;
+	
 	private Entreprise entreprise;
 	
 	public Batiment () { };

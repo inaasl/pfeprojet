@@ -4,6 +4,7 @@ import java.util.List;
 
 import ejb.entites.Batiment;
 import ejb.entites.Entreprise;
+import ejb.entites.Extincteur;
 import ejb.entites.Installation;
 import ejb.entites.Intervention;
 import ejb.entites.MarqueExtincteur;
@@ -21,7 +22,7 @@ public interface Servicepfeprojet {
 	public void InstallationExtincteur(int Annee, String Emp, String Obs, java.sql.Date date, int numtechnicien, int numbatiment,String nomtype,String nommarque) throws TechnicienInconnuException, BatimentInconnuException, EntrepriseInconnueException;
 	public void MaintenancePreventiveExtincteur(int numeroextincteur ,String Obs, String Obsraj, int numerotechnicien, java.sql.Date date/*, List<Piece> piecessupprimees,List<Piece> piecesajoutees*/) throws OrganeInconnuException,TechnicienInconnuException;
 	
-	public void Verification(int numero,String Obs, String conclusion, int numerotechnicien, java.sql.Date date) throws OrganeInconnuException,TechnicienInconnuException;
+	public void Verification(int numero,String Obs, String conclusion, int numerotechnicien, java.sql.Date date) throws OrganeInconnuException,TechnicienInconnuException,BatimentInconnuException;
 	public void MaintenanceCorrectiveExtincteur(int numeroExtincteur,String Obs, String Obsraj, int numerotechnicien, java.sql.Date date/*,List<Piece> piecesajoutees,List<Piece> piecessupprimees*/ ) throws OrganeInconnuException,TechnicienInconnuException;
 	
 
@@ -53,4 +54,6 @@ public interface Servicepfeprojet {
 	public TypeExtincteur rechercheTypeExtincteur(String Nom);
 	public MarqueExtincteur rechercheMarqueExtincteur(String Nom);
 
-}
+	public String rechercheObservationVerification(int numeroOrgane);
+	public String rechercheConclusionVerification(int numeroOrgane);
+	}

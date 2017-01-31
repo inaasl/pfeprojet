@@ -11,6 +11,7 @@ public class Extincteur extends Organe implements java.io.Serializable {
 	private int annee;
 	private TypeExtincteur type;
 	private MarqueExtincteur marque;
+	
 	private List<Piece> pieces;
 
 	public Extincteur () { };

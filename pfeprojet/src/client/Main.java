@@ -44,8 +44,7 @@ public class Main {
 			service.ajouterTechnicien("Dupont","Ronaldo", "1,Villeneuve d'ascq","0611223344");
 			service.ajouterTechnicien("Dubois","CR7", "10, Villeneuve d'ascq", "0655667788");
 			
-
-		}
+			}
 		catch (NamingException e) {
 			System.out.println("erreur acces au serveur de noms");
 		}

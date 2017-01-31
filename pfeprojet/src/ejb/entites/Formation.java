@@ -12,6 +12,7 @@ public class Formation implements java.io.Serializable {
 	private String nom;
 	private Date date;
 	private String Description;
+	
 	private List<Technicien> techniciens;
 	public Formation () { };
 

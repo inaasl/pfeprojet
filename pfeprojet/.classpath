@@ -37,5 +37,8 @@
 	<classpathentry kind="lib" path="/home/inas/Bureau/itext/itext7-io-7.0.1-sources.jar"/>
 	<classpathentry kind="lib" path="/home/inas/Bureau/itext/itext7-layout-7.0.1.jar"/>
 	<classpathentry kind="lib" path="/home/inas/Bureau/itext/itext7-itext7-root-7.0.1-javadoc.jar"/>
+	<classpathentry kind="lib" path="/home/inas/Téléchargements/hibernate-3.5.3.jar.zip"/>
+	<classpathentry kind="lib" path="/home/inas/Téléchargements/com.springsource.org.hibernate-3.2.6.ga.jar.zip"/>
+	<classpathentry kind="lib" path="/home/inas/Téléchargements/hibernate-annotations-3.2.0.ga.jar.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

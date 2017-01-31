@@ -12,6 +12,7 @@ public class RIA extends Organe implements java.io.Serializable {
 	
 	public RIA () { };
 	@ManyToOne
+	@JoinColumn(name="numerotype")
 	public TypeRia getType () {
 		return type;
 	}

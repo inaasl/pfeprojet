@@ -16,6 +16,7 @@ public class Entreprise implements java.io.Serializable {
 	private String adresse;
 	private String tel;
 	private String nominterlocuteur;
+	
 	private List<Batiment> batiments;
 
 	public Entreprise () { };

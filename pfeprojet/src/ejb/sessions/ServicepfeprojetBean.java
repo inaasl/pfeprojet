@@ -144,23 +144,26 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		Inst.setObservation(Obs);
 		Inst.setOrgane(E);
 		Inst.setTechnicien(T);
-		em.persist(Inst);
+
 		
 		if(E.getInterventions()==null) {
 			List<Intervention> interv =new ArrayList<Intervention>();
 			E.setInterventions(interv);
 		}
 		E.addInterventions(Inst);
-		em.persist(E);
 		B.addOrganes(E);
+		em.persist(E);
+		em.persist(Inst);
 		em.merge(B);
-		
 	}
 
+	// Liste des organes de type extincteur
+	
+	
 	// Verification
-	public void Verification(int numero,String Obs, String conclusion, int numerotechnicien, java.sql.Date date) throws OrganeInconnuException,TechnicienInconnuException{
-		Organe O = rechercheOrgane(numero);
+	public void Verification(int numero,String Obs, String conclusion, int numerotechnicien, java.sql.Date date) throws OrganeInconnuException,TechnicienInconnuException, BatimentInconnuException{
 		
+		Organe O = rechercheOrgane(numero);
 		Technicien T = em.find(Technicien.class,numerotechnicien);
 		if(T==null){
 			throw new TechnicienInconnuException();
@@ -181,6 +184,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 			O.setInterventions(interv);
 		}
 		O.addInterventions(V);
+		
 		
 		em.persist(V);
 		em.merge(O);
@@ -353,6 +357,33 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 			return M;
 	}
 	
-
-
+	// derniere observation
+	public String rechercheObservationVerification(int numeroOrgane){
+		List<Intervention> interventions = em.createQuery("FROM Intervention i WHERE i.organe.numero = "+numeroOrgane).getResultList();
+		String observation = "--";
+		int i=interventions.size()-1;
+		while(i>-1){
+			if(interventions.get(i) instanceof Verification){
+				observation = interventions.get(i).getObservation();
+				i=-1;
+			}
+			else i--;
+		}
+		return observation;
+	}
+	
+	// derniere conclusion
+	public String rechercheConclusionVerification(int numeroOrgane){
+		List<Intervention> interventions = em.createQuery("FROM Intervention i WHERE i.organe.numero = "+numeroOrgane).getResultList();
+		String conclusion = "--";
+		int i=interventions.size()-1;
+		while(i>-1){
+			if(interventions.get(i) instanceof Verification){
+				conclusion = interventions.get(i).getConclusion();
+				i=-1;
+			}
+			else i--;
+		}
+		return conclusion;
+	}
 }

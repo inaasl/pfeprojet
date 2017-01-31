@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
@@ -23,8 +24,10 @@ public abstract class Intervention implements java.io.Serializable {
 	private Date date;
 	private String conclusion;
 	private String observation;
+	
 	private Technicien technicien;
 	private Organe organe;
+	
 	public Intervention() { }
 	
 
