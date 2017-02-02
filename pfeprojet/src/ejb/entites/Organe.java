@@ -77,7 +77,6 @@ public abstract class Organe implements java.io.Serializable {
 	}
 	public abstract void addInterventions (Intervention intervention);
 	
-	@JoinColumn(name="numerobat")
 	@ManyToOne
 	public Batiment getBatiment() {
 		return batiment;

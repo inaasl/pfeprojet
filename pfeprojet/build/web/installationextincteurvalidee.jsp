@@ -7,8 +7,33 @@
 <body>
 <header class="header">
     	        <a class="logo" href="http://www.desentec.fr/"><img src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png"> </a>
-    	       <p class="head"><center><strong>Desentec - Protection incendie</strong></center></p>
+    	       <p class="head"><center></center></p>
+	<%! int statut;
+	%>
+	<%
+	 if(session.getAttribute("statut")!=null)
+	 {
+	 session = request.getSession();
+	 statut=(Integer)session.getAttribute("statut");	 
+	 if(statut==1)
+	 {
+	%>
+			<ul id="menu">
+		<li><a href="#">Gestion des Clients - Interventions </a>
+		<ul>
+			<li><a href="affichertoutesentreprises.jsp">Afficher tous les clients</a></li>
+		</ul>
+		</li>
+		<li><a href="#">Mon compte</a>
+			<ul>
+			<li><a href="gestioncompte.jsp">Gestion du compte</a></li>
+			</ul>
+		</li>
+		<li><a href="deconnexion.jsp">Déconnexion</a>
+		</li>
+		</ul>
 </header>
+
 		<%@ page import="java.net.URL" %>
         <%@ page import="java.net.URLConnection" %>
         <%@ page import="java.io.* " %>
@@ -33,16 +58,17 @@
 <%
 	annee =request.getParameter("annee");
 	observ =request.getParameter("observations");
-	numtech =request.getParameter("technicien");
 	conclu =request.getParameter("conclusion");
 	empla=request.getParameter("emplacement");
 	type=request.getParameter("typeextincteur");
 	marque=request.getParameter("marqueextincteur");
 	
 	
-	numBat=String.valueOf(session.getAttribute("num"));
+	numBat=String.valueOf(session.getAttribute("numBatiment"));
 	numB=Integer.parseInt(numBat);
-	numT=Integer.parseInt(numtech);
+	
+	numT=(Integer)session.getAttribute("numPersonne");
+	
 	anneeInt=Integer.parseInt(annee);
 	
 	InitialContext ctx = new InitialContext();
@@ -63,7 +89,16 @@
 	out.println("<br><center> Installation effectuée avec succès </center>");
 
 	out.println("<center><a href=\"installationextincteur.jsp\">Ajout d'un nouvel extincteur</a></center>");
-
 	out.println(
-			"<center><form action=\"interventionvalidee.jsp\"> <p> Conclusion : <input type=\"text\" name=\"conclusion\" /></p> <input type=\"submit\" value=\"Valider\"> </center>");
+			"<br><center><form action=\"interventionvalidee.jsp\"><table><tr>"+
+	"<td> <p> Conclusion  </td> <td><textarea  name=\"conclusion\" rows=\"5\" cols=\"47\" required placeholder=\"emplacement extincte...\"/></textarea></p> <td></tr></table>"+
+		"<input type=\"submit\" value=\"Valider\"> </center>");
 %>
+	<%
+	 }
+	 }
+	 else
+	 	out.println("</header><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\">");
+	%>
+</body>
+</html>

@@ -4,26 +4,23 @@
   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
   version="3.0">
   <display-name>application pfe</display-name>
-
+  	<welcome-file-list><welcome-file>index.jsp</welcome-file></welcome-file-list>
     <servlet>
-        <servlet-name>ajoutentreprise</servlet-name>
-        <jsp-file>/ajoutentreprise.jsp</jsp-file>
-        
+        <servlet-name>ajoutentreprisevalide</servlet-name>
+        <jsp-file>/ajoutentreprisevalide.jsp</jsp-file>      
     </servlet>
     <servlet-mapping>
-        <servlet-name>ajoutentreprise</servlet-name>
-        <url-pattern>/ajoutentreprise</url-pattern>
+        <servlet-name>ajoutentreprisevalide</servlet-name>
+        <url-pattern>/ajoutentreprisevalide</url-pattern>
     </servlet-mapping>
-    
     <servlet>
-        <servlet-name>rechercheentreprise</servlet-name>
-        <jsp-file>/rechercheentreprise.jsp</jsp-file>
+        <servlet-name>rechercheentrepriseresultat</servlet-name>
+        <jsp-file>/rechercheentrepriseresultat.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
-		<servlet-name>rechercheentreprise</servlet-name>
-		<url-pattern>/rechercheentreprise</url-pattern>
+		<servlet-name>rechercheentrepriseresultat</servlet-name>
+		<url-pattern>/rechercheentrepriseresultat</url-pattern>
 	</servlet-mapping>
-	
 	<servlet>
         <servlet-name>ficheentreprise</servlet-name>
         <jsp-file>/ficheentreprise.jsp</jsp-file>
@@ -32,16 +29,14 @@
 		<servlet-name>ficheentreprise</servlet-name>
 		<url-pattern>/ficheentreprise</url-pattern>
 	</servlet-mapping>
-	
 	    <servlet>
-        <servlet-name>ajouttechnicien</servlet-name>
-        <jsp-file>/ajouttechnicien.jsp</jsp-file>
+        <servlet-name>ajouttechnicienvalide</servlet-name>
+        <jsp-file>/ajouttechnicienvalide.jsp</jsp-file>
     </servlet>
     <servlet-mapping>
-		<servlet-name>ajouttechnicien</servlet-name>
-		<url-pattern>/ajouttechnicien</url-pattern>
+		<servlet-name>ajouttechnicienvalide</servlet-name>
+		<url-pattern>/ajouttechnicienvalide</url-pattern>
 	</servlet-mapping>
-	
 		<servlet>
         <servlet-name>fichebatiment</servlet-name>
         <jsp-file>/fichebatiment.jsp</jsp-file>
@@ -50,7 +45,6 @@
 		<servlet-name>fichebatiment</servlet-name>
 		<url-pattern>/fichebatiment</url-pattern>
 	</servlet-mapping>
-
 		<servlet>
         <servlet-name>intervention</servlet-name>
         <jsp-file>/intervention.jsp</jsp-file>
@@ -59,17 +53,6 @@
 		<servlet-name>intervention</servlet-name>
 		<url-pattern>/intervention</url-pattern>
 	</servlet-mapping>
-
-
-		<servlet>
-        <servlet-name>listeorganes</servlet-name>
-        <jsp-file>/listeorganes.jsp</jsp-file>
-    </servlet>
-	    <servlet-mapping>
-		<servlet-name>listeorganes</servlet-name>
-		<url-pattern>/listeorganes</url-pattern>
-	</servlet-mapping>
-
 		<servlet>
         <servlet-name>choixintervention</servlet-name>
         <jsp-file>/choixintervention.jsp</jsp-file>
@@ -87,7 +70,14 @@
 		<servlet-name>installationextincteurvalidee</servlet-name>
 		<url-pattern>/installationextincteurvalidee</url-pattern>
 	</servlet-mapping>
-
-
+	
+		<servlet>
+		<servlet-name>verificationcompte</servlet-name>
+		<jsp-file>/verificationcompte.jsp</jsp-file>
+	</servlet>
+		<servlet-mapping>
+		<servlet-name>verificationcompte</servlet-name>
+		<url-pattern>/verificationcompte</url-pattern>
+		</servlet-mapping>
 </web-app>
 

@@ -14,6 +14,30 @@
 			<strong>Desentec - Protection incendie</strong>
 		</center>
 		</p>
+		<%! int statut;
+	%>
+	<%
+	 if(session.getAttribute("statut")!=null)
+	 {
+	 session = request.getSession();
+	 statut=(Integer)session.getAttribute("statut");	 
+	 if(statut==1)
+	 {
+	%>
+			<ul id="menu">
+		<li><a href="#">Gestion des Clients - Interventions </a>
+		<ul>
+			<li><a href="affichertoutesentreprises.jsp">Afficher tous les clients</a></li>
+		</ul>
+		</li>
+		<li><a href="#">Mon compte</a>
+			<ul>
+			<li><a href="gestioncompte.jsp">Gestion du compte</a></li>
+			</ul>
+		</li>
+		<li><a href="deconnexion.jsp">Déconnexion</a>
+		</li>
+		</ul>
 	</header>
 	<%@ page import="java.net.URL"%>
 	<%@ page import="java.net.URLConnection"%>
@@ -29,7 +53,7 @@
 	<%@ page import="java.text.DateFormat"%>
 
 	<%!String numBat, conclusion, observation;
-	int num, i;
+	int num, i, numT;
 	List<Extincteur> E;
 	%>
 
@@ -49,16 +73,21 @@
 		String format = "yyyy-MM-dd";
 		java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
 		java.util.Date date = new java.util.Date();
-
+		numT=(Integer)session.getAttribute("numPersonne");
 		for (i=0;i <E.size(); i++) {
 				observation = request.getParameter(String.valueOf(i));
-				service.Verification(service.rechercheOrgane(E.get(i).getNumero()).getNumero(),observation,conclusion,1,
+				service.Verification(service.rechercheOrgane(E.get(i).getNumero()).getNumero(),observation,conclusion,numT,
 					Date.valueOf(formater.format(date)));
 		}
 		out.println("<center><br>Intervention effectuée avec succès");
 		E.clear();
 		out.println("<a href=\"fichebatiment.jsp\">retour à la fiche du bâtiment</a></center>");
 	%>
+	<%
+	 }
+	 }
+	 else
+	 	out.println("</header>center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\">");
+	%>
 </body>
 </html>
-

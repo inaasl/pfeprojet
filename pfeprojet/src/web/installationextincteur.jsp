@@ -10,11 +10,34 @@
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
 		</a>
 		<p class="head">
-		<center>
-			<strong>Desentec - Protection incendie</strong>
-		</center>
+		<center></center>
 		</p>
+		<%! int statut;
+		%>
+	<%
+	 if(session.getAttribute("statut")!=null)
+	 {
+	 session = request.getSession();
+	 statut=(Integer)session.getAttribute("statut");	 
+	 if(statut==1)
+	 {
+	%>
+			<ul id="menu">
+		<li><a href="#">Gestion des Clients - Interventions </a>
+		<ul>
+			<li><a href="affichertoutesentreprises.jsp">Afficher tous les clients</a></li>
+		</ul>
+		</li>
+		<li><a href="#">Mon compte</a>
+			<ul>
+			<li><a href="gestioncompte.jsp">Gestion du compte</a></li>
+			</ul>
+		</li>
+		<li><a href="deconnexion.jsp">Déconnexion</a>
+		</li>
+		</ul>
 	</header>
+		
 	<%@ page import="java.net.URL"%>
 	<%@ page import="java.net.URLConnection"%>
 	<%@ page import="java.io.* "%>
@@ -30,26 +53,31 @@
 	<%@ page import="java.util.HashSet"%>
 
 
-	<center>
-		<form action="installationextincteurvalidee">
-			<p>
-				Annee de fabrication de l'extincteur : <input type="text"
-					name="annee" required placeholder="Annee..." />
-			</p>
-			<p>
-				Emplacement de l'extincteur : <input type="text" name="emplacement"
-					required placeholder="emplacement..." />
-			</p>
-			<p>
-				Observations : <input type="text" name="observations" required
-					placeholder="observations..." />
-			</p>
-			<p>
-				Numero du Technicien : <input type="text" name="technicien" required
-					placeholder="numero du technicien..." />
-			</p>
-			<p>
-				Type de l'extincteur : <select name="typeextincteur">
+<form action="installationextincteurvalidee">
+		 <fieldset>
+		 <legend><b>Installation extincteur</b></legend>
+		<br>
+		<table>
+		 <tr>
+			<td>
+                <label for="annee"><i>Annee de fabrication de l'extincteur <font color="#ff0000">*</font></i></label>
+                </td>	  
+		   <td><input type="text"
+					name="annee" required placeholder="Annee..." size="40" class="taille_input_annee"/>
+		  </td></tr>
+		<tr></tr>
+		<tr>
+			<td> <label for="emplacement"><i>Emplacement de l'extincteur <font color="#ff0000">*</font></i></label></td>
+			<td><textarea name="emplacement" rows="5" cols="47" required placeholder="emplacement extincteur..."></textarea></td></tr>
+	  <tr></tr>
+	  <tr><td><label for="observations"><i>Observations <font color="#ff0000">*</font></i></label></td><td>
+					<textarea name="observations" rows="5" cols="47" required placeholder="observations......"></textarea> 
+			</td>
+	 </tr>
+	 <tr></tr>
+	 <tr></tr>
+	 <tr><td> <label for="typeextincteur"><i>Type de l'extincteur <font color="#ff0000">*</font></i></label>	 
+			</td> <td> <select name="typeextincteur" class="class_select">
 					<%!String numBat;
 					int num, i;%>
 					<%
@@ -58,30 +86,32 @@
 						Object obj = ctx.lookup(
 								"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 						ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
-
 						numBat = String.valueOf(session.getAttribute("num"));
 						session.setAttribute("num", numBat);
-						
 						for (i = 0; i < service.touslesTypeExtincteur().size(); i++)
 							out.println("<option value=" + service.touslesTypeExtincteur().get(i).getNumero() + ">"
 									+ service.touslesTypeExtincteur().get(i).getNom() + "</option>");
 					%>
 				</select>
-			</p>
-
-			<p>
-				Marque de l'extincteur : <select name="marqueextincteur">
+			</td>
+		</tr>
+      <tr></tr>
+	  <tr> <td> <label for="marqueextincteur"><i>Marque de l'extincteur <font color="#ff0000">*</font></i></label>
+			</td><td><select name="marqueextincteur" class="class_select">
 					<%
 						for (i = 0; i < service.touteslesMarqueExtincteur().size(); i++)
 							out.println("<option value=" + service.touteslesMarqueExtincteur().get(i).getNumero() + ">"
 									+ service.touteslesMarqueExtincteur().get(i).getNom() + "</option>");
 					%>
-				</select>
-			</p>
-			<br>
-			<input type="submit" value="Valider">
+			</select></td></tr></table>
+			<br><center><input type="submit" value="Valider"> </center>
+			</fieldset>
 		</form>
-	</center>
-
+	<%
+	 }
+	 }
+	 else
+	 	out.println("</header><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\">");
+	%>
 </body>
 </html>

@@ -1,22 +1,84 @@
 
 <html>
-
 <head>
 <title>Liste de toutes les entreprises</title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
+ <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="datatables.css" />
+    <script type="text/javascript" src="jquery.dataTables.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.css"/>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+     $(document).ready(function(){
+     $('#datatables').dataTable();
+    
+     })
+    </script>
 </head>
 <body>
 	<header class="header">
 		<a class="logo" href="http://www.desentec.fr/"><img
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
 		</a>
-		<p class="head">
-		<center>
-			<strong>Desentec - Protection incendie</strong>
-		</center>
-		</p>
+	<%! int statut;
+	%>
+	<%
+	 if(session.getAttribute("statut")!=null)
+	 {
+	 	session = request.getSession();
+	 	statut=(Integer)session.getAttribute("statut");	 
+	 	if(statut==1 || statut==0)
+	 	{
+	 		if(statut==0)
+	 		{
+	%>
+		<br>
+	<ul id="menu">
+	<li><a href="#">Gestion des Clients</a>
+		<ul>
+			<li><a href="affichertoutesentreprises.jsp">Afficher tous les clients</a></li>
+			<li><a href="ajoutentreprise.jsp">Ajout d'un client</a></li>
+		</ul>
+	</li>
+	<li><a href="#">Gestion des Techniciens</a>
+		<ul>
+			<li><a href="affichertouslestechniciens.jsp">Afficher tous les techniciens</a></li>
+			<li><a href="ajouttechnicien.jsp">Ajout d'un technicien</a></li>
+		</ul>
+	</li>
+	<li><a href="#">Mon compte</a>
+		<ul>
+			<li><a href="gestioncompte.jsp">Gestion du compte</a></li>
+		</ul>
+		</li>
+	<li><a href="#">Déconnexion</a>
+	</li>
+	</ul>
+	<%
+	 		}if(statut==1)
+	 		{
+	%>
+		<ul id="menu">
+		<li><a href="#">Gestion des Clients - Interventions </a>
+		<ul>
+			<li><a href="affichertoutesentreprises.jsp">Afficher tous les clients</a></li>
+		</ul>
+		</li>
+		<li><a href="#">Mon compte</a>
+			<ul>
+			<li><a href="gestioncompte.jsp">Gestion du compte</a></li>
+			</ul>
+		</li>
+		<li><a href="deconnexion.jsp">Déconnexion</a>
+		</li>
+		</ul>
+	<% }
+	%>
 	</header>
+
 	<%@ page import="java.net.URL"%>
 	<%@ page import="java.net.URLConnection"%>
 	<%@ page import="java.io.* "%>
@@ -47,21 +109,21 @@
 		ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
 		session = request.getSession();
 
-		out.print(
-				"<br> <table border=\"1\" cellpadding=\"10\" cellspacing=\"1\" width=\"100%\"> <tr><th width=\"20%\" align=\"center\"> Nom de l'entreprise </th><th width=\"40%\" align=\"center\"> Adresse de l'entreprise </th><th width=\"20%\" align=\"center\"> Numero de telephone de l'entreprise </th><thth width=\"20%\" align=\"center\">  </th></tr>");
-		for (i = 0; i < service.getlisteEntreprises().size(); i++) {
-			out.print(" <tr><td align=\"center\"> " + service.getlisteEntreprises().get(i).getNom()
-					+ "</td><td <td align=\"center\">" + service.getlisteEntreprises().get(i).getAdresse()
-					+ "</td><td align=\"center\">" + service.getlisteEntreprises().get(i).getTel()
-					+ "</td><td align=\"center\"> <form action=\"ficheentreprise\" method=\"GET\" ><input type=\"hidden\" id=\"thisField\" name=\"numEntreprise\" value="
-					+ service.getlisteEntreprises().get(i).getNumero()
-					+ "> <input type=\"submit\" name=\" Consulter la fiche \" value=\" Consulter la fiche \" /></form></td></tr>");
+		out.print("<br> <table id=\"datatables\" class=\"display\" >");
+		out.print("<thead><tr><th> Client </th><th> Adresse </th><th> Télephone </th><th> Mail </th><th>Interlocuteur </th><th>Fiche du client</th></tr>");
+		out.print("</thead><tbody>");
+		for(i=0;i<service.getlisteEntreprises().size();i++){
+			out.print(" <tr><td > "+service.getlisteEntreprises().get(i).getNom()+"</td><td>"+service.getlisteEntreprises().get(i).getAdresse()+"</td><td>"+service.getlisteEntreprises().get(i).getTel()+
+					"<td>"+service.getlisteEntreprises().get(i).getAdressemail()+"</td> "+"<td>"+service.getlisteEntreprises().get(i).getNominterlocuteur()+"</td> "+"</td><td> <form action=\"ficheentreprise\" method=\"POST\" ><input type=\"hidden\" id=\"thisField\" name=\"numEntreprise\" value="+service.getlisteEntreprises().get(i).getNumero()+"> <input type=\"submit\" name=\" Consulter la fiche \" value=\" Consulter la fiche \" /></form></td></tr>");
 		}
-		out.print("</table>");
+		out.print("</tbody></table>");
 	%>
-
-
-
+	<%
+	 	}
+	 }
+	 else
+	 	out.println("</header><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\">");
+	%>
 </body>
 </html>
 

@@ -1,7 +1,6 @@
 package client;
 
 import java.io.IOException;
-import java.sql.Date;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
@@ -20,11 +19,10 @@ public class Main {
 			System.out.println("Acces au service Remote");
 			Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 			ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
-
 			// Ajout Entreprises et Batiments
 			
-			service.ajouterEntreprise("Euratech","9,Lille","0612523645");
-			service.ajouterEntreprise("TechMa", "7,Loos","0624587496");
+			service.ajouterEntreprise("Euratech","9,Lille","Admin@Euratech.com","0612523645","Dupont");
+			service.ajouterEntreprise("TechMa", "7,Loos","Admin@TechMa.com","0624587496","Dubois");
 			service.ajouterBatiment("Euratech", "BatimentA", "28, Lille");
 			service.ajouterBatiment("Euratech", "BatimentB", "57, Lille");
 			service.ajouterBatiment("TechMa", "BatimentA1", "7,Lille");
@@ -41,9 +39,10 @@ public class Main {
 			service.ajoutmarqueextincteur("Marque 3");
 			
 			// Ajout Techniciens
-			service.ajouterTechnicien("Dupont","Ronaldo", "1,Villeneuve d'ascq","0611223344");
-			service.ajouterTechnicien("Dubois","CR7", "10, Villeneuve d'ascq", "0655667788");
+			service.ajouterTechnicien("Martin","Ger", "1,Villeneuve d'ascq","0611223344","ger.martin@gmail.com");
 			
+			// Ajout du compte Administrateur
+			service.creercompteAdmin("admin",0,0);
 			}
 		catch (NamingException e) {
 			System.out.println("erreur acces au serveur de noms");

@@ -15,6 +15,7 @@ public class Technicien implements java.io.Serializable {
 	private String prenom;
 	private String adresse;
 	private String tel;
+	private String adressemail;
 	
 	private List<Formation> formation;
 	
@@ -69,5 +70,13 @@ public class Technicien implements java.io.Serializable {
 		return "Nom : " + this.nom 
 				+ "	\nAdresse : " + this.adresse
 				+ " \nNumero de telephone : " + this.tel;
+	}
+
+	public String getAdressemail() {
+		return adressemail;
+	}
+
+	public void setAdressemail(String adressemail) {
+		this.adressemail = adressemail;
 	}
 }

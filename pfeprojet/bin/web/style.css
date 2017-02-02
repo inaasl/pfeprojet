@@ -1,73 +1,170 @@
 html, body {
-	margin: 0;
-	padding: 0;
-}
+ margin: 0;
+ padding: 0;
+ }
 
 body {
-	background-color: #EFEFEF;
-	font-family: Verdana, sans-serif;
-	font-size: 100%;
-}
+ background-color: #EFEFEF; 
+ font-family: Verdana, sans-serif; 
+ font-size: 100%;
 
-a:link {
-	color: #5077C6;
-	text-decoration: underline;
+ }
+ header{
+    position:fixed;
+    left: 0;
+    right: 0;
+    height: 120px;
+    /*line-height: 140px;*/
+    background-color: #5581CD;
+    top:0;
+    color : white;
+    font-size: 20px;
+    background-attachement: fixed;
+    
 }
-
-a:visited {
-	color: gray;
+img{
+    float: left;
+    position: fixed;
+    top: 0;
+    left: 20px;
 }
-
-a:hover {
-	color: red;
-	text-decoration: none;
-}
-
-a:active, a:focus {
-	color: red;
-}
-
-p, ul, li, td {
-	
-}
-
-h3 {
-	color: #2E3192;
-}
-
-.header {
-	left: 0;
-	right: 0;
-	height: 120px;
-	/*line-height: 140px;*/
+.footer{
 	background-color: #5581CD;
-	top: 0;
-	color: white;
-	font-size: 20px;
+	position:fixed;
+	bottom:0;
+	height:60px;
+	width:100%;
+}
+#bloc_page
+{
+    width: 1200px;
+    margin: auto;
+}
+ 
+/*  rajout pour l'authentification */
+
+#logincontent{
+  margin:100px auto 20px auto;
+  //background:#4b667b;
+  background:#E6E6FA;
+  padding:10px;
+  width:800px;
+  border-radius:10px 10px 10px 10px;
+  -moz-border-radius:10px 10px 10px 10px;
+  -webkit-border-radius:10px 10px 10px 10px;
 }
 
-img {
-	float: left;
-	top: 0;
-	left: 20px;
-}
-/* CONTAINER */
-.container {
-	height: 350px;
-	/*background-color:#FFFFFF;*/
-	margin-left: auto;
-	margin-right: auto;
-	width: 350px;
-}
-/* footer */
-.footer {
-	background-color: #5581CD;
-	position: fixed;
-	bottom: 0;
-	height: 60px;
-	width: 100%;
+#logincontent{
+  height:410px;
 }
 
-.head {
-	color: white;
+#logincontent form{
+  background:#808080;
+  opacity:0.9;
+  margin:20px 20px 20px 250px;
+  padding:10px;
+  border-radius:10px 10px 10px 10px;
+  -moz-border-radius:10px 10px 10px 10px;
+  -webkit-border-radius:10px 10px 10px 10px;
+  color:#000;
+}
+
+#logincontent form{
+  height:230px;
+}
+
+div.loginlogo{
+  background:url(././lock.png) no-repeat center; 
+  width:180px;
+  height:250px;
+  margin:40px 10px;
+  float:left;
+}
+/* Suite CSS */
+.taille_input
+{
+  height: 50px;
+  width: 300px;
+  
+}
+.taille_input_annee
+{
+  height: 20px;
+  width: 300px;
+}
+
+.class_select
+{
+  width: 100px;
+}
+
+.taille_area
+{
+  height: 100px;
+  width: 300px;
+  text-align : right;
+  /*vertical-align : top;*/
+  
+}
+/* Menu */
+
+#menu, #menu ul{
+padding:0;
+margin:0;
+list-style:none;
+text-align:center;
+
+margin-top:4.1%;
+font-size : 17px;
+}
+#menu li{
+display:inline-block;
+position:relative;
+border-radius:8px 8px 0 0;
+}
+#menu ul li{
+display:inherit;
+border-radius:0;
+}
+#menu ul li:hover{
+border-radius:0;
+}
+#menu ul li:last-child{
+border-radius:0 0 8px 8px;
+}
+#menu ul{
+position:absolute;
+z-index: 1000;
+max-height:0;
+left: 0;
+right: 0;
+overflow:hidden;
+-moz-transition: .8s all .3s;
+-webkit-transition: .8s all .3s;
+transition: .8s all .3s;
+}
+#menu li:hover ul{
+max-height:15em;
+}
+#menu li{
+background-color: #292c91;
+background-image:-webkit-linear-gradient(top, #292c91 0%, #5077C6 100%);
+background-image:linear-gradient(to bottom, #292c91 0%, #5077C6 100%);
+}
+#menu a{
+text-decoration:none;
+display:block;
+padding:8px 32px;
+color:#fff;
+font-family:arial;
+}
+#menu ul a{
+padding:8px 0;
+}
+#menu li:hover li a{
+color:#fff;
+text-transform:inherit;
+}
+#menu li:hover a, #menu-demo2 li li:hover a{
+color:#000;
 }

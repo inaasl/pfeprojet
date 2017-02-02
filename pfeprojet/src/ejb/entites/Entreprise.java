@@ -15,6 +15,7 @@ public class Entreprise implements java.io.Serializable {
 	private String nom;
 	private String adresse;
 	private String tel;
+	private String adressemail;
 	private String nominterlocuteur;
 	
 	private List<Batiment> batiments;
@@ -73,9 +74,18 @@ public class Entreprise implements java.io.Serializable {
 	public void setNominterlocuteur(String nominterlocuteur) {
 		this.nominterlocuteur = nominterlocuteur;
 	}
+	public String getAdressemail() {
+		return adressemail;
+	}
+
+	public void setAdressemail(String adressemail) {
+		this.adressemail = adressemail;
+	}
 	public String toString(){
 		return "Fiche de l'entreprise : \n  Nom de l'entreprise : "+this.nom
 				+"\nAdresse Postale : "+this.adresse
 				+"\n Numero de telephone : "+this.tel;
 	}
+
+
 }
