@@ -35,8 +35,9 @@
 	 		if(statut==0)
 	 		{
 	%>
-		<br>
 	<ul id="menu">
+	<li><a href="accueiladministrateur.jsp">Accueil</a>
+	</li>
 	<li><a href="#">Gestion des Clients</a>
 		<ul>
 			<li><a href="affichertoutesentreprises.jsp">Afficher tous les clients</a></li>
@@ -62,6 +63,8 @@
 	 		{
 	%>
 		<ul id="menu">
+		<li><a href="accueiltechnicien.jsp">Accueil</a>
+		</li>
 		<li><a href="#">Gestion des Clients - Interventions </a>
 		<ul>
 			<li><a href="affichertoutesentreprises.jsp">Afficher tous les clients</a></li>
@@ -78,7 +81,7 @@
 	<% }
 	%>
 	</header>
-
+  <div id="container">
 	<%@ page import="java.net.URL"%>
 	<%@ page import="java.net.URLConnection"%>
 	<%@ page import="java.io.* "%>
@@ -98,10 +101,8 @@
 	<%!String nomEntreprise;
 	List<Entreprise> E;
 	int i;%>
-
-
 	<%
-		out.println("Liste de toutes les entreprises : <br> ");
+		out.println("<h3><center>Liste de toutes les entreprises</center></h3> <br> ");
 
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
@@ -118,11 +119,12 @@
 		}
 		out.print("</tbody></table>");
 	%>
+	</div>
 	<%
 	 	}
 	 }
 	 else
-	 	out.println("</header><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\">");
+	 	out.println("</header><div id=\"container\"><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\"></div>");
 	%>
 </body>
 </html>

@@ -14,19 +14,24 @@ body {
     left: 0;
     right: 0;
     height: 120px;
-    /*line-height: 140px;*/
     background-color: #5581CD;
     top:0;
     color : white;
     font-size: 20px;
     background-attachement: fixed;
-    
+}
+.head {
+	color: white;
 }
 img{
     float: left;
-    position: fixed;
     top: 0;
+    margin-top:0;
     left: 20px;
+}
+/* CONTAINER */
+#container {
+	margin-top:10%;
 }
 .footer{
 	background-color: #5581CD;
@@ -39,13 +44,14 @@ img{
 {
     width: 1200px;
     margin: auto;
+    margin-top:0;
 }
  
 /*  rajout pour l'authentification */
 
 #logincontent{
-  margin:100px auto 20px auto;
-  //background:#4b667b;
+  margin:210px auto 20px auto;
+  background:#4b667b;
   background:#E6E6FA;
   padding:10px;
   width:800px;
@@ -81,6 +87,7 @@ div.loginlogo{
   float:left;
 }
 /* Suite CSS */
+
 .taille_input
 {
   height: 50px;
@@ -114,7 +121,8 @@ margin:0;
 list-style:none;
 text-align:center;
 
-margin-top:4.1%;
+margin-top:6%;
+right:0;
 font-size : 17px;
 }
 #menu li{
@@ -147,9 +155,8 @@ transition: .8s all .3s;
 max-height:15em;
 }
 #menu li{
-background-color: #292c91;
-background-image:-webkit-linear-gradient(top, #292c91 0%, #5077C6 100%);
-background-image:linear-gradient(to bottom, #292c91 0%, #5077C6 100%);
+background-color: none;
+
 }
 #menu a{
 text-decoration:none;
@@ -160,6 +167,7 @@ font-family:arial;
 }
 #menu ul a{
 padding:8px 0;
+background-color: #5581CD;
 }
 #menu li:hover li a{
 color:#fff;

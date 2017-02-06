@@ -33,11 +33,10 @@
 			<a class="logo" href="http://www.desentec.fr/"><img
 				src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
 			</a>
-			<p class="head">
-			<center></center>
-			</p>
 				<br>
 	<ul id="menu">
+	<li><a href="accueilclient.jsp">Accueil</a>
+		</li>
 	<li><a href="#">Gestion des Batiments</a>
 	<ul>
 		<li><a href="ficheentreprise.jsp">Afficher tous les batiments</a></li>
@@ -89,7 +88,7 @@
 		out.print("</tbody></table></center>");
 	 }
 	 else
-		 	out.println("</header><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\">");
+		 	out.println("</header><div id=\"container\"><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\"></div>");
   %>
 </div>
 </body>

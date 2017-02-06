@@ -24,9 +24,6 @@
 		<a class="logo" href="http://www.desentec.fr/"><img
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
 		</a>
-		<p class="head">
-		<center></center>
-		</p>
 	<%! Integer statut;
 	%>
 	<%
@@ -37,8 +34,9 @@
 		if(statut==0)
 	 	{
 	%>
-	<br>
 	<ul id="menu">
+		<li><a href="accueiladministrateur.jsp">Accueil</a>
+		</li>
 	<li><a href="#">Gestion des Clients</a>
 		<ul>
 			<li><a href="affichertoutesentreprises.jsp">Afficher tous les clients</a></li>
@@ -60,7 +58,7 @@
 	</li>
 	</ul>
 	</header>
-
+  <div id="container">
 	<%@ page import="java.net.URL"%>
 	<%@ page import="java.net.URLConnection"%>
 	<%@ page import="java.io.* "%>
@@ -83,8 +81,7 @@
 
 
 	<%
-		out.println("Liste de tous les techniciens : <br> ");
-
+		out.println("<h3><center>Liste de tous les techniciens</center></h3> <br> ");
 		session = request.getSession();
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
@@ -100,10 +97,13 @@
 			
 		}
 		out.print("</tbody></table>");
+		%>
+		</div>
+		<%
 	 	}
 	 }
 	 else
-	 	out.println("</header><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\">");
+	 	out.println("</header><div id=\"container\"><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\"></div>");
 	%>
 	
 	

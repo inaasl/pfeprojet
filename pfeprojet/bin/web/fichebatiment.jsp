@@ -10,9 +10,6 @@
 		<a class="logo" href="http://www.desentec.fr/"><img
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
 		</a>
-		<p class="head">
-		<center></center>
-		</p>
 		<%! int statut;
 	%>
 	<%
@@ -24,8 +21,9 @@
 	 {
 		 if(statut==0){
 	%>
-		<br>
 	<ul id="menu">
+	<li><a href="accueiladministrateur.jsp">Accueil</a>
+	</li>
 	<li><a href="#">Gestion des Clients</a>
 		<ul>
 			<li><a href="affichertoutesentreprises.jsp">Afficher tous les clients</a></li>
@@ -49,7 +47,9 @@
 	<% }
 		 if(statut==1){
 	%>
-			<ul id="menu">
+		<ul id="menu">
+		<li><a href="accueiltechnicien.jsp">Accueil</a>
+		</li>
 		<li><a href="#">Gestion des Clients - Interventions </a>
 		<ul>
 			<li><a href="affichertoutesentreprises.jsp">Afficher tous les clients</a></li>
@@ -66,7 +66,9 @@
 		<% }
 			if(statut==2){
 		%>
-		<ul id="menu">
+	<ul id="menu">
+	<li><a href="accueilclient.jsp">Accueil</a>
+	</li>
 	<li><a href="#">Gestion des Batiments</a>
 	<ul>
 		<li><a href="ficheentreprise.jsp">Afficher tous les batiments</a></li>
@@ -83,7 +85,7 @@
 	<%
 	}%>
 	</header>
-	
+	  <div id="container">
 	<%@ page import="java.net.URL"%>
 	<%@ page import="java.net.URLConnection"%>
 	<%@ page import="java.io.* "%>
@@ -118,7 +120,7 @@
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 		ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
 		out.println("<center>");
-		out.println("Fiche du batiment : <br> <br> ");
+		out.println("<h3>Fiche du batiment <h3> <br> <br> ");
 		B = service.rechercheBatimentnum(num);
 		out.println("<table border=\"1\" cellpadding=\"10\" cellspacing=\"1\" >");
 		out.print("<thead><tr><th> Nom du batiment </th><th> Adresse du batiment </th><th> Entreprise </th></tr>");
@@ -129,21 +131,23 @@
 			out.println(
 					"<br><br><table><tr><td><form action=\"choixintervention\" method=\"GET\" ><input type=\"hidden\" id=\"idintervention\" name=\"numBatiment\" value="
 							+ B.getNumero()
-							+ "> <input type=\"submit\" name=\" Effectuer une intervention \" value=\" Effectuer une intervention \" /></form></td><tr>");	
+							+ "> <input type=\"submit\" name=\" Effectuer une intervention \" value=\" Effectuer une intervention \" /></form></td><td>&nbsp;&nbsp;</td>");	
 		}
 		out.println(
-				"<tr><td><form action=\"listeorganes\" method=\"GET\" ><input type=\"hidden\" id=\"idlisteorganes\" name=\"numBatiment\" value="
+				"<td><form action=\"listeorganes\" method=\"GET\" ><input type=\"hidden\" id=\"idlisteorganes\" name=\"numBatiment\" value="
 						+ B.getNumero()
-						+ "> <input type=\"submit\" name=\" Consulter la liste des organes de securite \" value=\" Consulter la liste des organes de securite \" /></form></td></tr>");
-		out.println("</table>");
+						+ "> <input type=\"submit\" name=\" Consulter la liste des organes de securite \" value=\" Consulter la liste des organes de securite \" /></form></td>");
+		out.println("</tr></table>");
+		
+		out.println("<br><form action=\"ficheentreprise\" method=\"GET\" ><input type=\"submit\" name=\" Retour a la fiche du client \" value=\" Retour a la fiche du client \" /></form></center>");
 		out.println("</center>");
-		out.println("<a href=\"ficheentreprise.jsp\">retour à la fiche du client</a></center>");
 	%>
+	</div>
 	<%
 	 }
 	 }
 	 else
-	 	out.println("</header><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\">");
+	 	out.println("</header><div id=\"container\"><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\"></div>");
 	%>
 </body>
 </html>

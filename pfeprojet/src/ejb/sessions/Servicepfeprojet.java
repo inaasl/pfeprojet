@@ -3,6 +3,7 @@ package ejb.sessions;
 import java.util.List;
 
 import ejb.entites.Batiment;
+import ejb.entites.Compte;
 import ejb.entites.Entreprise;
 import ejb.entites.Extincteur;
 import ejb.entites.Installation;
@@ -14,8 +15,8 @@ import ejb.entites.TypeExtincteur;
 import ejb.entites.Verification;
 
 public interface Servicepfeprojet {
-	public void ajouterEntreprise(String nom, String adresse,String email, String tel, String interlocuteur);
-	public void ajouterTechnicien(String nom, String prenom, String adresse, String tel, String email);
+	public Compte ajouterEntreprise(String nom, String adresse,String email, String tel, String interlocuteur);
+	public Compte ajouterTechnicien(String nom, String prenom, String adresse, String tel, String email);
 	public void ajouterBatiment(String nomentreprise, String nom, String adresse) throws EntrepriseInconnueException;
 
 

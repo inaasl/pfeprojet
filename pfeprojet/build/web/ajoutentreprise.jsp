@@ -38,9 +38,7 @@
 		<a class="logo" href="http://www.desentec.fr/"><img
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
 		</a>
-		<p class="head">
-		<center></center>
-		</p>
+		
 		<%! int statut;
 	%>
 	<%
@@ -51,8 +49,9 @@
 	 	if(statut==0)
 	 	{
 	%>
-		<br>
 	<ul id="menu">
+	<li><a href="accueiladministrateur.jsp">Accueil</a>
+	</li>
 	<li><a href="#">Gestion des Clients</a>
 		<ul>
 			<li><a href="affichertoutesentreprises.jsp">Afficher tous les clients</a></li>
@@ -74,7 +73,7 @@
 	</li>
 	</ul>
 	</header>
-	<div id="bloc_page">
+	<div id="container">
 		<center>
 			<h1>Remplir les champs du formulaire</h1>
 		<form action="ajoutentreprisevalide" method="post" onsubmit="return check(this);">
@@ -129,7 +128,7 @@
 	 	}
 	 }
 	 else
-	 	out.println("</header><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\">");
+	 	out.println("</header><div id=\"container\"><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\"></div>");
 	%>
 </body>
 </html>

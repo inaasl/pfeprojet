@@ -10,8 +10,6 @@
 		<a class="logo" href="http://www.desentec.fr/"><img
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
 		</a>
-		<p class="head">
-		</p>
 	<%! int statut;
 		String stat;
 	%>
@@ -23,8 +21,9 @@
 	 	if(statut==0)
 	 	{
 	%>
-	<br>
 	<ul id="menu">
+		<li><a href="accueiladministrateur.jsp">Accueil</a>
+		</li>
 	<li><a href="#">Gestion des Clients</a>
 		<ul>
 			<li><a href="affichertoutesentreprises.jsp">Afficher tous les clients</a></li>
@@ -45,13 +44,12 @@
 	<li><a href="deconnexion.jsp">Déconnexion</a>
 	</li>
 	</ul>
-	
 	</header>
 	<%
 	 	}
 	 }
 	 else
-	 	out.println("</header><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\">");
+	 	out.println("</header><div id=\"container\"><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\"></div>");
 	%>
 </body>
 </html>

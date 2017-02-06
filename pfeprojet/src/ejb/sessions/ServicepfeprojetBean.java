@@ -136,7 +136,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	// Fonctions d'ajouts
 
 	// Ajout d'une entreprise
-	public void ajouterEntreprise(String nom, String adresse,String email, String tel, String interlocuteur) {
+	public Compte ajouterEntreprise(String nom, String adresse,String email, String tel, String interlocuteur) {
 		Entreprise E = new Entreprise();
 		E.setNom(nom);
 		E.setAdresse(adresse);
@@ -146,14 +146,15 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		em.persist(E);
 		Compte session = new Compte();
 		session.setLogin(E.getAdressemail());
-		session.setNumAdmin(E.getNumero());
+		session.setNumeroutilisateur(E.getNumero());
 		session.setStatut(2);
 		session.setPassword(password());
 		em.persist(session);
+		return session;
 	}
 
 	// Ajout d'un technicien
-	public void ajouterTechnicien(String nom, String prenom, String adresse, String tel, String email) {
+	public Compte ajouterTechnicien(String nom, String prenom, String adresse, String tel, String email) {
 		Technicien T = new Technicien();
 		T.setNom(nom);
 		T.setPrenom(prenom);
@@ -163,10 +164,11 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		em.persist(T);
 		Compte session = new Compte();
 		session.setLogin(T.getAdressemail());
-		session.setNumAdmin(T.getNumero());
+		session.setNumeroutilisateur(T.getNumero());
 		session.setStatut(1);
 		session.setPassword(password());
 		em.persist(session);
+		return session;
 	}
 
 	// Ajout d'un batiment
@@ -387,7 +389,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	public void creercompteAdmin(String login, int admin, int statut) {
 		Compte session = new Compte();
 		session.setLogin(login);
-		session.setNumAdmin(admin);
+		session.setNumeroutilisateur(admin);
 		session.setStatut(0);
 		session.setPassword(password());
 		em.persist(session);
@@ -413,7 +415,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 
 			if (session.get(i).getLogin().compareTo(login) == 0 && session.get(i).getPassword().compareTo(pwd) == 0) {
 				trouver = true;
-				liste.add(session.get(i).getNumAdmin());
+				liste.add(session.get(i).getNumeroutilisateur());
 				liste.add(session.get(i).getStatut());
 			} else
 				i++;

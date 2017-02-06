@@ -8,7 +8,6 @@
 <body>
  <header class="header">
     	        <a class="logo" href="http://www.desentec.fr/"><img src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png"> </a>
-    	       <p class="head"><center></center></p>
  <%! int statut;
 	%>
 	<%
@@ -20,6 +19,8 @@
 	 {
 	%>
 		<ul id="menu">
+		<li><a href="accueiltechnicien.jsp">Accueil</a>
+		</li>
 		<li><a href="#">Gestion des Clients - Interventions </a>
 		<ul>
 			<li><a href="affichertoutesentreprises.jsp">Afficher tous les clients</a></li>
@@ -34,10 +35,11 @@
 		</li>
 		</ul>
  </header>
+  <div id="container">
 <center>Type de l'intervention
  <FORM action="intervention.jsp">
 <fieldset>
-    <legend><b>Type de l'intervention</b></legend> <br />
+    <legend><b>Type de l'intervention</b></legend> <br/>
 	<INPUT id="installation" type= "radio" name="choixinterv" value="installation"/> 
 	<label for="installation">Installation</label> &nbsp;&nbsp;&nbsp;
 	<INPUT id="verification" type= "radio" name="choixinterv" value="verification"/>
@@ -62,11 +64,12 @@
 	<br><br><center><input type="submit" value="Valider"></center>
 </FORM>
 </center>
+</div>
 	<%
 	 }
 	 }
 	 else
-	 	out.println("</header><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\">");
+	 	out.println("</header><div id=\"container\"><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\"></div>");
 	%>
  </body>
  </html>

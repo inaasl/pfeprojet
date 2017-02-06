@@ -8,8 +8,8 @@ import javax.persistence.*;
 public class Compte implements java.io.Serializable{
 
 	private static final long serialVersionUID = 1L;
-	private int numCompte;
-	private int numAdmin;
+	private int numero;
+	private int numeroutilisateur;
 	private String login;
 	private String password;
 	private int statut;
@@ -24,17 +24,17 @@ public class Compte implements java.io.Serializable{
 			sequenceName="compte_sequence",
 			allocationSize=100
 			)
-	public int getNumCompte() {
-		return numCompte;
+	public int getNumero() {
+		return numero;
 	}
-	public void setNumCompte(int num) {
-		this.numCompte = num;
+	public void setNumero(int num) {
+		this.numero = num;
 	}
-	public int getNumAdmin() {
-		return numAdmin;
+	public int getNumeroutilisateur() {
+		return numeroutilisateur;
 	}
-	public void setNumAdmin(int numclient) {
-		this.numAdmin = numclient;
+	public void setNumeroutilisateur(int numclient) {
+		this.numeroutilisateur = numclient;
 	}
 	public String getLogin() {
 		return login;

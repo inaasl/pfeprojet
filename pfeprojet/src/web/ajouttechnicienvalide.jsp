@@ -10,9 +10,6 @@
 		<a class="logo" href="http://www.desentec.fr/"><img
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
 		</a>
-		<p class="head">
-		<center></center>
-		</p>
 	<%! int statut;
 	%>
 	<%
@@ -23,8 +20,9 @@
 	 if(statut==0)
 	 {
 	%>
-		<br>
 	<ul id="menu">
+	<li><a href="accueiladministrateur.jsp">Accueil</a>
+	</li>
 	<li><a href="#">Gestion des Clients</a>
 		<ul>
 			<li><a href="affichertoutesentreprises.jsp">Afficher tous les clients</a></li>
@@ -46,6 +44,7 @@
 	</li>
 	</ul>
 	</header>
+	  <div id="container">
 	<%@ page import="java.net.URL"%>
 	<%@ page import="java.net.URLConnection"%>
 	<%@ page import="java.io.* "%>
@@ -63,7 +62,8 @@
 
 
 	<%!String nomTechnicien, prenomTechnicien, adresseTechnicien, telTechnicien, emailTechnicien;
-	int num,id;%>
+	int num,id;
+	Compte compteajoute;%>
 
 
 	<%
@@ -78,17 +78,23 @@
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 		ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
 		
-		service.ajouterTechnicien(nomTechnicien,prenomTechnicien,adresseTechnicien,telTechnicien,emailTechnicien);    			
-
-		//service.creercompteTechnicien(service.rechercheTechnicienemail(emailTechnicien).getNumero());
-		out.println("<center>Ajout effectué avec succès<br>");
-		out.println("<a href=\"accueiladministrateur.jsp\">retour à la page d'accueil</a></center>");
-	%>
+		compteajoute=service.ajouterTechnicien(nomTechnicien,prenomTechnicien,adresseTechnicien,telTechnicien,emailTechnicien);
+		
+		out.println("<center><h3>Ajout effectué avec succès<h3><br>");
+		
+		out.println("<table border=\"1\" cellpadding=\"10\" cellspacing=\"1\" >");
+		out.print("<thead><tr><th> Nom du Technicien </th><th> Prenom du Technicien </th><th> Login </th><th> Mot de Passe </th></tr>");
+		out.print("</thead><tbody>");
+		out.print("<tr><td>" + nomTechnicien + "</td><td>" + prenomTechnicien + "</td><td>  " + compteajoute.getLogin()
+			+ "</td><td>" + compteajoute.getPassword()+"</td></tr></tbody></table>");
+		out.println("</center>");
+		%>
+	</div>
 	<%
 	 }
 	 }
 	 else
-	 	out.println("</header><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\">");
+	 	out.println("</header><div id=\"container\"><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\"></div>");
 	%>
 </body>
 </html>

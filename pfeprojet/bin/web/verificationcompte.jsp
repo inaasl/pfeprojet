@@ -17,6 +17,7 @@
 	 if(session.getAttribute("statut")!=null)
 	 {
 	%>
+	  <div id="container">
 		<%@ page import="java.net.URL" %>
         <%@ page import="java.net.URLConnection" %>
         <%@ page import="java.io.* " %>
@@ -62,10 +63,11 @@
     				out.println("<meta http-equiv=\"refresh\" content=\"1; URL=index.jsp?result=compte inexistant\"");
     			}
         %>
+        </div>
         	<%
 	 }
 	 else
-	 	out.println("<center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\">");
+	 	out.println("</header><div id=\"container\"><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\"></div>");
 	%>
 </body>
 </html>

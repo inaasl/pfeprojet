@@ -9,11 +9,6 @@
 		<a class="logo" href="http://www.desentec.fr/"><img
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
 		</a>
-		<p class="head">
-		<center>
-			<strong>Desentec - Protection incendie</strong>
-		</center>
-		</p>
 		<%! int statut;
 	%>
 	<%
@@ -24,7 +19,9 @@
 	 if(statut==1)
 	 {
 	%>
-			<ul id="menu">
+		<ul id="menu">
+		<li><a href="accueiltechnicien.jsp">Accueil</a>
+		</li>
 		<li><a href="#">Gestion des Clients - Interventions </a>
 		<ul>
 			<li><a href="affichertoutesentreprises.jsp">Afficher tous les clients</a></li>
@@ -39,6 +36,7 @@
 		</li>
 		</ul>
 	</header>
+	  <div id="container">
 	<%@ page import="java.net.URL"%>
 	<%@ page import="java.net.URLConnection"%>
 	<%@ page import="java.io.* "%>
@@ -64,9 +62,10 @@
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 		ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
 
-		numBat = String.valueOf(session.getAttribute("num"));
-		session.setAttribute("num", numBat);
-		num = Integer.parseInt(numBat);
+ 		numBat = String.valueOf(session.getAttribute("numBatiment"));
+		session.setAttribute("numBatiment", numBat);
+		num = Integer.parseInt(numBat); 
+		//num=(Integer)session.getAttribute("num");
 		conclusion = request.getParameter("Conclusion");
 		E=(List<Extincteur>)session.getAttribute("Extincteurs");
 		
@@ -81,13 +80,15 @@
 		}
 		out.println("<center><br>Intervention effectuée avec succès");
 		E.clear();
-		out.println("<a href=\"fichebatiment.jsp\">retour à la fiche du bâtiment</a></center>");
-	%>
+		out.println("<br><form action=\"fichebatiment\" method=\"GET\" ><input type=\"submit\" name=\" Retour a la fiche du batiment \" value=\" Retour a la fiche du batiment \" /></form></center>");
+		out.println("</center>");
+		%>
+	</div>
 	<%
 	 }
 	 }
 	 else
-	 	out.println("</header>center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\">");
+	 	out.println("</header><div id=\"container\"><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\"></div>");
 	%>
 </body>
 </html>

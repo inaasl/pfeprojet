@@ -26,9 +26,6 @@
 		<a class="logo" href="http://www.desentec.fr/"><img
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
 		</a>
-		<p class="head">
-		<center></center>
-		</p>
 	<%! int statut;
 	%>
 	<%
@@ -40,8 +37,9 @@
 	 	{
 	 		if(statut==0){
 	%>
-		<br>
 	<ul id="menu">
+	<li><a href="accueiladministrateur.jsp">Accueil</a>
+	</li>
 	<li><a href="#">Gestion des Clients</a>
 		<ul>
 			<li><a href="affichertoutesentreprises.jsp">Afficher tous les clients</a></li>
@@ -65,7 +63,9 @@
 	<% }
 		 if(statut==1){
 	%>
-			<ul id="menu">
+		<ul id="menu">
+		<li><a href="accueiltechnicien.jsp">Accueil</a>
+		</li>
 		<li><a href="#">Gestion des Clients - Interventions </a>
 		<ul>
 			<li><a href="ficheentreprise.jsp">Afficher tous les clients</a></li>
@@ -82,7 +82,9 @@
 		<% }
 			if(statut==2){
 		%>
-		<ul id="menu">
+	<ul id="menu">
+	<li><a href="accueilclient.jsp">Accueil</a>
+	</li>
 	<li><a href="#">Gestion des Batiments</a>
 	<ul>
 		<li><a href="affichertoutesentreprises.jsp">Afficher tous les batiments</a></li>
@@ -99,6 +101,7 @@
 	<%
 	}%>
 	</header>
+	  <div id="container">
 	<%@ page import="java.net.URL"%>
 	<%@ page import="java.net.URLConnection"%>
 	<%@ page import="java.io.* "%>
@@ -132,11 +135,11 @@
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 
 		ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
-		out.print("<br><br><center>");
-		out.print("<h2>Fiche du Client</h2><hr>");
+		out.print("<center>");
+		out.print("<h3>Fiche du Client</h3><br>");
 		E = service.rechercheEntreprisenum(num);
 		batiment = service.rechercheBatimentEntreprise(num);
-		out.println("<b><font size=\"5\">" + E.getNom() + "</b><br><i>" + E.getAdresse()
+		out.println("<b><font size=\"3\">" + E.getNom() + "</b><br><i>" + E.getAdresse()
 			+ "</i><br><b>Tel: </b><i>" + E.getTel()+"</i></font><br>");
 		out.print("<br><br> <table id=\"datatables\" class=\"display\" >"); 
 		out.print("<thead><tr><th> Nom du batiment </th><th> Adresse du batiment </th><th> Fiche batiment </th></tr>");
@@ -150,11 +153,12 @@
 		}
 		out.print("</tbody></table>");
 	%>
+	</div>
 	<%
 	 }
 	 }
 	 else
-	 	out.println("</header><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\">");
+	 	out.println("</header><div id=\"container\"><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\"></div>");
 	%>
 
 </body>

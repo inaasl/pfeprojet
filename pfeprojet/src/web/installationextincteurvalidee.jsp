@@ -7,7 +7,6 @@
 <body>
 <header class="header">
     	        <a class="logo" href="http://www.desentec.fr/"><img src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png"> </a>
-    	       <p class="head"><center></center></p>
 	<%! int statut;
 	%>
 	<%
@@ -18,7 +17,9 @@
 	 if(statut==1)
 	 {
 	%>
-			<ul id="menu">
+		<ul id="menu">
+		<li><a href="accueiltechnicien.jsp">Accueil</a>
+		</li>	
 		<li><a href="#">Gestion des Clients - Interventions </a>
 		<ul>
 			<li><a href="affichertoutesentreprises.jsp">Afficher tous les clients</a></li>
@@ -33,7 +34,7 @@
 		</li>
 		</ul>
 </header>
-
+  <div id="container">
 		<%@ page import="java.net.URL" %>
         <%@ page import="java.net.URLConnection" %>
         <%@ page import="java.io.* " %>
@@ -94,11 +95,12 @@
 	"<td> <p> Conclusion  </td> <td><textarea  name=\"conclusion\" rows=\"5\" cols=\"47\" required placeholder=\"emplacement extincte...\"/></textarea></p> <td></tr></table>"+
 		"<input type=\"submit\" value=\"Valider\"> </center>");
 %>
+</div>
 	<%
 	 }
 	 }
 	 else
-	 	out.println("</header><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\">");
+	 	out.println("</header><div id=\"container\"><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\"></div>");
 	%>
 </body>
 </html>

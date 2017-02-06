@@ -80,4 +80,3 @@
 		<url-pattern>/verificationcompte</url-pattern>
 		</servlet-mapping>
 </web-app>
-
