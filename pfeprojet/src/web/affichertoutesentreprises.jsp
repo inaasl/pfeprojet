@@ -24,6 +24,7 @@
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
 		</a>
 	<%! int statut;
+	List<Intervention> interv;
 	%>
 	<%
 	 if(session.getAttribute("statut")!=null)
@@ -78,7 +79,9 @@
 		<li><a href="deconnexion.jsp">Déconnexion</a>
 		</li>
 		</ul>
-	<% }
+	<% 		interv=(List<Intervention>)session.getAttribute("interv");
+	if(interv!=null) interv.clear();
+	}
 	%>
 	</header>
   <div id="container">

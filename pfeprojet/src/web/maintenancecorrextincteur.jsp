@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Verification d'un Extincteur</title>
+<title>Maintenance Corrective : Extincteur</title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -78,27 +78,25 @@
  		num=Integer.parseInt(numBat);
 		E.clear();
 		E=service.rechercheExtincteurBatiment(num);
-		out.println("<br><center><h3>Vérification des Extincteurs</h3></center><br>");
+		out.println("<br><center><h3>Maintenance Corrective des Extincteurs</h3></center><br>");
 		// Tableau
-		out.println("<br><form action=\"verificationextincteurvalidee.jsp\">");
+		out.println("<br><form action=\"maintenancecorrextincteurvalidee.jsp\">");
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
-		out.print("<thead><tr><th> N° Extincteur </th><th> Emplacement </th><th> Type extincteur </th><th>  Marque </th><th>Annee </th><th>Observation</th></tr>");
+		out.print("<thead><tr><th> N° Extincteur </th><th> Emplacement </th><th> Type extincteur </th><th>  Marque </th><th>Annee </th></tr>");
 		out.print("</thead><tbody>");
 	      
 		for(i=0;i<E.size();i++){
-					observation=service.rechercheObservationVerification(E.get(i).getNumero());
 					out.println(" <tr><td > " + E.get(i).getNumero()+
 						"</td> <td>" + E.get(i).getEmplacement()+
 						"</td> <td >" + E.get(i).getType().getNom()+
 						"</td> <td >" + E.get(i).getMarque().getNom()+
 						"</td> <td >" + E.get(i).getAnnee()+
-						"</td> <td> <input type=\"text\" name="+i+" value="+observation+"></td></tr>"
+						"</td><td> <form action=\"maintenancecorrextincteurvalidee\" method=\"GET\" ><input type=\"hidden\" id=\"idextinct\" name=\"numextincteur\" value="
+						+ E.get(i).getNumero()
+						+ "> <input type=\"submit\" name=\" Effectuer une maintenance corrective \" value=\" Effectuer une maintenance corrective \" /></form></td></tr>"
 						);
 		}
-		conclusion=service.rechercheConclusionVerification();
 		out.println("</tbody></table><br><br>"); 
-		out.println("<center><table><tr><td>Conclusion</td> <td></td> <td><textarea name=\"Conclusion\" rows=\"5\" cols=\"47\" required>"+conclusion+"</textarea></td></tr></table>");
-		out.println("<br><input type=\"submit\" value=\"Valider\"></center></form>");
 		session.setAttribute("Extincteurs",E);
 	%>
 	</div>

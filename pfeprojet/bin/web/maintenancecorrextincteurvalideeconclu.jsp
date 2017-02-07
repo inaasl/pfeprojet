@@ -40,37 +40,29 @@
         <%@ page import="java.io.* " %>
 		<%@ page import= "ejb.sessions.*"%>
 		<%@ page import= "ejb.entites.* "%>
-		<%@ page import= "java.util.Collection"%>
-		<%@ page import= "java.util.Set"%>
 		<%@ page import= "javax.naming.InitialContext"%>
 		<%@ page import= "javax.naming.NamingException"%>
 		<%@ page import= "java.sql.Date"%>
 		<%@ page import= "java.text.SimpleDateFormat"%>
 		<%@ page import= "java.text.DateFormat"%>
-		<%@ page import= "java.util.HashSet"%>
 		<%@ page import= "java.util.List"%>
 		<%@ page import= "java.util.ArrayList"%>
 		
 		
-<%! String numBat, annee,observ,empla, type,marque;
-	int numB,numT,anneeInt;
-	List<Installation> interv;
+<%! String numBat,observ,conclusion;
+	int numB,numT,numextincteur;
+	List<Corrective> interv;
 	Extincteur Extcourant;
 %>
 <%
-	annee =request.getParameter("annee");
 	observ =request.getParameter("observations");
-	empla=request.getParameter("emplacement");
-	type=request.getParameter("typeextincteur");
-	marque=request.getParameter("marqueextincteur");
-	
-	
+
 	numBat=String.valueOf(session.getAttribute("numBatiment"));
 	numB=Integer.parseInt(numBat);
 	
-	numT=(Integer)session.getAttribute("numPersonne");
+	numextincteur=(Integer)session.getAttribute("numextincteur");
 	
-	anneeInt=Integer.parseInt(annee);
+	numT=(Integer)session.getAttribute("numPersonne");
 	
 	InitialContext ctx = new InitialContext();
 	Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -79,30 +71,22 @@
 	java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
 	java.util.Date date = new java.util.Date();
 	
-	Extcourant=service.ajoutExtincteur(numB, anneeInt, empla, observ, marque, type);
-	
-/* 	extincteurs = (List<Extincteur>) session.getAttribute("organes");
-	if (extincteurs == null) {
-		extincteurs = new ArrayList<Extincteur>();
-	}
-	extincteurs.add(Extcourant);
-	
-	 */
-	interv = (List<Installation>) session.getAttribute("interv");
+	Extcourant=service.rechercheExtincteur(numextincteur);
+	conclusion=service.rechercheConclusionMaintenancecorr();
+	interv = (List<Corrective>) session.getAttribute("interv");
 	if (interv == null) {
-		interv = new ArrayList<Installation>();
+		interv = new ArrayList<Corrective>();
 	} 
-	interv.add(service.InstallationOrgane(observ, Date.valueOf(formater.format(date)), numT, numB, Extcourant));
-	
-	//session.setAttribute("organes",extincteurs);
+	interv.add(service.MaintenanceCorrectiveOrgane(observ, Date.valueOf(formater.format(date)), numT, Extcourant));
+
 	session.setAttribute("interv", interv);
 	
-	out.println("<br><center> Installation effectuée avec succès </center>");
+	out.println("<br><center> Maintenance Corrective effectuée avec succès </center>");
 
-	out.println("<center><a href=\"installationextincteur.jsp\">Ajout d'un nouvel extincteur</a></center>");
+	out.println("<center><a href=\"maintenancecorrextincteur.jsp\">Effectuer une nouvelle maintenance corrective </a></center>");
 	out.println(
 			"<br><center><form action=\"interventionvalidee.jsp\"><table><tr>"+
-	"<td> <p> Conclusion  </td> <td><textarea  name=\"conclusion\" rows=\"5\" cols=\"47\" required placeholder=\"emplacement extincte...\"/></textarea></p> <td></tr></table>"+
+	"<td> <p> Conclusion  </td> <td><textarea  name=\"conclusion\" rows=\"5\" cols=\"47\" />"+conclusion+"</textarea></p> <td></tr></table>"+
 		"<input type=\"submit\" value=\"Valider\"> </center>");
 %>
 </div>

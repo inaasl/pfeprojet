@@ -71,12 +71,30 @@
 		<url-pattern>/installationextincteurvalidee</url-pattern>
 	</servlet-mapping>
 	
-		<servlet>
+	<servlet>
 		<servlet-name>verificationcompte</servlet-name>
 		<jsp-file>/verificationcompte.jsp</jsp-file>
 	</servlet>
 		<servlet-mapping>
 		<servlet-name>verificationcompte</servlet-name>
 		<url-pattern>/verificationcompte</url-pattern>
+		</servlet-mapping>
+		
+	<servlet>
+		<servlet-name>maintenancecorrextincteurvalidee</servlet-name>
+		<jsp-file>/maintenancecorrextincteurvalidee.jsp</jsp-file>
+	</servlet>
+		<servlet-mapping>
+		<servlet-name>maintenancecorrextincteurvalidee</servlet-name>
+		<url-pattern>/maintenancecorrextincteurvalidee</url-pattern>
+		</servlet-mapping>
+		
+	<servlet>
+		<servlet-name>maintenancecorrextincteurvalideeconclu</servlet-name>
+		<jsp-file>/maintenancecorrextincteurvalideeconclu.jsp</jsp-file>
+	</servlet>
+		<servlet-mapping>
+		<servlet-name>maintenancecorrextincteurvalideeconclu</servlet-name>
+		<url-pattern>/maintenancecorrextincteurvalideeconclu</url-pattern>
 		</servlet-mapping>
 </web-app>

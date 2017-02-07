@@ -52,14 +52,14 @@
 		<%@ page import= "java.util.ArrayList"%>
 		
 		
-<%! String numBat, annee,observ,numtech,conclu,empla, type,marque;
+<%! String numBat, annee,observ,empla, type,marque;
 	int numB,numT,anneeInt;
 	List<Installation> interv;
+	Extincteur Extcourant;
 %>
 <%
 	annee =request.getParameter("annee");
 	observ =request.getParameter("observations");
-	conclu =request.getParameter("conclusion");
 	empla=request.getParameter("emplacement");
 	type=request.getParameter("typeextincteur");
 	marque=request.getParameter("marqueextincteur");
@@ -78,13 +78,23 @@
 	String format = "yyyy-MM-dd";
 	java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
 	java.util.Date date = new java.util.Date();
-	service.InstallationExtincteur(anneeInt, empla, observ,Date.valueOf(formater.format(date)),numT,numB,type,marque);
 	
+	Extcourant=service.ajoutExtincteur(numB, anneeInt, empla, observ, marque, type);
+	
+/* 	extincteurs = (List<Extincteur>) session.getAttribute("organes");
+	if (extincteurs == null) {
+		extincteurs = new ArrayList<Extincteur>();
+	}
+	extincteurs.add(Extcourant);
+	
+	 */
 	interv = (List<Installation>) session.getAttribute("interv");
 	if (interv == null) {
 		interv = new ArrayList<Installation>();
 	} 
-	interv.add(service.getlisteInstallation().get(service.getlisteInstallation().size() - 1));
+	interv.add(service.InstallationOrgane(observ, Date.valueOf(formater.format(date)), numT, numB, Extcourant));
+	
+	//session.setAttribute("organes",extincteurs);
 	session.setAttribute("interv", interv);
 	
 	out.println("<br><center> Installation effectuée avec succès </center>");

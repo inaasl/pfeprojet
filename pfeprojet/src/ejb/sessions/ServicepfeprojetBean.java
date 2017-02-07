@@ -131,7 +131,10 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	public List<Extincteur> rechercheExtincteurBatiment(int numeroBatiment){
 		return em.createQuery("from Extincteur e WHERE e.batiment.numero = "+numeroBatiment).getResultList();
 	}
-	
+	// recherche d'un organe 
+	public Extincteur rechercheExtincteur(int numeroExtincteur){
+		return em.find(Extincteur.class,numeroExtincteur);
+	}
 	
 	// Fonctions d'ajouts
 
@@ -210,10 +213,19 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	
 	// Interventions sur les extincteurs
 	// Intervention : Installation
-	public void InstallationExtincteur(int Annee, String Emp, String Obs, java.sql.Date date, int numtechnicien,
-			int numbatiment, String nomtype, String nommarque)
+	public Installation InstallationOrgane(String Obs, java.sql.Date date, int numtechnicien,int numbatiment,Organe O)
 			throws TechnicienInconnuException, BatimentInconnuException, EntrepriseInconnueException {
 		Technicien T = rechercheTechniciennum(numtechnicien);
+		Batiment B = rechercheBatimentnum(numbatiment);
+		Installation Inst = new Installation();
+		Inst.setDate(date);
+		Inst.setObservation(Obs);
+		Inst.setOrgane(O);
+		Inst.setTechnicien(T);
+		return Inst;
+	}
+	// Ajout Extincteur 
+	public Extincteur ajoutExtincteur(int numbatiment, int Annee, String Emp, String Obs, String nommarque, String nomtype) throws BatimentInconnuException{
 		Batiment B = rechercheBatimentnum(numbatiment);
 		Extincteur E = new Extincteur();
 		E.setAnnee(Annee);
@@ -224,20 +236,28 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		E.setMarque(M);
 		TypeExtincteur Tp = rechercheTypeExtincteur(nomtype);
 		E.setType(Tp);
-		Installation Inst = new Installation();
-		Inst.setDate(date);
-		Inst.setObservation(Obs);
-		Inst.setOrgane(E);
-		Inst.setTechnicien(T);
-		if (E.getInterventions() == null) {
-			List<Intervention> interv = new ArrayList<Intervention>();
-			E.setInterventions(interv);
+		return E;
+	}
+	// Ajout dans la base de donnée
+	public void ajoutIntervention(int numbatiment, Intervention Interv, Organe O, String conclusion) throws BatimentInconnuException{
+		Batiment B = rechercheBatimentnum(numbatiment);
+		Interv.setConclusion(conclusion);
+		
+		if (O.getInterventions() == null) {
+		List<Intervention> interv = new ArrayList<Intervention>();
+		O.setInterventions(interv);
 		}
-		E.addInterventions(Inst);
-		B.addOrganes(E);
-		em.persist(E);
-		em.persist(Inst);
-		em.merge(B);
+		O.addInterventions(Interv);
+		O.setConclusion(conclusion);
+		if(Interv instanceof Installation){
+			B.addOrganes(O);
+			em.merge(B);
+			em.persist(O);
+		}
+		else {
+			em.merge(O);
+		}
+		em.persist(Interv);
 	}
 	// Intervention : Verification
 	public void Verification(int numero, String Obs, String conclusion, int numerotechnicien, java.sql.Date date)
@@ -279,9 +299,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	}
 	// Intervention : Maintenance
 	// Maintenance : Corrective
-	public void MaintenanceCorrectiveExtincteur(int numeroExtincteur, String Obs, String Obsraj, int numerotechnicien,
-			java.sql.Date date) throws OrganeInconnuException, TechnicienInconnuException {
-		Extincteur E = (Extincteur) rechercheOrgane(numeroExtincteur);
+	public Corrective MaintenanceCorrectiveOrgane(String Obs,java.sql.Date date,  int numerotechnicien, Organe O) throws TechnicienInconnuException {
 		Technicien T = em.find(Technicien.class, numerotechnicien);
 		if (T == null) {
 			throw new TechnicienInconnuException();
@@ -289,24 +307,13 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		Corrective MC = new Corrective();
 		MC.setDate(date);
 		MC.setObservation(Obs);
-		MC.setConclusion(Obsraj);
 		MC.setTechnicien(T);
-		MC.setOrgane(E);
-		if (E.getInterventions() == null) {
-			List<Intervention> interv = new ArrayList<Intervention>();
-			E.setInterventions(interv);
-		}
-		E.addInterventions(MC);
-		em.persist(MC);
-		em.merge(E);
+		MC.setOrgane(O);
+		return MC;
 	}
 	// Maintenance : Preventive
-	public void MaintenancePreventiveExtincteur(int numeroextincteur, String Obs, String Obsraj, int numerotechnicien,
+	public void MaintenancePreventiveOrgane(Organe O, String Obs, String Obsraj, int numerotechnicien, 
 			java.sql.Date date) throws OrganeInconnuException, TechnicienInconnuException {
-		Extincteur E = em.find(Extincteur.class, numeroextincteur);
-		if (E == null) {
-			throw new OrganeInconnuException();
-		}
 		Technicien T = em.find(Technicien.class, numerotechnicien);
 		if (T == null) {
 			throw new TechnicienInconnuException();
@@ -316,25 +323,16 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		MP.setObservation(Obs);
 		MP.setConclusion(Obsraj);
 		MP.setTechnicien(T);
-		MP.setOrgane(E);
-		if (E.getInterventions() == null) {
+		MP.setOrgane(O);
+		if (O.getInterventions() == null) {
 			List<Intervention> interv = new ArrayList<Intervention>();
-			E.setInterventions(interv);
+			O.setInterventions(interv);
 		}
-		E.addInterventions(MP);
+		O.addInterventions(MP);
 		em.persist(MP);
-		em.persist(E);
+		em.merge(O);
 	}
-	// Ajout d'une conclusion pour : Installation // Maintenance Corrective
-	public void listeIntervention(List<Intervention> interv, String conclu) {
-		for (int i = 0; i < interv.size(); i++) {
-			interv.get(i).setConclusion(conclu);
-			em.merge(interv.get(i));
-			interv.get(i).getOrgane().setConclusion(conclu);
-			em.merge(interv.get(i).getOrgane());
-		}
-	}
-	
+
 	// Listes : A partir de la base de donnees
 	
 	// Liste des installations
@@ -365,7 +363,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		return M;
 	}
 
-	// derniere observation
+	// derniere observation : Verification
 	public String rechercheObservationVerification(int numeroOrgane) {
 		@SuppressWarnings("unchecked")
 		List<Verification> verifications = em.createQuery("FROM Verification v where v.organe.numero = "+numeroOrgane).getResultList();
@@ -375,13 +373,53 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		return observation;
 	}
 
-	// derniere conclusion
-	public String rechercheConclusionVerification(int numeroOrgane) {
+	// derniere conclusion : Verification
+	public String rechercheConclusionVerification() {
 		@SuppressWarnings("unchecked")
-		List<Verification> verifications = em.createQuery("FROM Verification v where v.organe.numero = "+numeroOrgane).getResultList();
+		List<Verification> verifications = em.createQuery("FROM Verification v ").getResultList();
 		String conclusion="--";
 		if(verifications.size()!=0)
 			conclusion=verifications.get(verifications.size()-1).getConclusion();
+		return conclusion;
+	}
+	
+	// derniere observation : Maintenance Corrective
+	public String rechercheObservationMaintenancecorr(int numeroOrgane) {
+		@SuppressWarnings("unchecked")
+		List<Corrective> maintenancecorrective = em.createQuery("FROM Corrective m where m.organe.numero = "+numeroOrgane).getResultList();
+		String observation="--";
+		if(maintenancecorrective.size()!=0)
+			observation=maintenancecorrective.get(maintenancecorrective.size()-1).getObservation();
+		return observation;
+	}
+
+	// derniere conclusion : Maintenance Corrective
+	public String rechercheConclusionMaintenancecorr() {
+		@SuppressWarnings("unchecked")
+		List<Corrective> maintenancecorrective = em.createQuery("FROM Corrective m ").getResultList();
+		String conclusion="--";
+		if(maintenancecorrective.size()!=0)
+			conclusion=maintenancecorrective.get(maintenancecorrective.size()-1).getConclusion();
+		return conclusion;
+	}
+	
+	// derniere observation : Maintenance Preventive
+	public String rechercheObservationMaintenanceprev(int numeroOrgane) {
+		@SuppressWarnings("unchecked")
+		List<Preventive> maintenancepreventive = em.createQuery("FROM Preventive m where m.organe.numero = "+numeroOrgane).getResultList();
+		String observation="--";
+		if(maintenancepreventive.size()!=0)
+			observation=maintenancepreventive.get(maintenancepreventive.size()-1).getObservation();
+		return observation;
+	}
+
+	// derniere conclusion : Maintenance Corrective
+	public String rechercheConclusionMaintenanceprev() {
+		@SuppressWarnings("unchecked")
+		List<Preventive> maintenancepreventive = em.createQuery("FROM Preventive m ").getResultList();
+		String conclusion="--";
+		if(maintenancepreventive.size()!=0)
+			conclusion=maintenancepreventive.get(maintenancepreventive.size()-1).getConclusion();
 		return conclusion;
 	}
 

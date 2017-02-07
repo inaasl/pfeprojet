@@ -8,7 +8,11 @@
 <body>
  <header class="header">
     	        <a class="logo" href="http://www.desentec.fr/"><img src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png"> </a>
+ <%@ page import= "ejb.entites.* "%>
+<%@ page import= "java.util.List"%>
+
  <%! int statut;
+	List<Intervention> interv;
 	%>
 	<%
 	 if(session.getAttribute("statut")!=null)
@@ -66,7 +70,9 @@
 </center>
 </div>
 	<%
-	 }
+	interv=(List<Intervention>)session.getAttribute("interv");
+	if(interv!=null) interv.clear();
+			}
 	 }
 	 else
 	 	out.println("</header><div id=\"container\"><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\"></div>");

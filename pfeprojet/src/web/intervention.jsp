@@ -4,13 +4,9 @@
 <%@ page import="java.io.* "%>
 <%@ page import="ejb.sessions.*"%>
 <%@ page import="ejb.entites.* "%>
-<%@ page import="java.util.Collection"%>
-<%@ page import="java.util.Set"%>
 <%@ page import="javax.naming.InitialContext"%>
 <%@ page import="javax.naming.NamingException"%>
-<%@ page import="java.util.Date"%>
-<%@ page import="java.text.SimpleDateFormat"%>
-<%@ page import="java.text.DateFormat"%>
+	<%@ page import= "java.util.List"%>
 <head>
 <title></title>
 <link href="style.css" rel="stylesheet" type="text/css">
@@ -48,8 +44,12 @@
 		</ul>
 	</header>
 	
-<%!String typeinterv, typeorg, numeroB;%>
+<%!String typeinterv, typeorg, numeroB;
+List<Intervention> interv;
+%>
 <%
+	interv=(List<Intervention>)session.getAttribute("interv");
+	if(interv!=null) interv.clear();
 	typeinterv = request.getParameter("choixinterv");
 
 	typeorg = request.getParameter("choixorg");
@@ -60,6 +60,13 @@
 	if (typeinterv.compareTo("verification") == 0 && typeorg.compareTo("extincteur") == 0) {
 		out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationextincteur.jsp\">");
 	}
+	if (typeinterv.compareTo("maintenancecorr") == 0 && typeorg.compareTo("extincteur") == 0) {
+		out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrextincteur.jsp\">");
+	}
+	if (typeinterv.compareTo("maintenanceprev") == 0 && typeorg.compareTo("extincteur") == 0) {
+		out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenanceprevextincteur.jsp\">");
+	}
+	
 %>
 	<%
 	 }

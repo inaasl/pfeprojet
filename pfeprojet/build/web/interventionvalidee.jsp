@@ -47,7 +47,8 @@
 	</header>
   <div id="container">
 	<%!List<Intervention> Interv;
-	String conclu;
+	String conclu,numBat;
+	int numB;
 	%>
 <%
 	session = request.getSession();
@@ -55,12 +56,21 @@
 	Object obj = ctx.lookup(
 	"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 	ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
+	
+	numBat=String.valueOf(session.getAttribute("numBatiment"));
+	numB=Integer.parseInt(numBat);
+	
 	conclu = request.getParameter("conclusion");
 	Interv = (List<Intervention>)session.getAttribute("interv");
-	service.listeIntervention(Interv,conclu);
+	
+	for(int i=0;i<Interv.size();i++){
+		service.ajoutIntervention(numB, Interv.get(i), Interv.get(i).getOrgane(), conclu);
+	}
+	
 	out.println("<center><br>Intervention effectuée avec succès");
-		out.println("<br><form action=\"fichebatiment\" method=\"GET\" ><input type=\"submit\" name=\" Retour a la fiche du batiment \" value=\" Retour a la fiche du batiment \" /></form></center>");
-		out.println("</center>");
+	if(Interv!=null) Interv.clear();
+	out.println("<br><form action=\"fichebatiment\" method=\"GET\" ><input type=\"submit\" name=\" Retour a la fiche du batiment \" value=\" Retour a la fiche du batiment \" /></form></center>");
+	out.println("</center>");
 %>
 </div>
 	<%

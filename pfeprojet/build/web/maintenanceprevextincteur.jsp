@@ -19,8 +19,11 @@
     
      })
     </script>
+    
+    
 </head>
 <body>
+
 	<header class="header">
 		<a class="logo" href="http://www.desentec.fr/"><img
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
@@ -68,6 +71,7 @@
 	List<Extincteur> E = new ArrayList<Extincteur>();
 	%>
 	<%
+	
 		session = request.getSession();
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
@@ -78,15 +82,15 @@
  		num=Integer.parseInt(numBat);
 		E.clear();
 		E=service.rechercheExtincteurBatiment(num);
-		out.println("<br><center><h3>Vérification des Extincteurs</h3></center><br>");
+		out.println("<br><center><h3>Maintenance préventive des Extincteurs</h3></center><br>");
 		// Tableau
-		out.println("<br><form action=\"verificationextincteurvalidee.jsp\">");
+		out.println("<br><form action=\"maintenanceprevextincteurvalidee.jsp\">");
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
 		out.print("<thead><tr><th> N° Extincteur </th><th> Emplacement </th><th> Type extincteur </th><th>  Marque </th><th>Annee </th><th>Observation</th></tr>");
 		out.print("</thead><tbody>");
 	      
 		for(i=0;i<E.size();i++){
-					observation=service.rechercheObservationVerification(E.get(i).getNumero());
+					observation=service.rechercheObservationMaintenanceprev(E.get(i).getNumero());
 					out.println(" <tr><td > " + E.get(i).getNumero()+
 						"</td> <td>" + E.get(i).getEmplacement()+
 						"</td> <td >" + E.get(i).getType().getNom()+
@@ -95,8 +99,76 @@
 						"</td> <td> <input type=\"text\" name="+i+" value="+observation+"></td></tr>"
 						);
 		}
-		conclusion=service.rechercheConclusionVerification();
+		conclusion=service.rechercheConclusionMaintenanceprev();
 		out.println("</tbody></table><br><br>"); 
+		%>
+		<div class="panel panel-primary">
+        <div class="panel-heading">Pieces</div>        
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+             <th class="col-sm-4">Nom de la pièce</th>
+             <th class="col-sm-4">Numéro Extincteur</th>
+             <th class="col-sm-2"></th>
+            </tr>
+          </thead>
+		 <tbody>
+            <tr v-for="piece in pieces">
+              <td>{{ piece.nom }}</td>
+              <td>{{ piece.extincteur }}</td> 
+              <td><button type="button" class="btn btn-warning btn-block" v-on:click="suppression($index)">Supprimer</button></td>
+            </tr>  
+            <tr>
+              <td><input type="text" class="form-control" v-model="inputNom" v-el:modif placeholder="Nom"></td>
+              <td><select name="inputExtincteur" class="class_select">
+              <%
+              for(i=0;i<E.size();i++){
+            	  out.println("<option value=" + E.get(i).getNumero() + ">"
+							+ E.get(i).getNumero() + "</option>");
+              }
+              %>
+            </select>
+			</td>
+              <td colspan="2"><button type="button" class="btn btn-primary btn-block" v-on:click="ajouter()">Ajouter</button></td>
+            </tr>
+          </tbody>
+          </table>
+          
+           <div class="panel-footer">
+          &nbsp
+          <button type="button" class="button btn btn-xs btn-warning" v-on:click="toutSupprimer">Tout supprimer</button>
+        </div>
+      </div> 
+     <script src="http://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
+     <script type="text/javascript">
+    new Vue({
+        el: '#container',
+        data: {
+          pieces: [],
+          supprimer: [],
+          inputNom: '',
+          inputExtincteur: ''
+        },
+        methods: {
+          suppression: function(index) {
+            this.supprimer.push(this.pieces[index]);
+            this.pieces.splice(index, 1);
+          },
+          toutSupprimer: function() {
+            this.supprimer = this.supprimer.concat(this.pieces);
+            this.pieces = [];
+          },
+          ajouter: function() {
+        	i=this.inputExtincteur.selectedIndex;
+            this.pieces.push({nom: this.inputNom, extincteur: this.inputExtincteur.option[i].value});
+            this.inputNom = this.inputExtincteur.option[i].value;
+            this.inputExtincteur = '';
+          },
+        }
+      });
+    </script>
+		
+		<%
 		out.println("<center><table><tr><td>Conclusion</td> <td></td> <td><textarea name=\"Conclusion\" rows=\"5\" cols=\"47\" required>"+conclusion+"</textarea></td></tr></table>");
 		out.println("<br><input type=\"submit\" value=\"Valider\"></center></form>");
 		session.setAttribute("Extincteurs",E);

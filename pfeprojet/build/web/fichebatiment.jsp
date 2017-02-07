@@ -10,7 +10,12 @@
 		<a class="logo" href="http://www.desentec.fr/"><img
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
 		</a>
-		<%! int statut;
+	
+	<%@ page import= "ejb.entites.* "%>
+	<%@ page import= "java.util.List"%>
+	
+	<%! int statut;
+		List<Intervention> interv;
 	%>
 	<%
 	 if(session.getAttribute("statut")!=null)
@@ -63,7 +68,9 @@
 		<li><a href="deconnexion.jsp">Déconnexion</a>
 		</li>
 		</ul>
-		<% }
+		<% 		interv=(List<Intervention>)session.getAttribute("interv");
+		if(interv!=null) interv.clear();
+		}
 			if(statut==2){
 		%>
 	<ul id="menu">

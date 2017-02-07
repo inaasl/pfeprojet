@@ -87,7 +87,6 @@
 	      
 		for(i=0;i<E.size();i++){
 					observation=service.rechercheObservationVerification(E.get(i).getNumero());
-					conclusion=service.rechercheConclusionVerification(E.get(i).getNumero());
 					out.println(" <tr><td > " + E.get(i).getNumero()+
 						"</td> <td>" + E.get(i).getEmplacement()+
 						"</td> <td >" + E.get(i).getType().getNom()+
@@ -96,6 +95,7 @@
 						"</td> <td> <input type=\"text\" name="+i+" value="+observation+"></td></tr>"
 						);
 		}
+		conclusion=service.rechercheConclusionVerification();
 		out.println("</tbody></table><br><br>"); 
 		out.println("<center><table><tr><td>Conclusion</td> <td></td> <td><textarea name=\"Conclusion\" rows=\"5\" cols=\"47\" required>"+conclusion+"</textarea></td></tr></table>");
 		out.println("<br><input type=\"submit\" value=\"Valider\"></center></form>");

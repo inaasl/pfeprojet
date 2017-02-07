@@ -11,7 +11,11 @@
 		<a class="logo" href="http://www.desentec.fr/"><img
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
 		</a>
+	<%@ page import= "ejb.entites.* "%>
+	<%@ page import= "java.util.List"%>
+	
 	<%! Integer statut;
+		List<Intervention> interv;
 	%>
 	<%
 	 if(session.getAttribute("statut")!=null)
@@ -39,6 +43,8 @@
 		</ul>
 	</header>
 	<%
+		interv=(List<Intervention>)session.getAttribute("interv");
+		if(interv!=null) interv.clear();
 	 	}
 	}
  	else
