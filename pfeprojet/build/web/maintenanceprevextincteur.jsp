@@ -120,15 +120,14 @@
             </tr>  
             <tr>
               <td><input type="text" class="form-control" v-model="inputNom" v-el:modif placeholder="Nom"></td>
-              <td><select name="inputExtincteur" class="class_select">
+              <td><select id="select" class="class_select" v-model="inputExtincteur">
               <%
               for(i=0;i<E.size();i++){
             	  out.println("<option value=" + E.get(i).getNumero() + ">"
 							+ E.get(i).getNumero() + "</option>");
               }
               %>
-            </select>
-			</td>
+            </select></td>
               <td colspan="2"><button type="button" class="btn btn-primary btn-block" v-on:click="ajouter()">Ajouter</button></td>
             </tr>
           </tbody>
@@ -147,7 +146,6 @@
           pieces: [],
           supprimer: [],
           inputNom: '',
-          inputExtincteur: ''
         },
         methods: {
           suppression: function(index) {
@@ -158,11 +156,16 @@
             this.supprimer = this.supprimer.concat(this.pieces);
             this.pieces = [];
           },
+          recuperer: function(){
+        	  select = document.getElementById("select");
+        	  choice = select.selectedIndex;
+        	  valeur = select.options[choice].value;
+        	  return valeur;
+          },
           ajouter: function() {
-        	i=this.inputExtincteur.selectedIndex;
-            this.pieces.push({nom: this.inputNom, extincteur: this.inputExtincteur.option[i].value});
-            this.inputNom = this.inputExtincteur.option[i].value;
-            this.inputExtincteur = '';
+        	value=recuperer();
+            this.pieces.push({nom: this.inputNom, extincteur: value});
+            this.inputNom = '';
           },
         }
       });
