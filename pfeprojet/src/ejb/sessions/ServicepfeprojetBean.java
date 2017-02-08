@@ -195,6 +195,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		Piece P = new Piece();
 		P.setNom(nom);
 		Pieces.add(P);
+		em.persist(P);
 		return Pieces;
 	}
 	// Ajout Type Extincteur

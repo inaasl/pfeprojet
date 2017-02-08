@@ -11,6 +11,7 @@ import ejb.entites.Installation;
 import ejb.entites.Intervention;
 import ejb.entites.MarqueExtincteur;
 import ejb.entites.Organe;
+import ejb.entites.Piece;
 import ejb.entites.Technicien;
 import ejb.entites.TypeExtincteur;
 import ejb.entites.Verification;
@@ -73,4 +74,6 @@ public interface Servicepfeprojet {
 	public List<Integer> verificationCompte(String login, String pwd) throws CompteInconnuException;
 	public void creercompteAdmin( String login, int admin,int statut);
 	public String password();
+	
+	public List<Piece> AjoutPiece(List<Piece> Pieces, String nom);
 }

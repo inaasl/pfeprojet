@@ -80,21 +80,13 @@
 	java.util.Date date = new java.util.Date();
 	
 	Extcourant=service.ajoutExtincteur(numB, anneeInt, empla, observ, marque, type);
-	
-/* 	extincteurs = (List<Extincteur>) session.getAttribute("organes");
-	if (extincteurs == null) {
-		extincteurs = new ArrayList<Extincteur>();
-	}
-	extincteurs.add(Extcourant);
-	
-	 */
+
 	interv = (List<Installation>) session.getAttribute("interv");
 	if (interv == null) {
 		interv = new ArrayList<Installation>();
 	} 
 	interv.add(service.InstallationOrgane(observ, Date.valueOf(formater.format(date)), numT, numB, Extcourant));
 	
-	//session.setAttribute("organes",extincteurs);
 	session.setAttribute("interv", interv);
 	
 	out.println("<br><center> Installation effectuée avec succès </center>");

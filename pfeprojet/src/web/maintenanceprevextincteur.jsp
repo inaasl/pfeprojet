@@ -66,9 +66,11 @@
 	<%@ page import="javax.naming.InitialContext"%>
 	<%@ page import="javax.naming.NamingException"%>
 
-	<%!String numBat,conclusion, observation;
+	<%!String numBat,conclusion, observation, nomPiece,numExtincteur;
 	int num,i;
 	List<Extincteur> E = new ArrayList<Extincteur>();
+	List<Piece> listP = new ArrayList<Piece>();
+	Piece piececourante;
 	%>
 	<%
 	
@@ -119,8 +121,8 @@
               <td><button type="button" class="btn btn-warning btn-block" v-on:click="suppression($index)">Supprimer</button></td>
             </tr>  
             <tr>
-              <td><input type="text" class="form-control" v-model="inputNom" v-el:modif placeholder="Nom"></td>
-              <td><select id="select" class="class_select" v-model="inputExtincteur">
+              <td><input name="nomPiece" type="text" class="form-control" v-model="inputNom" v-el:modif placeholder="Nom"></td>
+              <td><select name="numExtincteur" id="liste" class="class_select" v-model="inputExtincteur">
               <%
               for(i=0;i<E.size();i++){
             	  out.println("<option value=" + E.get(i).getNumero() + ">"
@@ -132,13 +134,21 @@
             </tr>
           </tbody>
           </table>
-          
            <div class="panel-footer">
           &nbsp
           <button type="button" class="button btn btn-xs btn-warning" v-on:click="toutSupprimer">Tout supprimer</button>
         </div>
-      </div> 
-     <script src="http://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
+      </div>
+      
+
+		
+		<%
+		out.println("<center><table><tr><td>Conclusion</td> <td></td> <td><textarea name=\"Conclusion\" rows=\"5\" cols=\"47\" required>"+conclusion+"</textarea></td></tr></table>");
+		out.println("<br><input type=\"submit\" value=\"Valider\"></center></form>");
+		session.setAttribute("Extincteurs",E);
+	%>
+	</div>
+	     <script src="http://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
      <script type="text/javascript">
     new Vue({
         el: '#container',
@@ -156,27 +166,20 @@
             this.supprimer = this.supprimer.concat(this.pieces);
             this.pieces = [];
           },
-          recuperer: function(){
-        	  select = document.getElementById("select");
-        	  choice = select.selectedIndex;
-        	  valeur = select.options[choice].value;
-        	  return valeur;
-          },
           ajouter: function() {
-        	value=recuperer();
-            this.pieces.push({nom: this.inputNom, extincteur: value});
+            this.pieces.push({nom: this.inputNom, extincteur: this.inputExtincteur});          
+            /*document.location.href="maintenanceprevextincteur.jsp?nom="+this.inputNom;*/
+            /* AJAX.send("nomPiece="+encodeURIComponent(this.inputNom)); */
             this.inputNom = '';
+            <% 
+               nomPiece=request.getParameter("nomPiece");
+               service.AjoutPiece(listP, nomPiece);
+               session.setAttribute("listP",listP);
+			%>
           },
         }
       });
     </script>
-		
-		<%
-		out.println("<center><table><tr><td>Conclusion</td> <td></td> <td><textarea name=\"Conclusion\" rows=\"5\" cols=\"47\" required>"+conclusion+"</textarea></td></tr></table>");
-		out.println("<br><input type=\"submit\" value=\"Valider\"></center></form>");
-		session.setAttribute("Extincteurs",E);
-	%>
-	</div>
 	<%
 	 }
 	 }
