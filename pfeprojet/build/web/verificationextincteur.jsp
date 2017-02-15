@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Verification d'un Extincteur</title>
+<title>Verification des Extincteurs</title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -69,6 +69,8 @@
 	%>
 	<%
 		session = request.getSession();
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -82,7 +84,7 @@
 		// Tableau
 		out.println("<br><form action=\"verificationextincteurvalidee.jsp\">");
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
-		out.print("<thead><tr><th> N° Extincteur </th><th> Emplacement </th><th> Type extincteur </th><th>  Marque </th><th>Annee </th><th>Observation</th></tr>");
+		out.print("<thead><tr><th> N° Extincteur </th><th> Emplacement </th><th> Type extincteur </th><th>  Marque </th><th>Annee </th><th>Observation</th><th> Etat défecteux </th></tr>");
 		out.print("</thead><tbody>");
 	      
 		for(i=0;i<E.size();i++){
@@ -92,10 +94,11 @@
 						"</td> <td >" + E.get(i).getType().getNom()+
 						"</td> <td >" + E.get(i).getMarque().getNom()+
 						"</td> <td >" + E.get(i).getAnnee()+
-						"</td> <td> <input type=\"text\" name="+i+" value="+observation+"></td></tr>"
+						"</td> <td> <input type=\"text\" name="+i+" value="+observation+
+						"></td><td> <INPUT type=\"checkbox\" name="+(i+100)+" value=\"oui\">OUI</td></tr>"
 						);
 		}
-		conclusion=service.rechercheConclusionVerification();
+		conclusion=service.rechercheConclusionVerificationExtincteur(num);
 		out.println("</tbody></table><br><br>"); 
 		out.println("<center><table><tr><td>Conclusion</td> <td></td> <td><textarea name=\"Conclusion\" rows=\"5\" cols=\"47\" required>"+conclusion+"</textarea></td></tr></table>");
 		out.println("<br><input type=\"submit\" value=\"Valider\"></center></form>");

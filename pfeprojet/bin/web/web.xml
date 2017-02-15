@@ -62,13 +62,22 @@
 		<url-pattern>/choixintervention</url-pattern>
 	</servlet-mapping>
 
-		<servlet>
+	<servlet>
         <servlet-name>installationextincteurvalidee</servlet-name>
         <jsp-file>/installationextincteurvalidee.jsp</jsp-file>
     </servlet>
 	    <servlet-mapping>
 		<servlet-name>installationextincteurvalidee</servlet-name>
 		<url-pattern>/installationextincteurvalidee</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+        <servlet-name>installationphamacievalidee</servlet-name>
+        <jsp-file>/installationphamacievalidee.jsp</jsp-file>
+    </servlet>
+	    <servlet-mapping>
+		<servlet-name>installationphamacievalidee</servlet-name>
+		<url-pattern>/installationphamacievalidee</url-pattern>
 	</servlet-mapping>
 	
 	<servlet>
@@ -80,6 +89,7 @@
 		<url-pattern>/verificationcompte</url-pattern>
 		</servlet-mapping>
 		
+		
 	<servlet>
 		<servlet-name>maintenancecorrextincteurvalidee</servlet-name>
 		<jsp-file>/maintenancecorrextincteurvalidee.jsp</jsp-file>
@@ -88,7 +98,6 @@
 		<servlet-name>maintenancecorrextincteurvalidee</servlet-name>
 		<url-pattern>/maintenancecorrextincteurvalidee</url-pattern>
 		</servlet-mapping>
-		
 	<servlet>
 		<servlet-name>maintenancecorrextincteurvalideeconclu</servlet-name>
 		<jsp-file>/maintenancecorrextincteurvalideeconclu.jsp</jsp-file>
@@ -96,5 +105,23 @@
 		<servlet-mapping>
 		<servlet-name>maintenancecorrextincteurvalideeconclu</servlet-name>
 		<url-pattern>/maintenancecorrextincteurvalideeconclu</url-pattern>
+		</servlet-mapping>
+		
+		
+	<servlet>
+		<servlet-name>maintenancecorrpharmacievalidee</servlet-name>
+		<jsp-file>/maintenancecorrpharmacievalidee.jsp</jsp-file>
+	</servlet>
+		<servlet-mapping>
+		<servlet-name>maintenancecorrpharmacievalidee</servlet-name>
+		<url-pattern>/maintenancecorrpharmacievalidee</url-pattern>
+		</servlet-mapping>
+	<servlet>
+		<servlet-name>maintenancecorrpharmacievalideeconclu</servlet-name>
+		<jsp-file>/maintenancecorrpharmacievalideeconclu.jsp</jsp-file>
+	</servlet>
+		<servlet-mapping>
+		<servlet-name>maintenancecorrpharmacievalideeconclu</servlet-name>
+		<url-pattern>/maintenancecorrpharmacievalideeconclu</url-pattern>
 		</servlet-mapping>
 </web-app>

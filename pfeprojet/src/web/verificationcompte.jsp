@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
    <head>
-    <title>Ajout d'une Entreprise</title>
+    <title></title>
     <meta charset="UTF-8" />
     <link href="style.css" rel="stylesheet" type="text/css">
   </head>
@@ -44,9 +44,13 @@
     			Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
     			ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
     			session = request.getSession();
+    			Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+    			pdf=null;
+    			session.setAttribute("login",login);
     			
     			try{
     			 List<Integer> liste = service.verificationCompte(login, password);
+    			 session.setAttribute("numCompte",liste.get(2));
          		 if(liste.get(1) == 2){ 
          		    session.setAttribute("numPersonne",liste.get(0));
          		    session.setAttribute("statut",liste.get(1));

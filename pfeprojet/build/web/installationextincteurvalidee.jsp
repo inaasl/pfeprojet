@@ -40,8 +40,6 @@
         <%@ page import="java.io.* " %>
 		<%@ page import= "ejb.sessions.*"%>
 		<%@ page import= "ejb.entites.* "%>
-		<%@ page import= "java.util.Collection"%>
-		<%@ page import= "java.util.Set"%>
 		<%@ page import= "javax.naming.InitialContext"%>
 		<%@ page import= "javax.naming.NamingException"%>
 		<%@ page import= "java.sql.Date"%>
@@ -63,7 +61,8 @@
 	empla=request.getParameter("emplacement");
 	type=request.getParameter("typeextincteur");
 	marque=request.getParameter("marqueextincteur");
-	
+	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+	pdf=null;
 	
 	numBat=String.valueOf(session.getAttribute("numBatiment"));
 	numB=Integer.parseInt(numBat);
@@ -75,7 +74,7 @@
 	InitialContext ctx = new InitialContext();
 	Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 	ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
-	String format = "yyyy-MM-dd";
+ 	String format = "yyyy-MM-dd"; 
 	java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
 	java.util.Date date = new java.util.Date();
 	
@@ -94,7 +93,7 @@
 	out.println("<center><a href=\"installationextincteur.jsp\">Ajout d'un nouvel extincteur</a></center>");
 	out.println(
 			"<br><center><form action=\"interventionvalidee.jsp\"><table><tr>"+
-	"<td> <p> Conclusion  </td> <td><textarea  name=\"conclusion\" rows=\"5\" cols=\"47\" required placeholder=\"emplacement extincte...\"/></textarea></p> <td></tr></table>"+
+	"<td> <p> Conclusion  </td> <td><textarea  name=\"conclusion\" rows=\"5\" cols=\"47\" required placeholder=\"Conclusion...\"/></textarea></p> <td></tr></table>"+
 		"<input type=\"submit\" value=\"Valider\"> </center>");
 %>
 </div>

@@ -50,14 +50,20 @@
 	<%@ page import="java.text.SimpleDateFormat"%>
 	<%@ page import="java.text.DateFormat"%>
 
-	<%!String numBat, conclusion, observation;
+	<%!String numBat,etat, conclusion, observation;
 	int num, i, numT;
 	List<Extincteur> E;
 	Extincteur Extcourant;
+	Preventive MP;
+	List<Intervention> Interventionajoutee = new ArrayList<Intervention>();
+	List<Piece> listP;
+	boolean Etat;
 	%>
 
 	<%
 		session = request.getSession();
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -68,7 +74,9 @@
 		num = Integer.parseInt(numBat); 
 
 		conclusion = request.getParameter("Conclusion");
+		
 		E=(List<Extincteur>)session.getAttribute("Extincteurs");
+		listP=(List<Piece>)session.getAttribute("listP");
 		
 		String format = "yyyy-MM-dd";
 		java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
@@ -76,12 +84,30 @@
 		numT=(Integer)session.getAttribute("numPersonne");
 		for (i=0;i <E.size(); i++) {
 				observation = request.getParameter(String.valueOf(i));
-				service.MaintenancePreventiveOrgane(E.get(i), observation, conclusion, numT, Date.valueOf(formater.format(date)));
+				etat = request.getParameter(String.valueOf(i+100));
+				if(etat!=null){
+					if(etat.compareTo("oui")==0)
+						Etat=false;
+				}
+				else 
+					Etat=true;
+				MP=service.MaintenancePreventiveOrgane(E.get(i), observation, conclusion, numT, Date.valueOf(formater.format(date)),Etat);
+ 				for(int j=0;j<listP.size();j++){
+					if(MP.getOrgane().getNumero()==listP.get(j).getOrgane().getNumero()){
+						listP.get(j).setPreventive(MP);
+						service.AjoutPieceBD(listP.get(j));
+					}
+				}
+ 				Interventionajoutee.add(MP);
 		}
+		pdf=service.ajoutpdf(Interventionajoutee);
+		Interventionajoutee.clear();
 		out.println("<center><br>Maintenance Préventive effectuée avec succès");
-		E.clear();
-		out.println("<br><form action=\"fichebatiment\" method=\"GET\" ><input type=\"submit\" name=\" Retour a la fiche du batiment \" value=\" Retour a la fiche du batiment \" /></form></center>");
+		session.setAttribute("pdf",pdf);
+		out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionextincteurpdf.jsp'\"></button></td></tr>");
+		out.println("<tr><td><input type=\"button\" name=\"Fichebatiment\" value=\"Retour a la fiche du batiment \" onclick=\"self.location.href='fichebatiment.jsp'\"></button></td></tr></table>");
 		out.println("</center>");
+		E.clear();
 		%>
 	</div>
 	<%

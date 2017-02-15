@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Verification d'un Extincteur</title>
+<title>Verification des Extincteurs</title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
@@ -50,13 +50,17 @@
 	<%@ page import="java.text.SimpleDateFormat"%>
 	<%@ page import="java.text.DateFormat"%>
 
-	<%!String numBat, conclusion, observation;
+	<%!String numBat, conclusion, observation,etat;
 	int num, i, numT;
+	boolean Etat;
 	List<Extincteur> E;
+	List<Intervention> Interventionajoutee = new ArrayList<Intervention>();
 	%>
 
 	<%
 		session = request.getSession();
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -65,7 +69,6 @@
  		numBat = String.valueOf(session.getAttribute("numBatiment"));
 		session.setAttribute("numBatiment", numBat);
 		num = Integer.parseInt(numBat); 
-		//num=(Integer)session.getAttribute("num");
 		conclusion = request.getParameter("Conclusion");
 		E=(List<Extincteur>)session.getAttribute("Extincteurs");
 		
@@ -75,13 +78,23 @@
 		numT=(Integer)session.getAttribute("numPersonne");
 		for (i=0;i <E.size(); i++) {
 				observation = request.getParameter(String.valueOf(i));
-				service.Verification(service.rechercheOrgane(E.get(i).getNumero()).getNumero(),observation,conclusion,numT,
-					Date.valueOf(formater.format(date)));
+				etat = request.getParameter(String.valueOf(i+100));
+				if(etat!=null){
+					if(etat.compareTo("oui")==0)
+						Etat=false;
+				}
+				Interventionajoutee.add(service.Verification(service.rechercheOrgane(E.get(i).getNumero()).getNumero(),observation,conclusion,numT,
+					Date.valueOf(formater.format(date)),Etat));
 		}
-		out.println("<center><br>Intervention effectuée avec succès");
+		pdf=service.ajoutpdf(Interventionajoutee);
+		Interventionajoutee.clear();
 		E.clear();
-		out.println("<br><form action=\"fichebatiment\" method=\"GET\" ><input type=\"submit\" name=\" Retour a la fiche du batiment \" value=\" Retour a la fiche du batiment \" /></form></center>");
+		out.println("<center><br>Vérification effectuée avec succès");
+		session.setAttribute("pdf",pdf);
+		out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionextincteurpdf.jsp'\"></button></td></tr>");
+		out.println("<tr><td><input type=\"button\" name=\"Fichebatiment\" value=\"Retour a la fiche du batiment \" onclick=\"self.location.href='fichebatiment.jsp'\"></button></td></tr></table>");
 		out.println("</center>");
+
 		%>
 	</div>
 	<%

@@ -12,7 +12,7 @@ public class Piece implements java.io.Serializable {
 	private int numero;
 	private String nom;
 	
-	private Extincteur extincteur;
+	private Organe organe;
 	private Preventive preventive;
 
 	public Piece () { };
@@ -37,11 +37,11 @@ public class Piece implements java.io.Serializable {
 		this.nom = newnom;
 	}
 	@ManyToOne
-	public Extincteur getExtincteur() {
-		return extincteur;
+	public Organe getOrgane() {
+		return organe;
 	}
-	public void setExtincteur(Extincteur extincteur) {
-		this.extincteur = extincteur;
+	public void setOrgane(Organe organe) {
+		this.organe = organe;
 	}
 	@ManyToOne
 	public Preventive getPreventive() {

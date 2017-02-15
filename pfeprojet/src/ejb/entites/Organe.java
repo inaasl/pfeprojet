@@ -28,10 +28,10 @@ public abstract class Organe implements java.io.Serializable {
 	private String emplacement;
 	private String conclusion;
 	private String observation;
-	
+	private boolean marche;
 
 	private List<Intervention> interventions;
-
+	private List<Piece> pieces;
 	
 	private Batiment batiment; 
 	
@@ -77,12 +77,33 @@ public abstract class Organe implements java.io.Serializable {
 	}
 	public abstract void addInterventions (Intervention intervention);
 	
+	@OneToMany(mappedBy="organe",fetch=FetchType.EAGER)
+	public List<Piece> getPieces () {
+		return (List<Piece>) pieces;
+	}
+	public void setPieces(List<Piece> pieces){
+		this.pieces=pieces;
+	}
+	public void addPiecesextincteur (Piece new_piece) {
+		pieces.add(new_piece);
+	}
+	public void removePiecesextincteur (Piece piece)
+	{
+		pieces.remove(piece);
+	}
+	
 	@ManyToOne
 	public Batiment getBatiment() {
 		return batiment;
 	}
 	public void setBatiment(Batiment batiment) {
 		this.batiment = batiment;
+	}
+	public boolean isMarche() {
+		return marche;
+	}
+	public void setMarche(boolean marche) {
+		this.marche = marche;
 	}
 
 }

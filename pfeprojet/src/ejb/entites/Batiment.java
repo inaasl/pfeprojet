@@ -12,6 +12,9 @@ public class Batiment implements java.io.Serializable {
 	private int numero;
 	private String nom;
 	private String adresse;
+	private String nomresp;
+	private String prenomresp;
+	private boolean marche;
 	
 	private List<Organe> organes;
 	
@@ -73,6 +76,30 @@ public class Batiment implements java.io.Serializable {
 	public String toString(){
 		return "Fiche du batiment : \n  Numero du batiment : "+this.numero+"\nNom du batiment : "+this.nom
 				+"\nAdresse Postale : "+this.adresse;
+	}
+
+	public String getNomresp() {
+		return nomresp;
+	}
+
+	public void setNomresp(String nomresp) {
+		this.nomresp = nomresp;
+	}
+
+	public String getPrenomresp() {
+		return prenomresp;
+	}
+
+	public void setPrenomresp(String prenomresp) {
+		this.prenomresp = prenomresp;
+	}
+
+	public boolean isMarche() {
+		return marche;
+	}
+
+	public void setMarche(boolean marche) {
+		this.marche = marche;
 	}
 
 

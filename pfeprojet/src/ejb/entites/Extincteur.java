@@ -12,7 +12,7 @@ public class Extincteur extends Organe implements java.io.Serializable {
 	private TypeExtincteur type;
 	private MarqueExtincteur marque;
 	
-	private List<Piece> pieces;
+
 
 	public Extincteur () { };
 	public int getAnnee () {
@@ -41,20 +41,7 @@ public class Extincteur extends Organe implements java.io.Serializable {
 	public void addMarqueextincteur (MarqueExtincteur new_object) {
 		marque=new_object;
 	}
-	@OneToMany(mappedBy="extincteur",fetch=FetchType.EAGER)
-	public List<Piece> getPieces () {
-		return (List<Piece>) pieces;
-	}
-	public void setPieces(List<Piece> pieces){
-		this.pieces=pieces;
-	}
-	public void addPiecesextincteur (Piece new_piece) {
-		pieces.add(new_piece);
-	}
-	public void removePiecesextincteur (Piece piece)
-	{
-		pieces.remove(piece);
-	}
+
 	public void addInterventions (Intervention intervention) {
 		this.getInterventions().add(intervention);
 	}

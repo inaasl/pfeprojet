@@ -85,6 +85,8 @@
 		<% 
 		interv=(List<Intervention>)session.getAttribute("interv");
 		if(interv!=null) interv.clear();
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
 			}
 			if(statut==2){
 		%>
@@ -120,14 +122,18 @@
 	<%@ page import="java.util.List"%>
 
 
-	<%!String numEntreprise;
+	<%!String numEntreprise, marche;
 	Entreprise E;
 	int num, i;
 	String numeroE;
 	List<Batiment> batiment;
+	List<Intervention>Interventionajoutee;
 	%>
 	<%
-		session = request.getSession();
+		 session = request.getSession();
+    	 Interventionajoutee=(List<Intervention>)session.getAttribute("Interventionajoutee");
+		 if(Interventionajoutee!=null)
+    	 	Interventionajoutee.clear();
 		 numEntreprise = request.getParameter("numEntreprise");
 		 if(numEntreprise==null){
 			 numeroE = (String)session.getAttribute("numeroE");
@@ -147,15 +153,28 @@
 		batiment = service.rechercheBatimentEntreprise(num);
 		out.println("<b><font size=\"3\">" + E.getNom() + "</b><br><i>" + E.getAdresse()
 			+ "</i><br><b>Tel: </b><i>" + E.getTel()+"</i></font><br>");
+		// formulaire d'ajout d'un batiment
+		if(statut==0)
+	 	{
+		  out.print("<br><br><form action=\"ajoutbatiment\" method=\"POST\" >");
+		  out.print("<input type=\"hidden\" id=\"thisField\" name=\"numEntreprise\" value="+num
+				+"> <input type=\"submit\" name=\" Ajout batiment \" value=\" Ajout batiment \" /></form>");
+	 	}	
 		out.print("<br><br> <table id=\"datatables\" class=\"display\" >"); 
-		out.print("<thead><tr><th> Nom du batiment </th><th> Adresse du batiment </th><th> Fiche batiment </th></tr>");
+		out.print("<thead><tr><th> Nom du batiment </th><th> Adresse du batiment </th><th> Fiche batiment </th><th> Etat </th></tr>");
 		out.print("</thead><tbody>");
 		for (i=0; i< batiment.size();i++){
+			service.checkbatiment(batiment.get(i).getNumero());
+			if(batiment.get(i).isMarche()==true)
+				marche="OK";
+			else
+				marche="Echec";
 			out.print(" <tr><td> " + batiment.get(i).getNom()
 					+ "</td><td <td>" + batiment.get(i).getAdresse()
 					+ "</td><td> <form action=\"fichebatiment\" method=\"GET\" ><input type=\"hidden\" id=\"idfichebat\" name=\"numBatiment\" value="
 					+ batiment.get(i).getNumero()
-					+ "> <input type=\"submit\" name=\" Consulter la fiche \" value=\" Consulter la fiche \" /></form></td></tr>");
+					+ "> <input type=\"submit\" name=\" Consulter la fiche \" value=\" Consulter la fiche \" /></form></td><td>"
+					+marche+"</td></tr>");
 		}
 		out.print("</tbody></table>");
 	%>

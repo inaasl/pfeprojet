@@ -19,6 +19,29 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	public ServicepfeprojetBean() {
 	}
 
+	// fonction check
+	// fonction check batiment
+	public void checkbatiment(int numerobatiment) throws BatimentInconnuException{
+		Batiment B = rechercheBatimentnum(numerobatiment);
+		boolean result;
+		int i;
+		result=true;
+		i=0;
+		List<Organe> organes = rechercheOrganeBatiment(numerobatiment);
+		if(organes!=null){
+			while(result==true && i<organes.size()){
+				if(organes.get(i).isMarche()==false){
+					result=false;
+			}
+			i++;
+			}
+		}
+		B.setMarche(result);
+		em.merge(B);
+	}
+	
+	
+	
 	// Recherche d'informations
 	
 	// Recherche d'une entreprise par nom
@@ -131,9 +154,42 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	public List<Extincteur> rechercheExtincteurBatiment(int numeroBatiment){
 		return em.createQuery("from Extincteur e WHERE e.batiment.numero = "+numeroBatiment).getResultList();
 	}
-	// recherche d'un organe 
+	// recherche d'un extincteur
 	public Extincteur rechercheExtincteur(int numeroExtincteur){
 		return em.find(Extincteur.class,numeroExtincteur);
+	}
+	public List<Extincteur> rechercheExtincteurNum(int num){
+		return em.createQuery("from Extincteur e where e.numero="+num).getResultList();
+	}
+	
+	public List<Pharmacie> recherchePharmacieBatiment(int numeroBatiment){
+		return em.createQuery("from Pharmacie p WHERE p.batiment.numero = "+numeroBatiment).getResultList();
+	}
+	// recherche d'une pharmacie
+	public Pharmacie recherchePharmacie(int numeroPharmacie){
+		return em.find(Pharmacie.class,numeroPharmacie);
+	}
+	public List<Pharmacie> recherchePharmacieNum(int num){
+		return em.createQuery("from Pharmacie p where p.numero="+num).getResultList();
+	}
+	// recherche intervention
+	public List<Intervention> rechercheInterventionOrgane(int numeroOrgane) {
+		return em.createQuery("from Intervention i where i.organe.numero="+numeroOrgane).getResultList();
+	}
+	// recherche pdf batiment
+	public List<Pdfgenere> recherchePdfgenereBatiment(int numeroBatiment){
+		List<Pdfgenere> listetotale = getlistePdfgenere();
+		List<Pdfgenere> listeresult = new ArrayList<Pdfgenere>();
+		for(int i=0;i<listetotale.size();i++){
+			if(listetotale.get(i).getInterventions().get(0).getOrgane().getBatiment().getNumero()==numeroBatiment){
+				listeresult.add(listetotale.get(i));
+			}
+		}
+		return listeresult;
+	}
+	// recherche pdf numero
+	public Pdfgenere recherchePdfgenereNum(int numeroPdf){
+		return em.find(Pdfgenere.class,numeroPdf);
 	}
 	
 	// Fonctions d'ajouts
@@ -185,19 +241,26 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 			B.setNom(nom);
 			B.setAdresse(adresse);
 			B.setEntreprise(E);
+			B.setMarche(true);
 			E.addBatiments(B);
 			em.persist(B);
 			em.merge(E);
 		}
 	}
 	// Ajout pieces
-	public List<Piece> AjoutPiece(List<Piece> Pieces, String nom) {
+	public Piece AjoutPiece(String nom,int numero) throws OrganeInconnuException {
 		Piece P = new Piece();
 		P.setNom(nom);
-		Pieces.add(P);
-		em.persist(P);
-		return Pieces;
+		Organe O = rechercheOrgane(numero);
+		P.setOrgane(O);
+		return P;
+//		em.persist(P);
 	}
+	
+	public void AjoutPieceBD(Piece P){
+		em.persist(P);
+	}
+	
 	// Ajout Type Extincteur
 	public void ajouttypeextincteur(String nom) {
 		TypeExtincteur T = new TypeExtincteur();
@@ -233,14 +296,26 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		E.setEmplacement(Emp);
 		E.setObservation(Obs);
 		E.setBatiment(B);
+		E.setMarche(true);
 		MarqueExtincteur M = rechercheMarqueExtincteur(nommarque);
 		E.setMarque(M);
 		TypeExtincteur Tp = rechercheTypeExtincteur(nomtype);
 		E.setType(Tp);
 		return E;
 	}
+	public Pharmacie ajoutPharmacie(int numbatiment, int Annee, String Emp,String Obs, int capacite)throws BatimentInconnuException{
+		Batiment B = rechercheBatimentnum(numbatiment);
+		Pharmacie P = new Pharmacie();
+		P.setAnnee(Annee);
+		P.setEmplacement(Emp);
+		P.setObservation(Obs);
+		P.setBatiment(B);
+		P.setCapacite(capacite);
+		return P;
+	}
+
 	// Ajout dans la base de donnée
-	public void ajoutIntervention(int numbatiment, Intervention Interv, Organe O, String conclusion) throws BatimentInconnuException{
+	public Intervention ajoutIntervention(int numbatiment, Intervention Interv, Organe O, String conclusion) throws BatimentInconnuException{
 		Batiment B = rechercheBatimentnum(numbatiment);
 		Interv.setConclusion(conclusion);
 		
@@ -248,6 +323,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		List<Intervention> interv = new ArrayList<Intervention>();
 		O.setInterventions(interv);
 		}
+		
 		O.addInterventions(Interv);
 		O.setConclusion(conclusion);
 		if(Interv instanceof Installation){
@@ -259,9 +335,21 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 			em.merge(O);
 		}
 		em.persist(Interv);
+		return Interv;
+	}
+	// Ajout pdf
+	public Pdfgenere ajoutpdf(List<Intervention> interventions){
+		Pdfgenere pdf = new Pdfgenere();
+		pdf.setInterventions(interventions);
+		em.persist(pdf);
+		for(int i=0;i<interventions.size();i++){
+			interventions.get(i).setPdf(pdf);
+			em.merge(interventions.get(i));
+		}
+		return pdf;
 	}
 	// Intervention : Verification
-	public void Verification(int numero, String Obs, String conclusion, int numerotechnicien, java.sql.Date date)
+	public Verification Verification(int numero, String Obs, String conclusion, int numerotechnicien, java.sql.Date date, boolean marche)
 			throws OrganeInconnuException, TechnicienInconnuException, BatimentInconnuException {
 		Organe O = rechercheOrgane(numero);
 		Technicien T = em.find(Technicien.class, numerotechnicien);
@@ -270,6 +358,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		}
 		O.setObservation(Obs);
 		O.setConclusion(conclusion);
+		O.setMarche(marche);
 		Verification V = new Verification();
 		V.setDate(date);
 		V.setObservation(Obs);
@@ -283,6 +372,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		O.addInterventions(V);
 		em.persist(V);
 		em.merge(O);
+		return V;
 	}
 	// Recherche : Verifications effectuees sur un organe
 	@SuppressWarnings("unchecked")
@@ -312,9 +402,28 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		MC.setOrgane(O);
 		return MC;
 	}
+	// remplacement
+	// remlacement extincteur
+	public Extincteur remplacementextincteur(Extincteur E, int Annee, String Emp, String Obs, String nommarque, String nomtype,boolean marche){
+		E.setAnnee(Annee);
+		E.setEmplacement(Emp);
+		E.setObservation(Obs);
+		E.setMarche(marche);
+		MarqueExtincteur M = rechercheMarqueExtincteur(nommarque);
+		E.setMarque(M);
+		TypeExtincteur Tp = rechercheTypeExtincteur(nomtype);
+		E.setType(Tp);
+		return E;
+	}
+	
+	
+	
+	
+	
+	
 	// Maintenance : Preventive
-	public void MaintenancePreventiveOrgane(Organe O, String Obs, String Obsraj, int numerotechnicien, 
-			java.sql.Date date) throws OrganeInconnuException, TechnicienInconnuException {
+	public Preventive MaintenancePreventiveOrgane(Organe O, String Obs, String Obsraj, int numerotechnicien, 
+			java.sql.Date date, boolean marche) throws OrganeInconnuException, TechnicienInconnuException {
 		Technicien T = em.find(Technicien.class, numerotechnicien);
 		if (T == null) {
 			throw new TechnicienInconnuException();
@@ -330,11 +439,32 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 			O.setInterventions(interv);
 		}
 		O.addInterventions(MP);
+		O.setObservation(Obs);
+		O.setConclusion(Obsraj);
+		O.setMarche(marche);
 		em.persist(MP);
 		em.merge(O);
+		return MP;
+	}
+	
+	
+	public Preventive rechercheMaintenancePreventive(int numeroMaintenance){
+		return em.find(Preventive.class, numeroMaintenance);
 	}
 
 	// Listes : A partir de la base de donnees
+	
+	// Liste des PDF
+	public List<Pdfgenere> getlistePdfgenere() {
+		return em.createQuery("from Pdfgenere P").getResultList();
+	}
+	
+	// Liste des interventions
+	@SuppressWarnings("unchecked")
+	public List<Intervention> getlisteIntervention() {
+		return em.createQuery("from Intervention I").getResultList();
+	}
+	
 	
 	// Liste des installations
 	@SuppressWarnings("unchecked")
@@ -374,13 +504,45 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		return observation;
 	}
 
-	// derniere conclusion : Verification
-	public String rechercheConclusionVerification() {
+	// derniere conclusion : Verification Extincteur
+	public String rechercheConclusionVerificationExtincteur(int numeroBatiment) {
 		@SuppressWarnings("unchecked")
-		List<Verification> verifications = em.createQuery("FROM Verification v ").getResultList();
+		List<Verification> verifications = em.createQuery("FROM Verification v where v.organe.batiment.numero = "+numeroBatiment).getResultList();
+		int test,i;
+		test=0;
+		i=verifications.size()-1;
 		String conclusion="--";
-		if(verifications.size()!=0)
-			conclusion=verifications.get(verifications.size()-1).getConclusion();
+		if(verifications.size()!=0){
+			while(test==0 && i>-1) {
+				if(verifications.get(i).getOrgane() instanceof Extincteur ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=verifications.get(i+1).getConclusion();
+		}
+		return conclusion;
+	}
+	
+	// derniere conclusion : Verification Pharmacie
+	public String rechercheConclusionVerificationPharmacie(int numeroBatiment) {
+		@SuppressWarnings("unchecked")
+		List<Verification> verifications = em.createQuery("FROM Verification v where v.organe.batiment.numero = "+numeroBatiment).getResultList();
+		int test,i;
+		test=0;
+		i=verifications.size()-1;
+		String conclusion="--";
+		if(verifications.size()!=0){
+			while(test==0 && i>-1) {
+				if(verifications.get(i).getOrgane() instanceof Pharmacie ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=verifications.get(i+1).getConclusion();
+		}
 		return conclusion;
 	}
 	
@@ -394,16 +556,46 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		return observation;
 	}
 
-	// derniere conclusion : Maintenance Corrective
-	public String rechercheConclusionMaintenancecorr() {
+	// derniere conclusion : Maintenance Corrective Extincteur
+	public String rechercheConclusionMaintenancecorrExtincteur(int numeroBatiment) {
 		@SuppressWarnings("unchecked")
-		List<Corrective> maintenancecorrective = em.createQuery("FROM Corrective m ").getResultList();
+		List<Corrective> maintenancecorrective = em.createQuery("FROM Corrective m where m.organe.batiment.numero = "+numeroBatiment).getResultList();
 		String conclusion="--";
-		if(maintenancecorrective.size()!=0)
-			conclusion=maintenancecorrective.get(maintenancecorrective.size()-1).getConclusion();
+		int test,i;
+		test=0;
+		i=maintenancecorrective.size()-1;
+		if(maintenancecorrective.size()!=0){
+			while(test==0 && i>-1) {
+				if(maintenancecorrective.get(i).getOrgane() instanceof Extincteur ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=maintenancecorrective.get(i+1).getConclusion();
+		}
 		return conclusion;
 	}
-	
+	// derniere conclusion : Maintenance Corrective Pharmacie
+	public String rechercheConclusionMaintenancecorrPharmacie(int numeroBatiment) {
+		@SuppressWarnings("unchecked")
+		List<Corrective> maintenancecorrective = em.createQuery("FROM Corrective m where m.organe.batiment.numero = "+numeroBatiment).getResultList();
+		String conclusion="--";
+		int test,i;
+		test=0;
+		i=maintenancecorrective.size()-1;
+		if(maintenancecorrective.size()!=0){
+			while(test==0 && i>-1) {
+				if(maintenancecorrective.get(i).getOrgane() instanceof Pharmacie ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=maintenancecorrective.get(i+1).getConclusion();
+		}
+		return conclusion;
+	}
 	// derniere observation : Maintenance Preventive
 	public String rechercheObservationMaintenanceprev(int numeroOrgane) {
 		@SuppressWarnings("unchecked")
@@ -414,10 +606,10 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		return observation;
 	}
 
-	// derniere conclusion : Maintenance Corrective
-	public String rechercheConclusionMaintenanceprev() {
+	// derniere conclusion : Maintenance Preventive
+	public String rechercheConclusionMaintenanceprev(int numeroBatiment) {
 		@SuppressWarnings("unchecked")
-		List<Preventive> maintenancepreventive = em.createQuery("FROM Preventive m ").getResultList();
+		List<Preventive> maintenancepreventive = em.createQuery("FROM Preventive m where m.organe.batiment.numero = "+numeroBatiment).getResultList();
 		String conclusion="--";
 		if(maintenancepreventive.size()!=0)
 			conclusion=maintenancepreventive.get(maintenancepreventive.size()-1).getConclusion();
@@ -456,6 +648,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 				trouver = true;
 				liste.add(session.get(i).getNumeroutilisateur());
 				liste.add(session.get(i).getStatut());
+				liste.add(session.get(i).getNumero());
 			} else
 				i++;
 		}
@@ -464,4 +657,12 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 
 		return liste;
 	}
+
+	public void modifPassWord(int numero,String password){
+		Compte compte= em.find(Compte.class,numero);
+		compte.setPassword(password);
+		em.merge(compte);
+	}
+
+
 }

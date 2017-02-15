@@ -25,6 +25,7 @@ public abstract class Intervention implements java.io.Serializable {
 	private String conclusion;
 	private String observation;
 	
+	private Pdfgenere pdf;	
 	private Technicien technicien;
 	private Organe organe;
 	
@@ -76,5 +77,17 @@ public abstract class Intervention implements java.io.Serializable {
 	public void setOrgane(Organe organe) {
 		this.organe = organe;
 	}
+
+	@ManyToOne
+	public Pdfgenere getPdf() {
+		return pdf;
+	}
+
+
+	public void setPdf(Pdfgenere pdf) {
+		this.pdf = pdf;
+	}
+
+
 
 }

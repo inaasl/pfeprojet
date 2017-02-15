@@ -81,6 +81,8 @@
 					int num, i;%>
 					<%
 						session = request.getSession();
+						Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+						pdf=null;
 						InitialContext ctx = new InitialContext();
 						Object obj = ctx.lookup(
 								"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");

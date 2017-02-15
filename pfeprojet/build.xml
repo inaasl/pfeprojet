@@ -18,6 +18,7 @@
       <pathelement location="${basedir}"/>
       <fileset dir="${jboss.dir}/modules/system/layers/base/org/hibernate/main">
         <include name="hibernate-core-4.3.10.Final.jar"/>
+      	
       </fileset>
       <fileset dir="${jboss.dir}/bin/client">
         <include name="*.jar"/>
@@ -28,6 +29,11 @@
       <fileset dir="${jboss.dir}/modules/system/layers/base/javax/persistence/api/main">
         <include name="**/*.jar"/>
       </fileset>
+   	  
+   	<fileset dir="${src.dir}">
+   	        <include name="itextpdf-5.1.0.jar"/>
+   	      	
+   	</fileset>
 	  <pathelement location="${build.dir}/sessions"/>
 	  <pathelement location="${build.dir}/entites" />
 	  <pathelement location="${build.dir}/classes"/>		
@@ -124,6 +130,7 @@
 
    <target name="ear" depends="package-entites,package-sessions, war">
      <!-- <schemavalidate file="${src.dir}/application.xml"/> -->
+   	<copy file="${src.dir}/itextpdf-5.1.0.jar" todir="${build.dir}/jars" />
      <ear destfile="${build.dir}/jars/${name}.ear"
           appxml="${src.dir}/application.xml">
           <fileset dir="${build.dir}/jars" excludes="*.ear" />
@@ -143,7 +150,8 @@
 
    <target name="deploySessionWeb" depends="earSessionWeb, deploy" />
 
-   <target name="deployAll" depends="ear, deploy" />
+   <target name="deployAll" depends="ear, deploy" >
+   </target>
 	 
    <target name="undeploy">
      <delete>

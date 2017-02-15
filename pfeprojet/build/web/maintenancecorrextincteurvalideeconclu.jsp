@@ -1,6 +1,6 @@
 <html>
 <head>
-<title> Installation d'un Extincteur</title>
+<title> Maintenance Corrective : Extincteur </title>
     <meta charset="UTF-8" />
     <link href="style.css" rel="stylesheet" type="text/css">
 </head>
@@ -49,17 +49,29 @@
 		<%@ page import= "java.util.ArrayList"%>
 		
 		
-<%! String numBat,observ,conclusion;
-	int numB,numT,numextincteur;
+<%! String numBat,observ,conclusion,empla,type,marque,annee,etat;
+	int numB,numT,numextincteur,anneeInt;
 	List<Corrective> interv;
 	Extincteur Extcourant;
+	boolean Etat;
 %>
 <%
+	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+	pdf=null;
+	annee=request.getParameter("annee");
+	empla=request.getParameter("emplacement");
+	type=request.getParameter("typeextincteur");
+	marque=request.getParameter("marqueextincteur");
 	observ =request.getParameter("observations");
-
+	etat=request.getParameter("etat");
+	if(etat.compareTo("oui")==0){
+		Etat=true;
+	}
+	else
+		Etat=false;
 	numBat=String.valueOf(session.getAttribute("numBatiment"));
 	numB=Integer.parseInt(numBat);
-	
+	anneeInt=Integer.parseInt(annee);
 	numextincteur=(Integer)session.getAttribute("numextincteur");
 	
 	numT=(Integer)session.getAttribute("numPersonne");
@@ -72,11 +84,18 @@
 	java.util.Date date = new java.util.Date();
 	
 	Extcourant=service.rechercheExtincteur(numextincteur);
-	conclusion=service.rechercheConclusionMaintenancecorr();
+	Extcourant=service.remplacementextincteur(Extcourant, anneeInt, empla, observ, marque, type, Etat);
+	
+	
+	conclusion=service.rechercheConclusionMaintenancecorrExtincteur(numB);
 	interv = (List<Corrective>) session.getAttribute("interv");
 	if (interv == null) {
 		interv = new ArrayList<Corrective>();
-	} 
+	}
+	
+	
+	
+	
 	interv.add(service.MaintenanceCorrectiveOrgane(observ, Date.valueOf(formater.format(date)), numT, Extcourant));
 
 	session.setAttribute("interv", interv);

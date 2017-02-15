@@ -50,29 +50,127 @@ List<Intervention> interv;
 <%
 	interv=(List<Intervention>)session.getAttribute("interv");
 	if(interv!=null) interv.clear();
+	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+	pdf=null;
 	typeinterv = request.getParameter("choixinterv");
 
 	typeorg = request.getParameter("choixorg");
-
-	if (typeinterv.compareTo("installation") == 0 && typeorg.compareTo("extincteur") == 0) {
-		out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationextincteur.jsp\">");
-	}
-	if (typeinterv.compareTo("verification") == 0 && typeorg.compareTo("extincteur") == 0) {
-		out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationextincteur.jsp\">");
-	}
-	if (typeinterv.compareTo("maintenancecorr") == 0 && typeorg.compareTo("extincteur") == 0) {
-		out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrextincteur.jsp\">");
-	}
-	if (typeinterv.compareTo("maintenanceprev") == 0 && typeorg.compareTo("extincteur") == 0) {
-		out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenanceprevextincteur.jsp\">");
-	}
 	
-%>
-	<%
-	 }
-	 }
+	if(typeinterv.compareTo("installation") == 0){
+		if(typeorg.compareTo("extincteur") == 0){
+			out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationextincteur.jsp\">");
+		}
+		else {
+			if(typeorg.compareTo("eclairage") == 0){
+				out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationeclairage.jsp\">");
+			}
+			else {
+				if(typeorg.compareTo("pharmacie") == 0){
+					out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationpharmacie.jsp\">");
+				}
+				else {
+					if(typeorg.compareTo("signaletique") == 0){
+						out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationsignaletique.jsp\">");
+					}
+					else {
+						if(typeorg.compareTo("coupefeu") == 0){
+							out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationcoupefeu.jsp\">");
+						}
+					}
+				}
+			}
+		}
+	}
+	else {
+		if (typeinterv.compareTo("verification") == 0){
+			if(typeorg.compareTo("extincteur") == 0){
+				out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationextincteur.jsp\">");
+			}
+			else {
+				if(typeorg.compareTo("eclairage") == 0){
+					out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationeclairage.jsp\">");
+				}
+				else {
+					if(typeorg.compareTo("pharmacie") == 0){
+						out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationpharmacie.jsp\">");
+					}
+					else {
+						if(typeorg.compareTo("ria") == 0){
+							out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationria.jsp\">");
+						}
+						else {
+							if(typeorg.compareTo("poteaux") == 0){
+								out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationpoteaux.jsp\">");
+							}
+							else {
+								if(typeorg.compareTo("coupefeu") == 0){
+									out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationcoupefeu.jsp\">");
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		else {
+			if (typeinterv.compareTo("maintenancecorr") == 0) {
+				if(typeorg.compareTo("extincteur") == 0){
+					out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrextincteur.jsp\">");
+				}
+				else {
+					if(typeorg.compareTo("eclairage") == 0){
+						out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorreclairage.jsp\">");
+					}
+					else {
+						if(typeorg.compareTo("pharmacie") == 0){
+							out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrpharmacie.jsp\">");
+						}
+						else {
+							if(typeorg.compareTo("ria") == 0){
+								out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrria.jsp\">");
+							}
+							else {
+								if(typeorg.compareTo("poteaux") == 0){
+									out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrpoteaux.jsp\">");
+								}
+								else {
+									if(typeorg.compareTo("coupefeu") == 0){
+										out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrcoupefeu.jsp\">");
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			else {
+				if (typeinterv.compareTo("maintenanceprev") == 0){
+					if(typeorg.compareTo("extincteur") == 0){
+						out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenanceprevextincteur.jsp\">");
+					}
+					else {
+						if(typeorg.compareTo("ria") == 0){
+							out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenanceprevria.jsp\">");
+						}
+						else {
+							if(typeorg.compareTo("poteaux") == 0){
+								out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenanceprevpoteaux.jsp\">");
+							}
+							else {
+								if(typeorg.compareTo("coupefeu") == 0){
+									out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenanceprevcoupefeu.jsp\">");
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+ }
+}
 	 else
 	 	out.println("</header><div id=\"container\"><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\"></div>");
-	%>
+%>
 </body>
 </html>

@@ -69,6 +69,8 @@
 	%>
 	<%
 		session = request.getSession();
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -80,7 +82,6 @@
 		E=service.rechercheExtincteurBatiment(num);
 		out.println("<br><center><h3>Maintenance Corrective des Extincteurs</h3></center><br>");
 		// Tableau
-		out.println("<br><form action=\"maintenancecorrextincteurvalidee.jsp\">");
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
 		out.print("<thead><tr><th> N° Extincteur </th><th> Emplacement </th><th> Type extincteur </th><th>  Marque </th><th>Annee </th></tr>");
 		out.print("</thead><tbody>");

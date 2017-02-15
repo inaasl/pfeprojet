@@ -81,6 +81,8 @@
 		</ul>
 	<% 		interv=(List<Intervention>)session.getAttribute("interv");
 	if(interv!=null) interv.clear();
+	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+	pdf=null;
 	}
 	%>
 	</header>

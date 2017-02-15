@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Installation d'un Extincteur</title>
+<title>Maintenance Corrective : Extincteur </title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
@@ -52,9 +52,11 @@
 	<%@ page import="java.util.HashSet"%>
 
 		<%!String numBat,observation;
-			int num,numextincteur;%>
+			int i,num,numextincteur;%>
 		<%
 			session = request.getSession();
+			Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+			pdf=null;
 			InitialContext ctx = new InitialContext();
 			Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -65,25 +67,60 @@
 			
 			numextincteur = Integer.parseInt(request.getParameter("numextincteur"));
 			observation=service.rechercheObservationMaintenancecorr(numextincteur);
-			
+			Extincteur E =service.rechercheExtincteur(numextincteur);
 			session.setAttribute("numextincteur",numextincteur);
 		%>
 <form action="maintenancecorrextincteurvalideeconclu">
-		 <fieldset>
-		 <legend><b>Maintenance Corrective</b></legend>
 		<br>
 		<table>
-	  	<tr><td><label for="observations"><i>Observations <font color="#ff0000">*</font></i></label></td><td>
-			<%
-				out.println("<textarea name=\"observations\" rows=\"5\" cols=\"47\" >"+observation+"</textarea>");
-				%>			
+		 <tr>
+			<td>
+                <label for="annee"><i>Annee de fabrication de l'extincteur <font color="#ff0000">*</font></i></label>
+                </td>	  
+		   <td><input type="text"
+					name="annee" required value="<%out.println(E.getAnnee()); %>" size="40" class="taille_input_annee"/>
+		  </td></tr>
+		<tr></tr>
+		<tr>
+			<td> <label for="emplacement"><i>Emplacement de l'extincteur <font color="#ff0000">*</font></i></label></td>
+			<td><textarea name="emplacement" rows="5" cols="47" required placeholder="emplacement extincteur..."><%out.println(E.getEmplacement()); %></textarea></td></tr>
+	  <tr></tr>
+	  <tr><td><label for="observations"><i>Observations <font color="#ff0000">*</font></i></label></td><td>
+					<textarea name="observations" rows="5" cols="47" required placeholder="observations......"><%out.println(observation);%></textarea> 
+			</td>
+	 </tr>
+	 <tr></tr>
+	 <tr></tr>
+	 <tr><td> <label for="typeextincteur"><i>Type de l'extincteur <font color="#ff0000">*</font></i></label>	 
+			</td> <td> <select name="typeextincteur" class="class_select">
+					<%
+						for (i = 0; i < service.touslesTypeExtincteur().size(); i++)
+							out.println("<option value=" + service.touslesTypeExtincteur().get(i).getNumero() + ">"
+									+ service.touslesTypeExtincteur().get(i).getNom() + "</option>");
+					%>
+					<%out.println(E.getType().getNom()); %>
+				</select>
+			</td>
+		</tr>
+      <tr></tr>
+	  <tr> <td> <label for="marqueextincteur"><i>Marque de l'extincteur <font color="#ff0000">*</font></i></label>
+			</td><td><select name="marqueextincteur" class="class_select">
+					<%
+						for (i = 0; i < service.touteslesMarqueExtincteur().size(); i++)
+							out.println("<option value=" + service.touteslesMarqueExtincteur().get(i).getNumero() + ">"
+									+ service.touteslesMarqueExtincteur().get(i).getNom() + "</option>");
+					%>
+					<%out.println(E.getMarque().getNom()); %>
+			</select></td></tr>
+		<tr><td> Est-ce que l'organe fonctionne correctement ? &nbsp;&nbsp;
+		<INPUT id="oui" type= "radio" name="etat" value="oui">
+	    <label for="oui">OUI</label> &nbsp;&nbsp;&nbsp;
+		<INPUT id="non" type= "radio" name="etat" value="non"> 
+		<label for="non">NON</label> &nbsp;&nbsp;&nbsp;
 		</td></tr>
-	 	<tr></tr>
-	 	<tr></tr>
-
-		</table>
-		<br><center><input type="submit" value="Valider"> </center>
-		</fieldset>
+			</table>
+			<br><center><input type="submit" value="Valider"> </center>
+			</fieldset>
 		</form>
 		</div>
 	<%

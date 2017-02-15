@@ -70,6 +70,8 @@
 		</ul>
 		<% 		interv=(List<Intervention>)session.getAttribute("interv");
 		if(interv!=null) interv.clear();
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
 		}
 			if(statut==2){
 		%>
@@ -110,6 +112,7 @@
 	Batiment B;
 	int num, i;
 	String numeroB;
+	List<Intervention>Interventionajoutee;
 	%>
 	<%
 		 session = request.getSession();
@@ -122,6 +125,9 @@
 			 num = Integer.parseInt(numBatiment);
 		 }
 		session.setAttribute("numBatiment",String.valueOf(num));
+	    Interventionajoutee=(List<Intervention>)session.getAttribute("Interventionajoutee");
+		if(Interventionajoutee!=null)
+	    	Interventionajoutee.clear();
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -144,6 +150,10 @@
 				"<td><form action=\"listeorganes\" method=\"GET\" ><input type=\"hidden\" id=\"idlisteorganes\" name=\"numBatiment\" value="
 						+ B.getNumero()
 						+ "> <input type=\"submit\" name=\" Consulter la liste des organes de securite \" value=\" Consulter la liste des organes de securite \" /></form></td>");
+		out.println(
+				"<td><form action=\"listeintervention.jsp\" method=\"GET\" ><input type=\"hidden\" id=\"idlisteinterv\" name=\"numBatiment\" value="
+						+ B.getNumero()
+						+ "> <input type=\"submit\" name=\" Consulter la liste des interventions \" value=\" Consulter la liste des interventions \" /></form></td>");
 		out.println("</tr></table>");
 		
 		out.println("<br><form action=\"ficheentreprise\" method=\"GET\" ><input type=\"submit\" name=\" Retour a la fiche du client \" value=\" Retour a la fiche du client \" /></form></center>");

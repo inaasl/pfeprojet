@@ -66,15 +66,17 @@
 	<%@ page import="javax.naming.InitialContext"%>
 	<%@ page import="javax.naming.NamingException"%>
 
-	<%!String numBat,conclusion, observation, nomPiece,numExtincteur;
-	int num,i;
+	<%!String numBat,conclusion, observation, nomPiece;
+	int num,i,numExtincteur;
 	List<Extincteur> E = new ArrayList<Extincteur>();
-	List<Piece> listP = new ArrayList<Piece>();
+	List<Piece> listP = new ArrayList<Piece>() ;
 	Piece piececourante;
 	%>
 	<%
 	
 		session = request.getSession();
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -83,12 +85,13 @@
 		session.setAttribute("numBatiment", numBat);
  		num=Integer.parseInt(numBat);
 		E.clear();
+
 		E=service.rechercheExtincteurBatiment(num);
 		out.println("<br><center><h3>Maintenance préventive des Extincteurs</h3></center><br>");
 		// Tableau
 		out.println("<br><form action=\"maintenanceprevextincteurvalidee.jsp\">");
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
-		out.print("<thead><tr><th> N° Extincteur </th><th> Emplacement </th><th> Type extincteur </th><th>  Marque </th><th>Annee </th><th>Observation</th></tr>");
+		out.print("<thead><tr><th> N° Extincteur </th><th> Emplacement </th><th> Type extincteur </th><th>  Marque </th><th>Annee </th><th>Observation</th> <th> Etat défecteux </th></tr>");
 		out.print("</thead><tbody>");
 	      
 		for(i=0;i<E.size();i++){
@@ -98,10 +101,11 @@
 						"</td> <td >" + E.get(i).getType().getNom()+
 						"</td> <td >" + E.get(i).getMarque().getNom()+
 						"</td> <td >" + E.get(i).getAnnee()+
-						"</td> <td> <input type=\"text\" name="+i+" value="+observation+"></td></tr>"
+						"</td> <td> <input type=\"text\" name="+i+" value="+observation+
+						"></td><td> <INPUT type=\"checkbox\" name="+(i+100)+" value=\"oui\"> OUI </td></tr>"
 						);
 		}
-		conclusion=service.rechercheConclusionMaintenanceprev();
+		conclusion=service.rechercheConclusionMaintenanceprev(num);
 		out.println("</tbody></table><br><br>"); 
 		%>
 		<div class="panel panel-primary">
@@ -167,20 +171,31 @@
             this.pieces = [];
           },
           ajouter: function() {
-            this.pieces.push({nom: this.inputNom, extincteur: this.inputExtincteur});          
-            /*document.location.href="maintenanceprevextincteur.jsp?nom="+this.inputNom;*/
-            /* AJAX.send("nomPiece="+encodeURIComponent(this.inputNom)); */
-            this.inputNom = '';
+            this.pieces.push({nom: this.inputNom, extincteur: this.inputExtincteur});
+            $.ajax({
+                url: "maintenanceprevextincteur.jsp",
+                data: {
+                	nomPiece: this.inputNom,
+                	numExtincteur: this.inputExtincteur,
+                	ajout: 'oui'
+                },
+                });
             <% 
-               nomPiece=request.getParameter("nomPiece");
-               service.AjoutPiece(listP, nomPiece);
-               session.setAttribute("listP",listP);
+               String ajout=request.getParameter("ajout");
+         	   if(ajout!=null){
+                   nomPiece=request.getParameter("nomPiece");
+                   numExtincteur=Integer.parseInt(request.getParameter("numExtincteur"));
+                   piececourante=service.AjoutPiece(nomPiece,numExtincteur);
+				   listP.add(piececourante);
+         	   }
 			%>
+			this.inputNom = '';
           },
         }
       });
     </script>
 	<%
+     session.setAttribute("listP",listP);
 	 }
 	 }
 	 else

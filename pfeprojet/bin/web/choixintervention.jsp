@@ -63,7 +63,13 @@
 	<INPUT id="pharmacie" type= "radio" name="choixorg" value="pharmacie"> 
 	<label for="pharmacie">Pharmacie</label> &nbsp;&nbsp;&nbsp;
 	<INPUT id="signaletique" type= "radio" name="choixorg" value="signaletique"> 
-	<label for="signaletique">Signalétique</label> 
+	<label for="signaletique">Signalétique</label>
+	<INPUT id="ria" type= "radio" name="choixorg" value="ria"> 
+	<label for="ria">RIA</label> 
+	<INPUT id="poteaux" type= "radio" name="choixorg" value="poteaux"> 
+	<label for="poteaux">Poteaux Incendie</label>
+	<INPUT id="coupefeu" type= "radio" name="choixorg" value="coupefeu"> 
+	<label for="coupefeu">Porte Coupe-Feu</label> 
 </fieldset>	
 	<br><br><center><input type="submit" value="Valider"></center>
 </FORM>
@@ -72,6 +78,8 @@
 	<%
 	interv=(List<Intervention>)session.getAttribute("interv");
 	if(interv!=null) interv.clear();
+	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+	pdf=null;
 			}
 	 }
 	 else

@@ -11,34 +11,49 @@ import ejb.entites.Installation;
 import ejb.entites.Intervention;
 import ejb.entites.MarqueExtincteur;
 import ejb.entites.Organe;
+import ejb.entites.Pdfgenere;
+import ejb.entites.Pharmacie;
 import ejb.entites.Piece;
+import ejb.entites.Preventive;
 import ejb.entites.Technicien;
 import ejb.entites.TypeExtincteur;
 import ejb.entites.Verification;
 
 public interface Servicepfeprojet {
+	
+	public void checkbatiment(int numerobatiment) throws BatimentInconnuException;
+	
 	public Compte ajouterEntreprise(String nom, String adresse,String email, String tel, String interlocuteur);
 	public Compte ajouterTechnicien(String nom, String prenom, String adresse, String tel, String email);
 	public void ajouterBatiment(String nomentreprise, String nom, String adresse) throws EntrepriseInconnueException;
 
-
 	public Installation InstallationOrgane(String Obs, java.sql.Date date, int numtechnicien,int numbatiment,Organe O) throws TechnicienInconnuException, BatimentInconnuException, EntrepriseInconnueException;	
-	public Extincteur ajoutExtincteur(int numbatiment, int Annee, String Emp, String Obs, String nommarque, String nomtype) throws BatimentInconnuException;
-	public void ajoutIntervention(int numbatiment, Intervention Interv, Organe O, String conclusion) throws BatimentInconnuException;
-
-	public void MaintenancePreventiveOrgane(Organe O, String Obs, String Obsraj, int numerotechnicien, java.sql.Date date) throws OrganeInconnuException, TechnicienInconnuException;	
 	
-	public void Verification(int numero,String Obs, String conclusion, int numerotechnicien, java.sql.Date date) throws OrganeInconnuException,TechnicienInconnuException,BatimentInconnuException;
+	public Extincteur ajoutExtincteur(int numbatiment, int Annee, String Emp, String Obs, String nommarque, String nomtype) throws BatimentInconnuException;
+	public Pharmacie ajoutPharmacie(int numbatiment, int Annee, String Emp,String Obs, int capacite)throws BatimentInconnuException;
+	
+	
+	public Intervention ajoutIntervention(int numbatiment, Intervention Interv, Organe O, String conclusion) throws BatimentInconnuException;
+	public Pdfgenere ajoutpdf(List<Intervention> interventions);
+	
+	public Preventive MaintenancePreventiveOrgane(Organe O, String Obs, String Obsraj, int numerotechnicien, java.sql.Date date,boolean marche) throws OrganeInconnuException, TechnicienInconnuException;	
+	public Preventive rechercheMaintenancePreventive(int numeroMaintenance);
+	
+	public Verification Verification(int numero,String Obs, String conclusion, int numerotechnicien, java.sql.Date date,boolean marche) throws OrganeInconnuException,TechnicienInconnuException,BatimentInconnuException;
 	
 	public Corrective MaintenanceCorrectiveOrgane(String Obs,java.sql.Date date,  int numerotechnicien, Organe O) throws TechnicienInconnuException;	
+	public Extincteur remplacementextincteur(Extincteur E, int Annee, String Emp, String Obs, String nommarque, String nomtype,boolean marche);
 	public String rechercheObservationMaintenancecorr(int numeroOrgane);
-	public String rechercheConclusionMaintenancecorr();
+	
+	public String rechercheConclusionMaintenancecorrExtincteur(int numeroBatiment);
+	public String rechercheConclusionMaintenancecorrPharmacie(int numeroBatiment);
 	
 	public List<Installation> getlisteInstallation();
 	public List<Verification> getVerificationOrgane(Organe o);
 	public List<Verification> getVerificationBatiment(int numeroBatiment);
 	public List<Entreprise> getlisteEntreprises();
 	public List<Technicien> getlisteTechniciens();
+	public List<Pdfgenere> getlistePdfgenere();
 
 	public List<Entreprise> rechercheEntreprise(String Nom) throws EntrepriseInconnueException;
 	public Entreprise rechercheEntreprisenum(int Num) throws EntrepriseInconnueException;
@@ -53,9 +68,18 @@ public interface Servicepfeprojet {
 	public Batiment rechercheBatimentnum(int Num) throws BatimentInconnuException;
 
 	public Organe rechercheOrgane(int numero) throws OrganeInconnuException;
-	public Extincteur rechercheExtincteur(int numeroExtincteur);
-	public List<Extincteur> rechercheExtincteurBatiment(int numeroBatiment);
 	public List<Organe> rechercheOrganeBatiment(int numeroBatiment);
+	
+	public Extincteur rechercheExtincteur(int numeroExtincteur);
+	public List<Extincteur> rechercheExtincteurNum(int num);
+	public List<Extincteur> rechercheExtincteurBatiment(int numeroBatiment);
+
+	public List<Pharmacie> recherchePharmacieBatiment(int numeroBatiment);
+	public Pharmacie recherchePharmacie(int numeroPharmacie);
+	public List<Pharmacie> recherchePharmacieNum(int num);
+	
+	public List<Pdfgenere> recherchePdfgenereBatiment(int numeroBatiment);
+	public Pdfgenere recherchePdfgenereNum(int numeroPdf);
 	
 	public void ajouttypeextincteur(String nom);
 	public List<TypeExtincteur> touslesTypeExtincteur();
@@ -66,14 +90,17 @@ public interface Servicepfeprojet {
 	public MarqueExtincteur rechercheMarqueExtincteur(String Nom);
 
 	public String rechercheObservationVerification(int numeroOrgane);
-	public String rechercheConclusionVerification();
+	public String rechercheConclusionVerificationExtincteur(int numeroBatiment);
+	public String rechercheConclusionVerificationPharmacie(int numeroBatiment);
 	
 	public String rechercheObservationMaintenanceprev(int numeroOrgane);
-	public String rechercheConclusionMaintenanceprev();
+	public String rechercheConclusionMaintenanceprev(int numeroBatiment);
 	
 	public List<Integer> verificationCompte(String login, String pwd) throws CompteInconnuException;
 	public void creercompteAdmin( String login, int admin,int statut);
 	public String password();
+	public void modifPassWord(int numero,String password);
 	
-	public List<Piece> AjoutPiece(List<Piece> Pieces, String nom);
+	public Piece AjoutPiece(String nom,int numero) throws OrganeInconnuException;
+	public void AjoutPieceBD(Piece P);
 }
