@@ -36,7 +36,7 @@
 	 {
 	 	session = request.getSession();
 	 	statut=(Integer)session.getAttribute("statut");	 
-	 	if(statut==0 || statut==1 || statut!=2)
+	 	if(statut==0 || statut==1 || statut==2)
 	 	{
 	 		if(statut==0){
 	%>
@@ -128,10 +128,22 @@
 	String numeroE;
 	List<Batiment> batiment;
 	List<Intervention>Interventionajoutee;
+	List<Organe> organes;
+	String ajout;
 	%>
 	<%
-		 session = request.getSession();
-    	 Interventionajoutee=(List<Intervention>)session.getAttribute("Interventionajoutee");
+		session = request.getSession();
+    	
+		organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout=null;
+	
+		if(statut==2) {
+			num=(Integer)session.getAttribute("numPersonne");
+		}
+		else {
+		Interventionajoutee=(List<Intervention>)session.getAttribute("Interventionajoutee");
 		 if(Interventionajoutee!=null)
     	 	Interventionajoutee.clear();
 		 numEntreprise = request.getParameter("numEntreprise");
@@ -141,7 +153,8 @@
 		 }
 		 else
 			 num = Integer.parseInt(numEntreprise);
-		 session.setAttribute("numeroE",String.valueOf(num));
+		}
+		session.setAttribute("numeroE",String.valueOf(num));
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -166,9 +179,10 @@
 		for (i=0; i< batiment.size();i++){
 			service.checkbatiment(batiment.get(i).getNumero());
 			if(batiment.get(i).isMarche()==true)
-				marche="OK";
+				marche="<img src=\"marchtrue.jpg\">";
 			else
-				marche="Echec";
+				marche="<a href=\"listeorganealert.jsp?batiment="+batiment.get(i).getNumero()+"\"><img src=\"marchefalse.png\"></a>";
+			
 			out.print(" <tr><td> " + batiment.get(i).getNom()
 					+ "</td><td <td>" + batiment.get(i).getAdresse()
 					+ "</td><td> <form action=\"fichebatiment\" method=\"GET\" ><input type=\"hidden\" id=\"idfichebat\" name=\"numBatiment\" value="

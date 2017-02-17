@@ -33,7 +33,26 @@
 			<a class="logo" href="http://www.desentec.fr/"><img
 				src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
 			</a>
-				<br>
+	<%@ page import="java.net.URL"%>
+	<%@ page import="java.net.URLConnection"%>
+	<%@ page import="java.io.* "%>
+	<%@ page import="ejb.sessions.*"%>
+	<%@ page import="ejb.entites.* "%>
+	<%@ page import="javax.naming.InitialContext"%>
+	<%@ page import="javax.naming.NamingException"%>
+	
+	<%! int statut;%>
+	<% 
+	if(session.getAttribute("statut")!=null){
+    
+		session = request.getSession();
+ 		statut=(Integer)session.getAttribute("statut");	 
+
+ 		if(statut==2) {
+		
+	
+	%>
+	
 	<ul id="menu">
 	<li><a href="accueilclient.jsp">Accueil</a>
 		</li>
@@ -51,42 +70,12 @@
 	</li>
 	</ul>
 		</header>
-		<%@ page import="java.net.URL"%>
-		<%@ page import="java.net.URLConnection"%>
-		<%@ page import="java.io.* "%>
-		<%@ page import="ejb.sessions.*"%>
-		<%@ page import="ejb.entites.* "%>
-		<%@ page import="java.util.Collection"%>
-		<%@ page import="java.util.Set"%>
-		<%@ page import="javax.naming.InitialContext"%>
-		<%@ page import="javax.naming.NamingException"%>
-		<%@ page import="java.util.Date"%>
-		<%@ page import="java.text.SimpleDateFormat"%>
-		<%@ page import="java.text.DateFormat"%>
-		<%@ page import="java.util.HashSet"%>
 
-		<%!Entreprise E;
-		int i, statut;%>
-		<%
-     session = request.getSession();
-  	 statut=(Integer)session.getAttribute("statut");	 
-	 if(statut==2)
-	 {
-     	int numClient = (int) session.getAttribute("numPersonne");
-  	 	InitialContext ctx = new InitialContext();
-	 	Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
-	 	ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
-	 	E=service.rechercheEntreprisenum(numClient);
-	 	out.print("<center>");
-		out.println("<b> "+E.getNom()+"<br/>"+E.getAdresse()+"<br/>"+E.getTel()+"</b>");
-	 	out.print("<br/><table id=\"datatables\" class=\"display\" >");
-	 	out.print("<thead><tr><th> Nom du batiment </th><th> Adresse du batiment </th><th>Fiche du bâtiment</th></tr>");
-	 	out.print("</thead><tbody>");
-		for(i=0;i<E.getBatiments().size();i++){
-			out.print(" <tr><td> "+E.getBatiments().get(i).getNom() +"</td><td>"+E.getBatiments().get(i).getAdresse()+"</td><td align=\"center\"> <form action=\"fichebatiment\" method=\"post\" ><input type=\"hidden\" id=\"idfichebat\" name=\"numBatiment\" value="+E.getBatiments().get(i).getNumero()+"> <input type=\"submit\" name=\" Consulter la fiche \" value=\" Consulter la fiche \" /></form></td></tr>");
-		}
-		out.print("</tbody></table></center>");
-	 }
+<%
+
+
+}
+}
 	 else
 		 	out.println("</header><div id=\"container\"><center><br> VEUILLEZ VOUS RECONNECTER   </center> <meta http-equiv=\"refresh\" content=\"5; URL=index.jsp\"></div>");
   %>

@@ -176,3 +176,18 @@ text-transform:inherit;
 #menu li:hover a, #menu-demo2 li li:hover a{
 color:#000;
 }
+
+
+/* Marche true*/
+/* div.marchetrue{
+	background:url(../img/marchetrue.jpg) no-repeat center;
+	width:20px;
+	height:20px;
+}
+
+Marche false
+div.marchefalse{
+	background:url(../img/marchefalse.png) no-repeat center;
+	width:20px;
+	height:20px;
+} */

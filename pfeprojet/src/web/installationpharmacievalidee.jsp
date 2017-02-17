@@ -1,6 +1,6 @@
 <html>
 <head>
-<title> Installation d'une Pharmacie </title>
+<title> Ajout d'une Pharmacie </title>
     <meta charset="UTF-8" />
     <link href="style.css" rel="stylesheet" type="text/css">
 </head>
@@ -45,22 +45,25 @@
 		<%@ page import= "java.sql.Date"%>
 		<%@ page import= "java.text.SimpleDateFormat"%>
 		<%@ page import= "java.text.DateFormat"%>
-		<%@ page import= "java.util.HashSet"%>
 		<%@ page import= "java.util.List"%>
 		<%@ page import= "java.util.ArrayList"%>
 		
 		
-<%! String numBat, annee,observ,empla;
-	int numB,numT,anneeInt,capacite;
+<%! String numBat, annee,observ,empla,capacite,ajout;
+	int numB,numT,anneeInt,capaciteInt;
+	
 	List<Installation> interv;
-	Pharmacie pharmaciecour;
+	
+	Pharmacie Pharmcourante;
+
+    List<Pharmacie> pharmacies;
 %>
 <%
 	annee =request.getParameter("annee");
 	observ =request.getParameter("observations");
 	empla=request.getParameter("emplacement");
-	capacite=Integer.parseInt(request.getParameter("capacite"));
-
+	capacite=request.getParameter("capacite");
+	
 	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 	pdf=null;
 	
@@ -70,31 +73,57 @@
 	numT=(Integer)session.getAttribute("numPersonne");
 	
 	anneeInt=Integer.parseInt(annee);
+	capaciteInt=Integer.parseInt(capacite);
+	
+	ajout=String.valueOf(session.getAttribute("ajout"));
+	if(ajout==null)
+		ajout="0";
+	
+	if(ajout.compareTo("0")==0){
+		pharmacies=(List<Pharmacie>)session.getAttribute("organes");
+		if(pharmacies==null){
+			pharmacies=new ArrayList<Pharmacie>();
+		}
+	}
 	
 	InitialContext ctx = new InitialContext();
 	Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 	ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
+	
  	String format = "yyyy-MM-dd"; 
 	java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
 	java.util.Date date = new java.util.Date();
 	
-	pharmaciecour=service.ajoutPharmacie(numB, anneeInt, empla, observ, capacite);
-
-	interv = (List<Installation>) session.getAttribute("interv");
-	if (interv == null) {
-		interv = new ArrayList<Installation>();
-	} 
-	interv.add(service.InstallationOrgane(observ, Date.valueOf(formater.format(date)), numT, numB, pharmaciecour));
+	if(ajout.compareTo("0")==0){
+		Pharmcourante=service.ajoutPharmacie(numB, anneeInt, empla, observ, capaciteInt);
+		interv = (List<Installation>) session.getAttribute("interv");
+		if (interv == null) {
+			interv = new ArrayList<Installation>();
+		} 
+		interv.add(service.InstallationOrgane(observ, Date.valueOf(formater.format(date)), numT, numB, Pharmcourante));
+		session.setAttribute("interv", interv);
+	}
+	else {
+		observ="--";
+		Pharmcourante=service.ajoutPharmacie(numB, anneeInt, empla, observ, capaciteInt);
+		pharmacies.add(Pharmcourante);
+	}
 	
-	session.setAttribute("interv", interv);
+	session.setAttribute("organes",pharmacies);
 	
 	out.println("<br><center> Installation effectuée avec succès </center>");
 
-	out.println("<center><a href=\"installationpharmacie.jsp\">Ajout d'une nouvelle Pharmacie </a></center>");
+	out.println("<center><a href=\"installationpharmacie.jsp\">Ajout d'une nouvelle pharmacie </a></center>");
+	
+	if(ajout.compareTo("0")==0){
 	out.println(
 			"<br><center><form action=\"interventionvalidee.jsp\"><table><tr>"+
 	"<td> <p> Conclusion  </td> <td><textarea  name=\"conclusion\" rows=\"5\" cols=\"47\" required placeholder=\"Conclusion...\"/></textarea></p> <td></tr></table>"+
-		"<input type=\"submit\" value=\"Valider\"> </center>");
+		"<input type=\"submit\" value=\"Valider\"></form></center>");
+	}
+	else {
+		out.println("<br><center><form action=\"interventionvalidee.jsp\"> <input type=\"submit\" value=\"Valider\"></form></center>");
+	}
 %>
 </div>
 	<%

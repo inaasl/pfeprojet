@@ -42,21 +42,28 @@
 	<%@ page import="java.io.* "%>
 	<%@ page import="ejb.sessions.*"%>
 	<%@ page import="ejb.entites.* "%>
-	<%@ page import="java.util.Collection"%>
-	<%@ page import="java.util.Set"%>
 	<%@ page import="javax.naming.InitialContext"%>
 	<%@ page import="javax.naming.NamingException"%>
 	<%@ page import="java.util.Date"%>
 	<%@ page import="java.text.SimpleDateFormat"%>
 	<%@ page import="java.text.DateFormat"%>
-	<%@ page import="java.util.HashSet"%>
+	<%@ page import="java.util.List"%>
 
 		<%!String numBat,observation;
-			int num,numpharmacie;%>
+			int num,numpharmacie;
+			Pharmacie P;
+			List<Organe> organes;
+	 		String ajout;%>
 		<%
 			session = request.getSession();
 			Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 			pdf=null;
+			
+			organes=(List<Organe>)session.getAttribute("organes");
+			if(organes!=null) organes.clear();
+			ajout=String.valueOf(session.getAttribute("ajout"));
+			if(ajout!=null) ajout=null;
+			
 			InitialContext ctx = new InitialContext();
 			Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -67,20 +74,46 @@
 			
 			numpharmacie = Integer.parseInt(request.getParameter("numpharmacie"));
 			observation=service.rechercheObservationMaintenancecorr(numpharmacie);
-			
+			P = service.recherchePharmacie(numpharmacie);
 			session.setAttribute("numpharmacie",numpharmacie);
 		%>
-		<form action="maintenancecorrpharmacievalideeconclu">
+		<form action="maintenancecorrpharmacievalideeconclu.jsp">
 		 <fieldset>
 		 <legend><b>Maintenance Corrective</b></legend>
 		<br>
 		<table>
+		 <tr>
+			<td>
+                <label for="annee"><i>Annee  <font color="#ff0000">*</font></i></label>
+                </td>	  
+		   <td><input type="text"
+					name="annee" required value="<%out.println(P.getAnnee());%>" size="40" class="taille_input_annee"/>
+		  </td></tr>
+		<tr></tr>
+		<tr>
+			<td> <label for="emplacement"><i>Emplacement de la pharmacie <font color="#ff0000">*</font></i></label></td>
+			<td><textarea name="emplacement" rows="5" cols="47" required value="<%out.println(P.getEmplacement());%>"></textarea></td></tr>
+	  <tr></tr>
+	  <tr>
+	  	<td>
+        	<label for="capacite"><i> Capacité  <font color="#ff0000">*</font></i></label>
+      	</td>	  
+	  	<td>
+	  		<input type="text" name="capacite" required value="<%out.println(P.getCapacite());%>" size="40" class="taille_input_capacite"/>
+	  	</td>
+	  </tr>
 	  	<tr><td><label for="observations"><i>Observations <font color="#ff0000">*</font></i></label></td><td>
 			<%
 				out.println("<textarea name=\"observations\" rows=\"5\" cols=\"47\" >"+observation+"</textarea>");
 				%>			
 		</td></tr>
 	 	<tr></tr>
+	 	<tr><td> Est-ce que l'organe fonctionne correctement ? </td><td>
+		<INPUT id="oui" type= "radio" name="etat" value="oui">
+	    <label for="oui">OUI</label> &nbsp;&nbsp;&nbsp;
+		<INPUT id="non" type= "radio" name="etat" value="non"> 
+		<label for="non">NON</label> &nbsp;&nbsp;&nbsp;
+		</td></tr>
 	 	<tr></tr>
 
 		</table>

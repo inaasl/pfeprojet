@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Liste des organes </title>
+<title>Liste des organes défectueux </title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 
@@ -146,13 +146,7 @@
 		%>
 		<%
 		session = request.getSession();
-		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
-		pdf=null;
-		organes=(List<Organe>)session.getAttribute("organes");
-		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
-		 numBatiment = request.getParameter("numBatiment");
+		 numBatiment = request.getParameter("batiment");
 		 if(numBatiment==null){
 			 numeroB = (String)session.getAttribute("numBatiment");
 			 num=Integer.parseInt(numeroB);
@@ -160,6 +154,15 @@
 		 else{
 			 num = Integer.parseInt(numBatiment);
 		 }
+		
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
+		
+		organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout=null;
+		 
 		session.setAttribute("numBatiment",String.valueOf(num));
 	    
 		InitialContext ctx = new InitialContext();
@@ -171,7 +174,7 @@
 		
 		// Extincteur
 		
-		List<Organe> organe = service.rechercheOrganeBatiment(num);
+		List<Organe> organe = service.rechercheOrganeDefectBatiment(num);
 		
 		for(int j=0;j<organe.size();j++){
 			if(organe.get(j) instanceof Extincteur){
@@ -249,7 +252,7 @@
 	    	out.print("<br/><table id=\"datatables1\" class=\"display\" >");
 	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Année</th><th>Type</th><th>Marque</th><th>Observation</th><th>Etat</th></tr>");
 	 	 	out.print("</thead><tbody>");
-			 for(i=0;i<extincteur.size();i++){
+			for(i=0;i<extincteur.size();i++){
 				if(extincteur.get(i).isMarche()==true)
 					marche="<img src=\"marchtrue.jpg\">";
 				else
@@ -265,7 +268,6 @@
 							+"</td></tr>");
 			 }
 		  out.print("</tbody></table><br>");
-		  extincteur.clear();
 		}
 		
 		if(eclairage!=null) {
@@ -279,7 +281,6 @@
 	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Type</th><th> Marque </th><th>Présence télécommande </th><th>fonctionnement télécommande </th><th>Type télécommande </th><th>Observation</th><th>Etat</th></tr>");
 	 	 	out.print("</thead><tbody>");
 			out.print("</tbody></table><br>");
-
 		}
 		
 		if(pharmacie!=null) {
@@ -292,8 +293,7 @@
 	    	out.print("<br/><table id=\"datatables3\" class=\"display\" >");
 	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th> Capacité </th><th> Année </th><th>Observation</th><th>Etat</th></tr>");
 	 	 	out.print("</thead><tbody>");
-			out.print("</tbody></table><br>");
-
+		  	out.print("</tbody></table><br>");
 		}
 		
 		if(coupefeu!=null) {
@@ -306,8 +306,7 @@
 	    	out.print("<br/><table id=\"datatables4\" class=\"display\" >");
 	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Type</th><th>Observation</th><th>Etat</th></tr>");
 	 	 	out.print("</thead><tbody>");
-			out.print("</tbody></table><br>");
-
+		  	out.print("</tbody></table><br>");
 		}
 		
 		if(ria!=null) {
@@ -321,7 +320,6 @@
 	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Type</th><th>Observation</th><th>Etat</th></tr>");
 	 	 	out.print("</thead><tbody>");
 			out.print("</tbody></table><br>");
-
 		}
 		
 		if(poteaux!=null) {
@@ -348,9 +346,8 @@
 	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Observation</th><th>Etat</th></tr>");
 	 	 	out.print("</thead><tbody>");
 			out.print("</tbody></table><br>");
-		}
-		organe.clear();
 		
+		}
 		%>
 		</div>
 		<%

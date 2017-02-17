@@ -100,10 +100,14 @@
 	<%@ page import="java.util.Date"%>
 	<%@ page import="java.text.SimpleDateFormat"%>
 	<%@ page import="java.text.DateFormat"%>
-	<%@ page import="java.util.HashSet"%>
 	<%!
 	 String newpwd,oldpwd,confpwd;
 	 List<Integer> liste;
+	 String nomEntreprise;
+	 List<Entreprise> E;
+	 int i;
+	 List<Organe> organes;
+	 String ajout;
 	%>
 	<%
 		
@@ -111,6 +115,15 @@
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 		ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
+		
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
+		
+		organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout=null;
+		
 		newpwd=request.getParameter("nouveaupwd");
 		oldpwd=request.getParameter("ancienpwd");
 		confpwd=request.getParameter("confnouveaupwd");

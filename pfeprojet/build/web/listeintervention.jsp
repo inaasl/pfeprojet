@@ -39,7 +39,6 @@
 			<a class="logo" href="http://www.desentec.fr/"><img
 				src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
 			</a>
-				<br>
 	<%! int statut;
 	%>
 	<%
@@ -115,7 +114,6 @@
 	<%
 	}%>
 		</header>
-		<br><br><br><br><br><br>
 		<div id="container">
 		<%@ page import="java.net.URL"%>
 		<%@ page import="java.net.URLConnection"%>
@@ -136,11 +134,22 @@
 		int i,num; 
 		String numBatiment,numeroB,typeintervention,typeorgane,splitpt;
     	List<Pdfgenere> pdf;
+   	 	List<Organe> organes;
+   	 	String ajout;
 		%>
 		
 		<%
 		session = request.getSession();
-		 numBatiment = request.getParameter("numBatiment");
+		organes=(List<Organe>)session.getAttribute("organes");
+		
+		if(organes!=null) organes.clear();
+		ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout=null;
+		numBatiment = request.getParameter("numBatiment");
+		
+		Pdfgenere pdfs=(Pdfgenere)session.getAttribute("pdf");
+		pdfs=null;
+		
 		 if(numBatiment==null){
 			 numeroB = (String)session.getAttribute("numBatiment");
 			 num=Integer.parseInt(numeroB);
@@ -157,7 +166,7 @@
 	 	pdf=service.recherchePdfgenereBatiment(num);
 	 	
 	 	out.print("<center>");
-		out.println("<b>Liste des Interventions</b><br><br>");
+		out.println("<h3>Liste des Interventions</h3><br><br>");
 		out.print("</center>");
 		
     	out.print("<br/><table id=\"datatables\" class=\"display\" >");
@@ -179,11 +188,39 @@
  	 					typeintervention="Maintenance Préventive";
  	 			}
  	 		}
- 	 		
- 	 		splitpt=pdf.get(i).getInterventions().get(0).getOrgane().getClass().getName();
- 	 		String[] parts = splitpt.split(".");
- 	 		typeorgane=parts[1];
- 	 		
+ 	 		if(pdf.get(i).getInterventions().get(0).getOrgane() instanceof Extincteur){
+ 	 			typeorgane="Extincteur";
+ 	 		}
+ 	 		else {
+ 	 			if(pdf.get(i).getInterventions().get(0).getOrgane() instanceof Eclairage){
+ 	 				typeorgane="Eclairage";
+ 	 			}
+ 	 			else {
+ 	 				if(pdf.get(i).getInterventions().get(0).getOrgane() instanceof Pharmacie){
+ 	 					typeorgane="Pharmacie";
+ 	 				}
+ 	 				else {
+ 	 					if(pdf.get(i).getInterventions().get(0).getOrgane() instanceof Coupefeu){
+ 	 						typeorgane="Porte Coupe-feu";
+ 	 					}
+ 	 					else {
+ 	 						if(pdf.get(i).getInterventions().get(0).getOrgane() instanceof RIA){
+ 	 							typeorgane="RIA";
+ 	 						}
+ 	 						else {
+ 	 							if(pdf.get(i).getInterventions().get(0).getOrgane() instanceof Poteaux){
+ 	 								typeorgane="Poteaux incendie";
+ 	 							}
+ 	 							else {
+ 	 								if(pdf.get(i).getInterventions().get(0).getOrgane() instanceof Signaletique){
+ 	 									typeorgane="Signalétique";
+ 	 								}
+ 	 							}
+ 	 						}
+ 	 					}
+ 	 				}
+ 	 			}
+ 	 		}
  	 		out.print(" <tr><td>"+typeintervention
  	 				+"</td><td>"+typeorgane
  	 				+"</td><td>"+pdf.get(i).getInterventions().get(0).getDate()

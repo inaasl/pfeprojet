@@ -1,6 +1,6 @@
 <html>
 <head>
-<title> Installation d'un Extincteur</title>
+<title> Ajout d'un Extincteur</title>
     <meta charset="UTF-8" />
     <link href="style.css" rel="stylesheet" type="text/css">
 </head>
@@ -45,15 +45,17 @@
 		<%@ page import= "java.sql.Date"%>
 		<%@ page import= "java.text.SimpleDateFormat"%>
 		<%@ page import= "java.text.DateFormat"%>
-		<%@ page import= "java.util.HashSet"%>
 		<%@ page import= "java.util.List"%>
 		<%@ page import= "java.util.ArrayList"%>
 		
 		
-<%! String numBat, annee,observ,empla, type,marque;
+<%! String numBat, annee,observ,empla, type,marque,type2,marque2,ajout;
 	int numB,numT,anneeInt;
 	List<Installation> interv;
 	Extincteur Extcourant;
+    TypeExtincteur Type;
+    MarqueExtincteur Marque;
+    List<Extincteur> extincteurs;
 %>
 <%
 	annee =request.getParameter("annee");
@@ -61,6 +63,10 @@
 	empla=request.getParameter("emplacement");
 	type=request.getParameter("typeextincteur");
 	marque=request.getParameter("marqueextincteur");
+	type2= request.getParameter("nomType");
+	marque2= request.getParameter("nomMarque");
+	
+	
 	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 	pdf=null;
 	
@@ -71,30 +77,72 @@
 	
 	anneeInt=Integer.parseInt(annee);
 	
+	ajout=String.valueOf(session.getAttribute("ajout"));
+	
+	if(ajout.compareTo("0")==0){
+		extincteurs=(List<Extincteur>)session.getAttribute("organes");
+		if(extincteurs==null){
+			extincteurs=new ArrayList<Extincteur>();
+		}
+	}
+	
 	InitialContext ctx = new InitialContext();
 	Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 	ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
+	
  	String format = "yyyy-MM-dd"; 
 	java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
 	java.util.Date date = new java.util.Date();
 	
-	Extcourant=service.ajoutExtincteur(numB, anneeInt, empla, observ, marque, type);
-
-	interv = (List<Installation>) session.getAttribute("interv");
-	if (interv == null) {
-		interv = new ArrayList<Installation>();
-	} 
-	interv.add(service.InstallationOrgane(observ, Date.valueOf(formater.format(date)), numT, numB, Extcourant));
+	if (type2.compareTo("") != 0){ 
+		type=String.valueOf(type2);
+		service.ajouttypeextincteur(type);
+		Type=service.rechercheTypeExtincteurNom(type);
+	}
+	else {
+		Type=service.rechercheTypeExtincteur(type);
+	}
 	
-	session.setAttribute("interv", interv);
+	if (marque2.compareTo("") != 0){ 
+		marque=String.valueOf(marque2);
+		service.ajoutmarqueextincteur(marque);
+		Marque=service.rechercheMarqueExtincteurNom(marque);
+	}
+	else {
+		Marque=service.rechercheMarqueExtincteur(marque);
+	}
+	
+	if(ajout.compareTo("0")==0){
+		Extcourant=service.ajoutExtincteur(numB, anneeInt, empla, observ, String.valueOf(Marque.getNumero()), String.valueOf(Type.getNumero()));
+		interv = (List<Installation>) session.getAttribute("interv");
+		if (interv == null) {
+			interv = new ArrayList<Installation>();
+		} 
+		interv.add(service.InstallationOrgane(observ, Date.valueOf(formater.format(date)), numT, numB, Extcourant));
+		
+		session.setAttribute("interv", interv);
+	}
+	else {
+		observ="--";
+		Extcourant=service.ajoutExtincteur(numB, anneeInt, empla, observ, String.valueOf(Marque.getNumero()), String.valueOf(Type.getNumero()));
+		extincteurs.add(Extcourant);
+	}
+	
+	session.setAttribute("organes",extincteurs);
 	
 	out.println("<br><center> Installation effectuée avec succès </center>");
 
 	out.println("<center><a href=\"installationextincteur.jsp\">Ajout d'un nouvel extincteur</a></center>");
+	
+	if(ajout.compareTo("0")==0){
 	out.println(
 			"<br><center><form action=\"interventionvalidee.jsp\"><table><tr>"+
 	"<td> <p> Conclusion  </td> <td><textarea  name=\"conclusion\" rows=\"5\" cols=\"47\" required placeholder=\"Conclusion...\"/></textarea></p> <td></tr></table>"+
-		"<input type=\"submit\" value=\"Valider\"> </center>");
+		"<input type=\"submit\" value=\"Valider\"></form></center>");
+	}
+	else {
+		out.println("<br><center><form action=\"interventionvalidee.jsp\"> <input type=\"submit\" value=\"Valider\"></form></center>");
+	}
 %>
 </div>
 	<%

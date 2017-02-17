@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Verification d'un Extincteur</title>
+<title>Maintenance Préventive : Extincteur </title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
@@ -58,6 +58,8 @@
 	List<Intervention> Interventionajoutee = new ArrayList<Intervention>();
 	List<Piece> listP;
 	boolean Etat;
+	List<Organe> organes;
+	String ajout;
 	%>
 
 	<%
@@ -69,6 +71,11 @@
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 		ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
 
+		organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout=null;
+		
  		numBat = String.valueOf(session.getAttribute("numBatiment"));
 		session.setAttribute("numBatiment", numBat);
 		num = Integer.parseInt(numBat); 
@@ -88,9 +95,9 @@
 				if(etat!=null){
 					if(etat.compareTo("oui")==0)
 						Etat=false;
+					else
+						Etat=true;
 				}
-				else 
-					Etat=true;
 				MP=service.MaintenancePreventiveOrgane(E.get(i), observation, conclusion, numT, Date.valueOf(formater.format(date)),Etat);
  				for(int j=0;j<listP.size();j++){
 					if(MP.getOrgane().getNumero()==listP.get(j).getOrgane().getNumero()){
@@ -104,7 +111,7 @@
 		Interventionajoutee.clear();
 		out.println("<center><br>Maintenance Préventive effectuée avec succès");
 		session.setAttribute("pdf",pdf);
-		out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionextincteurpdf.jsp'\"></button></td></tr>");
+		out.println("<br><table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionextincteurpdf.jsp'\"></button></td></tr>");
 		out.println("<tr><td><input type=\"button\" name=\"Fichebatiment\" value=\"Retour a la fiche du batiment \" onclick=\"self.location.href='fichebatiment.jsp'\"></button></td></tr></table>");
 		out.println("</center>");
 		E.clear();

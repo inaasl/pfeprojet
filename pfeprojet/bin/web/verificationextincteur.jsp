@@ -66,11 +66,19 @@
 	<%!String numBat,conclusion, observation;
 	int num,i;
 	List<Extincteur> E = new ArrayList<Extincteur>();
+	List<Organe> organes;
+	String ajout;
 	%>
 	<%
 		session = request.getSession();
 		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 		pdf=null;
+		
+		organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout.compareTo("0")!=0) ajout="0";
+		
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -81,6 +89,9 @@
 		E.clear();
 		E=service.rechercheExtincteurBatiment(num);
 		out.println("<br><center><h3>Vérification des Extincteurs</h3></center><br>");
+		
+		out.println("<center><input type=\"button\" name=\"AjoutExt\" value=\"Ajouter un extincteur\"  onclick=\"self.location.href='installationextincteur.jsp?ajout=1'\"></button></center>");
+		out.println("<br><center><h4> Liste des Extincteurs </h4></center>");
 		// Tableau
 		out.println("<br><form action=\"verificationextincteurvalidee.jsp\">");
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
@@ -95,8 +106,9 @@
 						"</td> <td >" + E.get(i).getMarque().getNom()+
 						"</td> <td >" + E.get(i).getAnnee()+
 						"</td> <td> <input type=\"text\" name="+i+" value="+observation+
-						"></td><td> <INPUT type=\"checkbox\" name="+(i+100)+" value=\"oui\">OUI</td></tr>"
+						"></td><td><INPUT id=\"oui\" type= \"radio\" name="+(i+100)+" value=\"oui\"><label for=\"oui\">OUI</label>&nbsp;&nbsp;&nbsp;<INPUT id=\"non\" type= \"radio\" name="+(i+100)+" value=\"non\"><label for=\"non\">NON</label></td></tr>"
 						);
+					 
 		}
 		conclusion=service.rechercheConclusionVerificationExtincteur(num);
 		out.println("</tbody></table><br><br>"); 

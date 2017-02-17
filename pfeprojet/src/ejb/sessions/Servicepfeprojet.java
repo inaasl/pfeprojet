@@ -22,6 +22,7 @@ import ejb.entites.Verification;
 public interface Servicepfeprojet {
 	
 	public void checkbatiment(int numerobatiment) throws BatimentInconnuException;
+	public List<Organe> rechercheOrganeDefectBatiment(int numerobatiment);
 	
 	public Compte ajouterEntreprise(String nom, String adresse,String email, String tel, String interlocuteur);
 	public Compte ajouterTechnicien(String nom, String prenom, String adresse, String tel, String email);
@@ -34,6 +35,7 @@ public interface Servicepfeprojet {
 	
 	
 	public Intervention ajoutIntervention(int numbatiment, Intervention Interv, Organe O, String conclusion) throws BatimentInconnuException;
+	public void ajoutOrgane(List<Organe> organes);
 	public Pdfgenere ajoutpdf(List<Intervention> interventions);
 	
 	public Preventive MaintenancePreventiveOrgane(Organe O, String Obs, String Obsraj, int numerotechnicien, java.sql.Date date,boolean marche) throws OrganeInconnuException, TechnicienInconnuException;	
@@ -43,6 +45,7 @@ public interface Servicepfeprojet {
 	
 	public Corrective MaintenanceCorrectiveOrgane(String Obs,java.sql.Date date,  int numerotechnicien, Organe O) throws TechnicienInconnuException;	
 	public Extincteur remplacementextincteur(Extincteur E, int Annee, String Emp, String Obs, String nommarque, String nomtype,boolean marche);
+	public Pharmacie remplacementpharmacie(Pharmacie P, int Annee, String Emp, String Obs, int capacite,boolean marche);
 	public String rechercheObservationMaintenancecorr(int numeroOrgane);
 	
 	public String rechercheConclusionMaintenancecorrExtincteur(int numeroBatiment);
@@ -81,14 +84,21 @@ public interface Servicepfeprojet {
 	public List<Pdfgenere> recherchePdfgenereBatiment(int numeroBatiment);
 	public Pdfgenere recherchePdfgenereNum(int numeroPdf);
 	
+	public List<Piece> recherchePieceIntervention(int numeroIntervention);
+	
+	public List<Intervention> rechercheInterventionPdf(int numeroPdf);
+	public List<Intervention> rechercheInterventionOrgane(int numeroOrgane);
+	
 	public void ajouttypeextincteur(String nom);
 	public List<TypeExtincteur> touslesTypeExtincteur();
 	public TypeExtincteur rechercheTypeExtincteur(String Nom);
+	public TypeExtincteur rechercheTypeExtincteurNom(String nom);
 	
 	public void ajoutmarqueextincteur(String nom);
 	public List<MarqueExtincteur> touteslesMarqueExtincteur();
 	public MarqueExtincteur rechercheMarqueExtincteur(String Nom);
-
+	public MarqueExtincteur rechercheMarqueExtincteurNom(String nom);
+	
 	public String rechercheObservationVerification(int numeroOrgane);
 	public String rechercheConclusionVerificationExtincteur(int numeroBatiment);
 	public String rechercheConclusionVerificationPharmacie(int numeroBatiment);

@@ -1,7 +1,7 @@
 <html>
 
 <head>
-<title>Fiche : entreprise</title>
+<title>Fiche : Intervention</title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -17,7 +17,7 @@
     <script type="text/javascript" charset="utf-8">
      $(document).ready(function(){
      $('#datatables').dataTable();
-    
+     $('#datatables1').dataTable();
      })
     </script>
 </head>
@@ -36,7 +36,7 @@
 	 {
 	 	session = request.getSession();
 	 	statut=(Integer)session.getAttribute("statut");	 
-	 	if(statut==0 || statut==1 || statut!=2)
+	 	if(statut==0 || statut==1 || statut==2)
 	 	{
 	 		if(statut==0){
 	%>
@@ -115,25 +115,34 @@
 	<%@ page import="java.io.* "%>
 	<%@ page import="ejb.sessions.*"%>
 	<%@ page import="ejb.entites.* "%>
-	<%@ page import="java.util.Collection"%>
-	<%@ page import="java.util.Set"%>
 	<%@ page import="javax.naming.InitialContext"%>
 	<%@ page import="javax.naming.NamingException"%>
 	<%@ page import="java.util.List"%>
+	<%@ page import="java.util.ArrayList"%>
 
-
-	<%!String numPdf, split;
-	   int num, i;
+	<%!String numPdf, marche;
+	   int num, i,j;
 	   Pdfgenere pdf;
+	   List<Intervention> interventions = new ArrayList<Intervention>();
+	   List<Piece> pieces = new ArrayList<Piece>();
+	   List<Organe> organes;
+	   String ajout;
 	%>
 	<%
 		session = request.getSession();
+		
+		organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout=null;
+	
+	
 		pdf=(Pdfgenere)session.getAttribute("pdf");
 		pdf=null;
 		 
 		numPdf = request.getParameter("numPdf");
 		num = Integer.parseInt(numPdf);
-		session.setAttribute("numeroE",String.valueOf(num));
+		
 		
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
@@ -141,27 +150,49 @@
 		
 		ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
 		out.print("<center>");
-		out.print("<h3>Fiche de l'intervention</h3><br>");
-		
-		pdf=service.recherchePdfgenereNum(num);
+		out.print("<h3>Fiche de l'intervention</h3><br><br>");
 
-		out.print("<br><br> <table id=\"datatables\" class=\"display\" >"); 
-		out.print("<thead><tr><th> Numero de l'intervention </th><th> Numero de l'organe </th><th> Fiche batiment </th><th> Etat </th></tr>");
-		out.print("</thead><tbody>");
-/* 		for (i=0; i< batiment.size();i++){
-			service.checkbatiment(batiment.get(i).getNumero());
-			if(batiment.get(i).isMarche()==true)
-				marche="OK";
-			else
-				marche="Echec";
-			out.print(" <tr><td> " + batiment.get(i).getNom()
-					+ "</td><td <td>" + batiment.get(i).getAdresse()
-					+ "</td><td> <form action=\"fichebatiment\" method=\"GET\" ><input type=\"hidden\" id=\"idfichebat\" name=\"numBatiment\" value="
-					+ batiment.get(i).getNumero()
-					+ "> <input type=\"submit\" name=\" Consulter la fiche \" value=\" Consulter la fiche \" /></form></td><td>"
-					+marche+"</td></tr>");
-		} */
-		out.print("</tbody></table>");
+		interventions=service.rechercheInterventionPdf(num);
+		
+		if(interventions.get(0).getOrgane() instanceof Extincteur){
+			out.print("<br><br> <table id=\"datatables\" class=\"display\" >"); 
+			out.print("<thead><tr><th> Numero de l'intervention </th><th> Numero de l'organe </th><th> Année </th><th> Emplacement </th><th> Type </th><th> Marque </th><th> Observation </th></tr>");
+			out.print("</thead><tbody>");
+			for(i=0;i<interventions.size();i++){
+			out.println("<tr><td>"+interventions.get(i).getNumero()
+						+"</td><td>"+interventions.get(i).getOrgane().getNumero()
+						+"</td><td>"+((Extincteur)interventions.get(i).getOrgane()).getAnnee()
+						+"</td><td>"+interventions.get(i).getOrgane().getEmplacement()
+						+"</td><td>"+((Extincteur)interventions.get(i).getOrgane()).getType().getNom()
+						+"</td><td>"+((Extincteur)interventions.get(i).getOrgane()).getMarque().getNom()
+						+"</td><td>"+interventions.get(i).getOrgane().getObservation()
+					+"</td></tr>");
+			}
+			out.print("</tbody></table>");
+		}
+		if(interventions.get(0) instanceof Preventive){		
+			out.print("<br><br> <table id=\"datatables1\" class=\"display\" >"); 
+			out.print("<thead><tr><th> Numero de la pièce </th><th> Numero de l'organe </th></th></tr>");
+			out.print("</thead><tbody>");
+			
+			for(i=0;i<interventions.size();i++){
+				pieces=service.recherchePieceIntervention(interventions.get(i).getNumero());
+				if(pieces!=null){
+					for(j=0;j<pieces.size();j++){
+						out.println("<tr><td>"+pieces.get(j).getNumero()
+						+"</td><td>"+pieces.get(j).getOrgane().getNumero()
+						+"</td></tr>");
+					}
+				}
+				pieces=null;
+			}
+			out.print("</tbody></table>");
+		}
+		out.println("<br><center>Conclusion : </center>");
+		out.println("<br><center>"+interventions.get(0).getConclusion()+"</center>");
+		session.setAttribute("pdf",pdf);
+		out.println("<br><br><table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionextincteurpdf.jsp'\"></button></td></tr></table>");
+
 	%>
 	</div>
 	<%

@@ -49,14 +49,17 @@
 	<%!
 	List<Intervention> Interv;
 	List<Intervention>Interventionajoutee=new ArrayList<Intervention>();
-	String conclu,numBat;
+	String conclu,numBat,ajout;
 	Pdfgenere pdf;
 	int numB;
+	List<Organe> organes;
 	%>
 <%
 	session = request.getSession();
+
 	pdf=(Pdfgenere)session.getAttribute("pdf");
 	pdf=null;
+	
 	InitialContext ctx = new InitialContext();
 	Object obj = ctx.lookup(
 	"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -65,55 +68,86 @@
 	numBat=String.valueOf(session.getAttribute("numBatiment"));
 	numB=Integer.parseInt(numBat);
 	
-	conclu = request.getParameter("conclusion");
-	Interv = (List<Intervention>)session.getAttribute("interv");
-	
-	for(int i=0;i<Interv.size();i++){
-		Interventionajoutee.add(service.ajoutIntervention(numB,Interv.get(i),Interv.get(i).getOrgane(), conclu));
-	}
-	Interv.clear();
-	pdf=service.ajoutpdf(Interventionajoutee);
-
-	out.println("<center><br>Intervention effectuée avec succès");
-	session.setAttribute("pdf",pdf);
-	if(Interventionajoutee.get(0).getOrgane() instanceof Extincteur){
-	out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionextincteurpdf.jsp'\"></button></td></tr>");
-	}
-	else {
-		if(Interventionajoutee.get(0).getOrgane() instanceof Pharmacie){
-			out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionpharmaciepdf.jsp'\"></button></td></tr>");
+	ajout=String.valueOf(session.getAttribute("ajout"));
+	if(ajout.compareTo("0")==0){
+		conclu = request.getParameter("conclusion");
+		Interv = (List<Intervention>)session.getAttribute("interv");
+		
+		for(int i=0;i<Interv.size();i++){
+			Interventionajoutee.add(service.ajoutIntervention(numB,Interv.get(i),Interv.get(i).getOrgane(), conclu));
+		}
+		Interv.clear();
+		pdf=service.ajoutpdf(Interventionajoutee);
+		session.setAttribute("pdf",pdf);
+		out.println("<center><br>Intervention effectuée avec succès");
+		if(Interventionajoutee.get(0).getOrgane() instanceof Extincteur){
+		out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionextincteurpdf.jsp'\"></button></td></tr>");
 		}
 		else {
-			if(Interventionajoutee.get(0).getOrgane() instanceof Coupefeu){
-				out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventioncoupefeupdf.jsp'\"></button></td></tr>");
-				}
+			if(Interventionajoutee.get(0).getOrgane() instanceof Pharmacie){
+				out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionpharmaciepdf.jsp'\"></button></td></tr>");
+			}
 			else {
-				if(Interventionajoutee.get(0).getOrgane() instanceof Poteaux){
-					out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionpoteauxpdf.jsp'\"></button></td></tr>");
-				}
+				if(Interventionajoutee.get(0).getOrgane() instanceof Coupefeu){
+					out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventioncoupefeupdf.jsp'\"></button></td></tr>");
+					}
 				else {
-					if(Interventionajoutee.get(0).getOrgane() instanceof RIA){
-						out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionriapdf.jsp'\"></button></td></tr>");
+					if(Interventionajoutee.get(0).getOrgane() instanceof Poteaux){
+						out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionpoteauxpdf.jsp'\"></button></td></tr>");
 					}
 					else {
-						if(Interventionajoutee.get(0).getOrgane() instanceof Signaletique){
-							out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionsignaletiquepdf.jsp'\"></button></td></tr>");
+						if(Interventionajoutee.get(0).getOrgane() instanceof RIA){
+							out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionriapdf.jsp'\"></button></td></tr>");
 						}
 						else {
-							if(Interventionajoutee.get(0).getOrgane() instanceof Eclairage){
-								out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventioneclairagepdf.jsp'\"></button></td></tr>");
+							if(Interventionajoutee.get(0).getOrgane() instanceof Signaletique){
+								out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionsignaletiquepdf.jsp'\"></button></td></tr>");
+							}
+							else {
+								if(Interventionajoutee.get(0).getOrgane() instanceof Eclairage){
+									out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventioneclairagepdf.jsp'\"></button></td></tr>");
+								}
 							}
 						}
 					}
 				}
 			}
 		}
+		out.println("</center>");
+		Interventionajoutee.clear();
+		out.println("<tr><td><input type=\"button\" name=\"Fichebatiment\" value=\"Retour a la fiche du batiment \" onclick=\"self.location.href='fichebatiment.jsp'\"></button></td></tr></table>");
+		out.println("</center>");
 	}
-	
-	
-	Interventionajoutee.clear();
-	out.println("<tr><td><input type=\"button\" name=\"Fichebatiment\" value=\"Retour a la fiche du batiment \" onclick=\"self.location.href='fichebatiment.jsp'\"></button></td></tr></table>");
-	out.println("</center>");
+	else {
+		organes=(List<Organe>)session.getAttribute("organes");
+		service.ajoutOrgane(organes);
+		organes.clear();
+		//ajout=null;
+		if(ajout.compareTo("1")==0){
+			out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationextincteur.jsp\">");
+		}
+		else {
+			if(ajout.compareTo("2")==0){
+				out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrextincteur.jsp\">");
+			}
+			else{
+				if (ajout.compareTo("3")==0) {
+				out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenanceprevextincteur.jsp\">");
+				}
+				else {
+					if(ajout.compareTo("4")==0) {
+						out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationpharmacie.jsp\">");
+					}
+					else {
+						if(ajout.compareTo("5")==0) {
+							out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrpharmacie.jsp\">");
+						}
+					}
+				}
+			}
+		}
+		ajout=null;
+	}
 %>
 </div>
 	<%

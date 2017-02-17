@@ -55,33 +55,47 @@
 	boolean Etat;
 	List<Extincteur> E;
 	List<Intervention> Interventionajoutee = new ArrayList<Intervention>();
+	List<Organe> organes;
+	String ajout;
 	%>
 
 	<%
 		session = request.getSession();
 		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 		pdf=null;
+		
+		organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout=null;
+		
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 		ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
 
- 		numBat = String.valueOf(session.getAttribute("numBatiment"));
+ 		
+		numBat = String.valueOf(session.getAttribute("numBatiment"));
 		session.setAttribute("numBatiment", numBat);
 		num = Integer.parseInt(numBat); 
+		
 		conclusion = request.getParameter("Conclusion");
+		
 		E=(List<Extincteur>)session.getAttribute("Extincteurs");
 		
 		String format = "yyyy-MM-dd";
 		java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
 		java.util.Date date = new java.util.Date();
 		numT=(Integer)session.getAttribute("numPersonne");
+		
 		for (i=0;i <E.size(); i++) {
 				observation = request.getParameter(String.valueOf(i));
 				etat = request.getParameter(String.valueOf(i+100));
 				if(etat!=null){
 					if(etat.compareTo("oui")==0)
 						Etat=false;
+					else
+						Etat=true;
 				}
 				Interventionajoutee.add(service.Verification(service.rechercheOrgane(E.get(i).getNumero()).getNumero(),observation,conclusion,numT,
 					Date.valueOf(formater.format(date)),Etat));

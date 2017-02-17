@@ -35,10 +35,17 @@
 		
 		
         <%! String login,password;
+   		 	List<Organe> organes;
+   	 		String ajout;
         %>
         <%
            		login =request.getParameter("login");
            		password=request.getParameter("password");
+           		
+        		organes=(List<Organe>)session.getAttribute("organes");
+        		if(organes!=null) organes.clear();
+        		ajout=String.valueOf(session.getAttribute("ajout"));
+        		if(ajout!=null) ajout=null;
            		
            		InitialContext ctx = new InitialContext();
     			Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");

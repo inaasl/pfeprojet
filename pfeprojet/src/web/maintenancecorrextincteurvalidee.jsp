@@ -5,6 +5,19 @@
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<script language="JavaScript">
+   function check(f){
+	    var anneevalide = new RegExp (/^(19|20)[0-9][0-9]$/);
+	    
+	    if(anneevalide.test(f.annee.value)){
+	    	return true;
+	    }
+	    else {
+    		alert('Année non valide !');
+    		return false;
+	    }
+	}
+</script> 
 	<header class="header">
 		<a class="logo" href="http://www.desentec.fr/"><img
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
@@ -42,21 +55,27 @@
 	<%@ page import="java.io.* "%>
 	<%@ page import="ejb.sessions.*"%>
 	<%@ page import="ejb.entites.* "%>
-	<%@ page import="java.util.Collection"%>
-	<%@ page import="java.util.Set"%>
 	<%@ page import="javax.naming.InitialContext"%>
 	<%@ page import="javax.naming.NamingException"%>
 	<%@ page import="java.util.Date"%>
 	<%@ page import="java.text.SimpleDateFormat"%>
 	<%@ page import="java.text.DateFormat"%>
-	<%@ page import="java.util.HashSet"%>
+	<%@ page import="java.util.List"%>
 
 		<%!String numBat,observation;
-			int i,num,numextincteur;%>
+			int i,num,numextincteur;
+			List<Organe> organes;
+	 		String ajout;%>
 		<%
 			session = request.getSession();
 			Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 			pdf=null;
+			
+			organes=(List<Organe>)session.getAttribute("organes");
+			if(organes!=null) organes.clear();
+			ajout=String.valueOf(session.getAttribute("ajout"));
+			if(ajout!=null) ajout=null;
+			
 			InitialContext ctx = new InitialContext();
 			Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -70,7 +89,7 @@
 			Extincteur E =service.rechercheExtincteur(numextincteur);
 			session.setAttribute("numextincteur",numextincteur);
 		%>
-<form action="maintenancecorrextincteurvalideeconclu">
+<form action="maintenancecorrextincteurvalideeconclu" method="post" onsubmit="return check(this);">
 		<br>
 		<table>
 		 <tr>
@@ -78,7 +97,7 @@
                 <label for="annee"><i>Annee de fabrication de l'extincteur <font color="#ff0000">*</font></i></label>
                 </td>	  
 		   <td><input type="text"
-					name="annee" required value="<%out.println(E.getAnnee()); %>" size="40" class="taille_input_annee"/>
+					name="annee" required value="<%out.println(E.getAnnee());%>" size="40" class="taille_input_annee"/>
 		  </td></tr>
 		<tr></tr>
 		<tr>
@@ -101,6 +120,10 @@
 					<%out.println(E.getType().getNom()); %>
 				</select>
 			</td>
+			<td><label for="nomType"><i>Ajout d'un nouveau Type </i></label> <input type="text"
+					name="nomType"  placeholder="type..." size="20" class="taille_input_annee"/>
+		  
+		 	 </td>
 		</tr>
       <tr></tr>
 	  <tr> <td> <label for="marqueextincteur"><i>Marque de l'extincteur <font color="#ff0000">*</font></i></label>
@@ -111,8 +134,13 @@
 									+ service.touteslesMarqueExtincteur().get(i).getNom() + "</option>");
 					%>
 					<%out.println(E.getMarque().getNom()); %>
-			</select></td></tr>
-		<tr><td> Est-ce que l'organe fonctionne correctement ? &nbsp;&nbsp;
+			</select></td>
+			<td><label for="nomMarque"><i>Ajout d'une nouvelle Marque </i></label> <input type="text"
+					name="nomMarque"  placeholder="type..." size="20" class="taille_input_annee"/>
+		  
+		 	 </td>
+			</tr>
+		<tr><td> Est-ce que l'organe fonctionne correctement ? </td><td>
 		<INPUT id="oui" type= "radio" name="etat" value="oui">
 	    <label for="oui">OUI</label> &nbsp;&nbsp;&nbsp;
 		<INPUT id="non" type= "radio" name="etat" value="non"> 

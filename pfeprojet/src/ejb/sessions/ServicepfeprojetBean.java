@@ -40,6 +40,15 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		em.merge(B);
 	}
 	
+	public List<Organe> rechercheOrganeDefectBatiment(int numerobatiment){
+		List<Organe> listetotale = rechercheOrganeBatiment(numerobatiment);
+		List<Organe> listeresult = new ArrayList<Organe>();
+		for(int i=0;i<listetotale.size();i++){
+			if(listetotale.get(i).isMarche()==false)
+				listeresult.add(listetotale.get(i));
+		}
+		return listeresult;
+	}
 	
 	
 	// Recherche d'informations
@@ -139,11 +148,18 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		TypeExtincteur T = em.find(TypeExtincteur.class, Numero);
 		return T;
 	}
+	
+	public TypeExtincteur rechercheTypeExtincteurNom(String nom) {
+		return (TypeExtincteur) em.createQuery("from TypeExtincteur t WHERE t.nom like :name").setParameter("name",nom).getSingleResult();
+	}
 	// recherche de la marque
 	public MarqueExtincteur rechercheMarqueExtincteur(String Num) {
 		int Numero = Integer.parseInt(Num);
 		MarqueExtincteur M = em.find(MarqueExtincteur.class, Numero);
 		return M;
+	}
+	public MarqueExtincteur rechercheMarqueExtincteurNom(String nom) {
+		return (MarqueExtincteur) em.createQuery("from MarqueExtincteur m WHERE m.nom like :name").setParameter("name",nom).getSingleResult();
 	}
 	// recherche des organes d'un batiment 
 	@SuppressWarnings("unchecked")
@@ -176,6 +192,10 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	public List<Intervention> rechercheInterventionOrgane(int numeroOrgane) {
 		return em.createQuery("from Intervention i where i.organe.numero="+numeroOrgane).getResultList();
 	}
+	// recherche intervention pdf
+	public List<Intervention> rechercheInterventionPdf(int numeroPdf) {
+		return em.createQuery("from Intervention i where i.pdf.numero="+numeroPdf).getResultList();
+	}
 	// recherche pdf batiment
 	public List<Pdfgenere> recherchePdfgenereBatiment(int numeroBatiment){
 		List<Pdfgenere> listetotale = getlistePdfgenere();
@@ -191,6 +211,12 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	public Pdfgenere recherchePdfgenereNum(int numeroPdf){
 		return em.find(Pdfgenere.class,numeroPdf);
 	}
+	// recherche pieces par intervention
+	public List<Piece> recherchePieceIntervention(int numeroIntervention){
+		return em.createQuery("from Piece p where p.preventive.numero="+numeroIntervention).getResultList();
+	}
+	
+	
 	
 	// Fonctions d'ajouts
 
@@ -315,6 +341,15 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	}
 
 	// Ajout dans la base de donnée
+	// Organe
+	public void ajoutOrgane(List<Organe> organes){
+		int i;
+		for(i=0;i<organes.size();i++){
+			em.persist(organes.get(i));
+		}
+	}
+	
+	// Intervention
 	public Intervention ajoutIntervention(int numbatiment, Intervention Interv, Organe O, String conclusion) throws BatimentInconnuException{
 		Batiment B = rechercheBatimentnum(numbatiment);
 		Interv.setConclusion(conclusion);
@@ -403,6 +438,15 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		return MC;
 	}
 	// remplacement
+	// remlacement extincteur
+	public Pharmacie remplacementpharmacie(Pharmacie P, int Annee, String Emp, String Obs, int capacite,boolean marche){
+		P.setAnnee(Annee);
+		P.setEmplacement(Emp);
+		P.setObservation(Obs);
+		P.setMarche(marche);
+		P.setCapacite(capacite);
+		return P;
+	}
 	// remlacement extincteur
 	public Extincteur remplacementextincteur(Extincteur E, int Annee, String Emp, String Obs, String nommarque, String nomtype,boolean marche){
 		E.setAnnee(Annee);

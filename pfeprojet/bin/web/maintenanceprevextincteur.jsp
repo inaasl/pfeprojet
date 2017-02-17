@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Verification d'un Extincteur</title>
+<title>Maintenance Préventive : Extincteur </title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -71,6 +71,8 @@
 	List<Extincteur> E = new ArrayList<Extincteur>();
 	List<Piece> listP = new ArrayList<Piece>() ;
 	Piece piececourante;
+	List<Organe> organes;
+	String ajout;
 	%>
 	<%
 	
@@ -86,8 +88,15 @@
  		num=Integer.parseInt(numBat);
 		E.clear();
 
+		organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout=null;
+		
 		E=service.rechercheExtincteurBatiment(num);
 		out.println("<br><center><h3>Maintenance préventive des Extincteurs</h3></center><br>");
+		out.println("<center><input type=\"button\" name=\"AjoutExt\" value=\"Ajouter un extincteur\"  onclick=\"self.location.href='installationextincteur.jsp?ajout=3'\"></button></center>");
+		out.println("<br><center><h4> Liste des Extincteurs </h4></center>");
 		// Tableau
 		out.println("<br><form action=\"maintenanceprevextincteurvalidee.jsp\">");
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
@@ -102,7 +111,7 @@
 						"</td> <td >" + E.get(i).getMarque().getNom()+
 						"</td> <td >" + E.get(i).getAnnee()+
 						"</td> <td> <input type=\"text\" name="+i+" value="+observation+
-						"></td><td> <INPUT type=\"checkbox\" name="+(i+100)+" value=\"oui\"> OUI </td></tr>"
+						"></td><td><INPUT id=\"oui\" type= \"radio\" name="+(i+100)+" value=\"oui\"><label for=\"oui\">OUI</label>&nbsp;&nbsp;&nbsp;<INPUT id=\"non\" type= \"radio\" name="+(i+100)+" value=\"non\"><label for=\"non\">NON</label></td></tr>"
 						);
 		}
 		conclusion=service.rechercheConclusionMaintenanceprev(num);

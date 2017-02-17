@@ -66,11 +66,19 @@
 	<%!String numBat,conclusion, observation;
 	int num,i;
 	List<Pharmacie> P = new ArrayList<Pharmacie>();
+	List<Organe> organes;
+	String ajout;
 	%>
 	<%
 		session = request.getSession();
 		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 		pdf=null;
+		
+		organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout=null;
+		
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -81,6 +89,8 @@
 		P.clear();
 		P=service.recherchePharmacieBatiment(num);
 		out.println("<br><center><h3>Maintenance Corrective de la Pharmacie</h3></center><br>");
+		out.println("<center><input type=\"button\" name=\"AjoutPharm\" value=\"Ajouter une pharmacie\"  onclick=\"self.location.href='installationpharmacie.jsp?ajout=5'\"></button></center>");
+		out.println("<br><center><h4> Liste des Pharmacies </h4></center>");
 		// Tableau
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
 		out.print("<thead><tr><th> N° Pharmacie </th><th> Emplacement </th><th> Capacité </th><th>Annee </th></tr>");
@@ -91,7 +101,7 @@
 						"</td> <td>" + P.get(i).getEmplacement()+
 						"</td> <td >" + P.get(i).getCapacite()+
 						"</td> <td >" + P.get(i).getAnnee()+
-						"</td><td> <form action=\"maintenancecorrpharmacievalidee\" method=\"GET\" ><input type=\"hidden\" id=\"idpharm\" name=\"numpharmacie\" value="
+						"</td><td> <form action=\"maintenancecorrpharmacievalidee.jsp\" method=\"GET\" ><input type=\"hidden\" id=\"idpharm\" name=\"numpharmacie\" value="
 						+ P.get(i).getNumero()
 						+ "> <input type=\"submit\" name=\" Effectuer une maintenance corrective \" value=\" Effectuer une maintenance corrective \" /></form></td></tr>"
 						);

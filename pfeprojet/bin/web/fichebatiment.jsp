@@ -1,7 +1,7 @@
 <html>
 
 <head>
-<title>Fiche : entreprise</title>
+<title>Fiche : Batiment</title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
@@ -16,6 +16,8 @@
 	
 	<%! int statut;
 		List<Intervention> interv;
+		List<Organe> organes;
+		String ajout;
 	%>
 	<%
 	 if(session.getAttribute("statut")!=null)
@@ -116,6 +118,15 @@
 	%>
 	<%
 		 session = request.getSession();
+		
+		organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout=null;
+	
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
+		
 		 numBatiment = request.getParameter("numBatiment");
 		 if(numBatiment==null){
 			 numeroB = (String)session.getAttribute("numBatiment");
@@ -140,14 +151,15 @@
 		out.print("</thead><tbody>");
 		out.print("<tr><td>" + B.getNom() + "</td><td>  " + B.getAdresse()
 			+ "</td><td>" + B.getEntreprise().getNom()+"</td></tr></tbody></table>");
+		out.println("<br><br><table><tr>");
 		if(statut==1){
 			out.println(
-					"<br><br><table><tr><td><form action=\"choixintervention\" method=\"GET\" ><input type=\"hidden\" id=\"idintervention\" name=\"numBatiment\" value="
+					"<td><form action=\"choixintervention\" method=\"GET\" ><input type=\"hidden\" id=\"idintervention\" name=\"numBatiment\" value="
 							+ B.getNumero()
 							+ "> <input type=\"submit\" name=\" Effectuer une intervention \" value=\" Effectuer une intervention \" /></form></td><td>&nbsp;&nbsp;</td>");	
 		}
 		out.println(
-				"<td><form action=\"listeorganes\" method=\"GET\" ><input type=\"hidden\" id=\"idlisteorganes\" name=\"numBatiment\" value="
+				"<td><form action=\"listeorganes.jsp\" method=\"GET\" ><input type=\"hidden\" id=\"idlisteorganes\" name=\"numBatiment\" value="
 						+ B.getNumero()
 						+ "> <input type=\"submit\" name=\" Consulter la liste des organes de securite \" value=\" Consulter la liste des organes de securite \" /></form></td>");
 		out.println(

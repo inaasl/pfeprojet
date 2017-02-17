@@ -49,26 +49,41 @@
 		<%@ page import= "java.util.ArrayList"%>
 		
 		
-<%! String numBat,observ,conclusion,empla,type,marque,annee,etat;
+<%! String numBat,observ,conclusion,empla,type,marque,annee,etat,type2,marque2;
 	int numB,numT,numextincteur,anneeInt;
 	List<Corrective> interv;
 	Extincteur Extcourant;
 	boolean Etat;
+    TypeExtincteur Type;
+    MarqueExtincteur Marque;
+	List<Organe> organes;
+	String ajout;
 %>
 <%
 	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 	pdf=null;
+	
+	organes=(List<Organe>)session.getAttribute("organes");
+	if(organes!=null) organes.clear();
+	ajout=String.valueOf(session.getAttribute("ajout"));
+	if(ajout!=null) ajout=null;
+	
 	annee=request.getParameter("annee");
 	empla=request.getParameter("emplacement");
 	type=request.getParameter("typeextincteur");
 	marque=request.getParameter("marqueextincteur");
 	observ =request.getParameter("observations");
 	etat=request.getParameter("etat");
+	type2= request.getParameter("nomType");
+	marque2= request.getParameter("nomMarque");
+	
+	
 	if(etat.compareTo("oui")==0){
 		Etat=true;
 	}
 	else
 		Etat=false;
+	
 	numBat=String.valueOf(session.getAttribute("numBatiment"));
 	numB=Integer.parseInt(numBat);
 	anneeInt=Integer.parseInt(annee);
@@ -83,8 +98,26 @@
 	java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
 	java.util.Date date = new java.util.Date();
 	
+	if (type2.compareTo("") != 0){ 
+		type=String.valueOf(type2);
+		service.ajouttypeextincteur(type);
+		Type=service.rechercheTypeExtincteurNom(type);
+	}
+	else {
+		Type=service.rechercheTypeExtincteur(type);
+	}
+	
+	if (marque2.compareTo("") != 0){ 
+		marque=String.valueOf(marque2);
+		service.ajoutmarqueextincteur(marque);
+		Marque=service.rechercheMarqueExtincteurNom(marque);
+	}
+	else {
+		Marque=service.rechercheMarqueExtincteur(marque);
+	}
+	
 	Extcourant=service.rechercheExtincteur(numextincteur);
-	Extcourant=service.remplacementextincteur(Extcourant, anneeInt, empla, observ, marque, type, Etat);
+	Extcourant=service.remplacementextincteur(Extcourant, anneeInt, empla, observ, String.valueOf(Marque.getNumero()), String.valueOf(Type.getNumero()), Etat);
 	
 	
 	conclusion=service.rechercheConclusionMaintenancecorrExtincteur(numB);

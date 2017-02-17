@@ -66,9 +66,17 @@
 	<%!String numBat,conclusion, observation;
 	int num,i;
 	List<Pharmacie> P = new ArrayList<Pharmacie>();
+	List<Organe> organes;
+	String ajout;
 	%>
 	<%
 		session = request.getSession();
+	
+		organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout=null;
+	
 		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 		pdf=null;
 		InitialContext ctx = new InitialContext();
@@ -81,12 +89,12 @@
 		P.clear();
 		P=service.recherchePharmacieBatiment(num);
 		out.println("<br><center><h3>Vérification de la Pharmacie</h3></center><br>");
-		
+		out.println("<center><input type=\"button\" name=\"AjoutPharm\" value=\"Ajouter une pharmacie\"  onclick=\"self.location.href='installationpharmacie.jsp?ajout=4'\"></button></center>");
+		out.println("<br><center><h4> Liste des Pharmacies </h4></center>");
 		// Tableau
-		
 		out.println("<br><form action=\"verificationpharmacievalidee.jsp\">");
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
-		out.print("<thead><tr><th> N° Pharmacie </th><th> Emplacement </th><th> Capacité </th><th>Annee </th><th>Observation</th></tr>");
+		out.print("<thead><tr><th> N° Pharmacie </th><th> Emplacement </th><th> Capacité </th><th>Annee </th><th>Observation</th><th>Etat défecteux</th></tr>");
 		out.print("</thead><tbody>");
 	      
 		for(i=0;i<P.size();i++){
@@ -95,7 +103,8 @@
 						"</td> <td>" + P.get(i).getEmplacement()+
 						"</td> <td >" + P.get(i).getCapacite()+
 						"</td> <td >" + P.get(i).getAnnee()+
-						"</td> <td> <input type=\"text\" name="+i+" value="+observation+"></td></tr>"
+						"</td> <td> <input type=\"text\" name="+i+" value="+observation+
+						"></td><td><INPUT id=\"oui\" type= \"radio\" name="+(i+100)+" value=\"oui\"><label for=\"oui\">OUI</label>&nbsp;&nbsp;&nbsp;<INPUT id=\"non\" type= \"radio\" name="+(i+100)+" value=\"non\"><label for=\"non\">NON</label></td></tr>"
 						);
 		}
 		conclusion=service.rechercheConclusionVerificationPharmacie(num);

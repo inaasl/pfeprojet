@@ -53,13 +53,18 @@
 	Batiment B;
 	Pdfgenere pdf;
 	int num;
+	List<Organe> organes;
+	String ajout;
 	%>
 	<%
      	session = request.getSession();
 		numeroB = (String)session.getAttribute("numBatiment");
 		num=Integer.parseInt(numeroB);
 		session.setAttribute("numBatiment",String.valueOf(num));
-		
+		organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout=null;
 	    pdf=(Pdfgenere)session.getAttribute("pdf");
 
 		

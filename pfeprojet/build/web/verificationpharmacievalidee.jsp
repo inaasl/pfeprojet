@@ -50,10 +50,11 @@
 	<%@ page import="java.text.SimpleDateFormat"%>
 	<%@ page import="java.text.DateFormat"%>
 
-	<%!String numBat, conclusion, observation;
+	<%!String numBat, conclusion, observation,etat;
 	int num, i, numT;
 	List<Pharmacie> P;
 	List<Intervention> Interventionajoutee = new ArrayList<Intervention>();
+	boolean Etat;
 	%>
 
 	<%
@@ -77,8 +78,14 @@
 		numT=(Integer)session.getAttribute("numPersonne");
 		for (i=0;i <P.size(); i++) {
 				observation = request.getParameter(String.valueOf(i));
-				Interventionajoutee.add(service.Verification(service.rechercheOrgane(P.get(i).getNumero()).getNumero(),observation,conclusion,numT,
-					Date.valueOf(formater.format(date))));
+				etat = request.getParameter(String.valueOf(i+100));
+				if(etat!=null){
+					if(etat.compareTo("oui")==0)
+						Etat=false;
+					else
+						Etat=true;
+				}
+				Interventionajoutee.add(service.Verification(service.rechercheOrgane(P.get(i).getNumero()).getNumero(),observation,conclusion,numT,Date.valueOf(formater.format(date)),Etat));
 		}
 		pdf=service.ajoutpdf(Interventionajoutee);
 		Interventionajoutee.clear();

@@ -1,10 +1,23 @@
 <html>
 <head>
-<title>Installation d'un Extincteur</title>
+<title>Ajout d'un Extincteur</title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<script language="JavaScript">
+   function check(f){
+	    var anneevalide = new RegExp (/^(19|20)[0-9][0-9]$/);
+	    
+	    if(anneevalide.test(f.annee.value)){
+	    	return true;
+	    }
+	    else {
+    		alert('Année non valide !');
+    		return false;
+	    }
+	}
+</script> 
 	<header class="header">
 		<a class="logo" href="http://www.desentec.fr/"><img
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
@@ -50,9 +63,36 @@
 	<%@ page import="java.text.SimpleDateFormat"%>
 	<%@ page import="java.text.DateFormat"%>
 	<%@ page import="java.util.HashSet"%>
+	
+	<%!String numBat,ajout;
+	int num, i;%>
+	
+	<%
+		session = request.getSession();
+		
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
+		
+		InitialContext ctx = new InitialContext();
+		Object obj = ctx.lookup(
+				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
+		ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
+			
+		numBat = String.valueOf(session.getAttribute("num"));
+		
+		
+		session.setAttribute("num", numBat);
+		
+		ajout=request.getParameter("ajout");
+		if(ajout!=null)
+			session.setAttribute("ajout",ajout);
+		else {
+			ajout=String.valueOf(session.getAttribute("ajout"));
+		}
 
-
-<form action="installationextincteurvalidee">
+	
+	%>
+<form action="installationextincteurvalidee" method="post" onsubmit="return check(this);">
 		 <fieldset>
 		 <legend><b>Installation extincteur</b></legend>
 		<br>
@@ -69,32 +109,29 @@
 			<td> <label for="emplacement"><i>Emplacement de l'extincteur <font color="#ff0000">*</font></i></label></td>
 			<td><textarea name="emplacement" rows="5" cols="47" required placeholder="emplacement extincteur..."></textarea></td></tr>
 	  <tr></tr>
+	  <% if(ajout.compareTo("0")==0) { %>
 	  <tr><td><label for="observations"><i>Observations <font color="#ff0000">*</font></i></label></td><td>
 					<textarea name="observations" rows="5" cols="47" required placeholder="observations......"></textarea> 
 			</td>
 	 </tr>
+	 <% } %>
 	 <tr></tr>
 	 <tr></tr>
 	 <tr><td> <label for="typeextincteur"><i>Type de l'extincteur <font color="#ff0000">*</font></i></label>	 
 			</td> <td> <select name="typeextincteur" class="class_select">
-					<%!String numBat;
-					int num, i;%>
+
 					<%
-						session = request.getSession();
-						Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
-						pdf=null;
-						InitialContext ctx = new InitialContext();
-						Object obj = ctx.lookup(
-								"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
-						ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
-						numBat = String.valueOf(session.getAttribute("num"));
-						session.setAttribute("num", numBat);
+						
 						for (i = 0; i < service.touslesTypeExtincteur().size(); i++)
 							out.println("<option value=" + service.touslesTypeExtincteur().get(i).getNumero() + ">"
 									+ service.touslesTypeExtincteur().get(i).getNom() + "</option>");
 					%>
 				</select>
 			</td>
+			<td><label for="nomType"><i>Ajout d'un nouveau Type </i></label> <input type="text"
+					name="nomType"  placeholder="type..." size="20" class="taille_input_annee"/>
+		  
+		 	 </td>
 		</tr>
       <tr></tr>
 	  <tr> <td> <label for="marqueextincteur"><i>Marque de l'extincteur <font color="#ff0000">*</font></i></label>
@@ -104,7 +141,12 @@
 							out.println("<option value=" + service.touteslesMarqueExtincteur().get(i).getNumero() + ">"
 									+ service.touteslesMarqueExtincteur().get(i).getNom() + "</option>");
 					%>
-			</select></td></tr></table>
+			</select></td>
+			<td><label for="nomMarque"><i>Ajout d'une nouvelle Marque </i></label> <input type="text"
+					name="nomMarque"  placeholder="type..." size="20" class="taille_input_annee"/>
+		  
+		 	 </td>
+			</tr></table>
 			<br><center><input type="submit" value="Valider"> </center>
 			</fieldset>
 		</form>

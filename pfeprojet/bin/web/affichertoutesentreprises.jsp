@@ -105,7 +105,10 @@
 
 	<%!String nomEntreprise;
 	List<Entreprise> E;
-	int i;%>
+	int i;
+	List<Organe> organes;
+	String ajout;
+	%>
 	<%
 		out.println("<h3><center>Liste de toutes les entreprises</center></h3> <br> ");
 
@@ -115,6 +118,14 @@
 		ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
 		session = request.getSession();
 
+		organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout=null;
+		
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
+		
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
 		out.print("<thead><tr><th> Client </th><th> Adresse </th><th> Télephone </th><th> Mail </th><th>Interlocuteur </th><th>Fiche du client</th></tr>");
 		out.print("</thead><tbody>");

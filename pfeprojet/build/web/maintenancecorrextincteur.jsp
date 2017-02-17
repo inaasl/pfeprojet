@@ -66,11 +66,16 @@
 	<%!String numBat,conclusion, observation;
 	int num,i;
 	List<Extincteur> E = new ArrayList<Extincteur>();
+	String ajout;
 	%>
 	<%
 		session = request.getSession();
 		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 		pdf=null;
+		
+		ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout=null;
+		
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -79,11 +84,14 @@
 		session.setAttribute("numBatiment", numBat);
  		num=Integer.parseInt(numBat);
 		E.clear();
+		
 		E=service.rechercheExtincteurBatiment(num);
 		out.println("<br><center><h3>Maintenance Corrective des Extincteurs</h3></center><br>");
+		out.println("<center><input type=\"button\" name=\"AjoutExt\" value=\"Ajouter un extincteur\"  onclick=\"self.location.href='installationextincteur.jsp?ajout=2'\"></button></center>");
+		out.println("<br><center><h4> Liste des Extincteurs </h4></center>");
 		// Tableau
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
-		out.print("<thead><tr><th> N° Extincteur </th><th> Emplacement </th><th> Type extincteur </th><th>  Marque </th><th>Annee </th></tr>");
+		out.print("<thead><tr><th> N° Extincteur </th><th> Emplacement </th><th> Type extincteur </th><th>  Marque </th><th>Annee </th><th></th></tr>");
 		out.print("</thead><tbody>");
 	      
 		for(i=0;i<E.size();i++){

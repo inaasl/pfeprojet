@@ -8,6 +8,8 @@
 <header class="header">
     	        <a class="logo" href="http://www.desentec.fr/"><img src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png"> </a>
 	<%! int statut;
+	 List<Organe> organes;
+	 String ajout;
 	%>
 	<%
 	 if(session.getAttribute("statut")!=null)
@@ -49,23 +51,41 @@
 		<%@ page import= "java.util.ArrayList"%>
 		
 		
-<%! String numBat,observ,conclusion;
-	int numB,numT,numpharmacie;
+<%! String numBat,observ,conclusion,etat,annee,capacite,emplacement;
+	int numB,numT,numpharmacie,capaciteInt,anneeInt;
 	List<Corrective> interv;
 	Pharmacie Pharmaciecour;
+	boolean Etat;
 %>
 <%
 	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 	pdf=null;
+	
+	organes=(List<Organe>)session.getAttribute("organes");
+	if(organes!=null) organes.clear();
+	ajout=String.valueOf(session.getAttribute("ajout"));
+	if(ajout!=null) ajout=null;
+	
+	annee =request.getParameter("annee");
+	emplacement=request.getParameter("emplacement");
+	capacite=request.getParameter("capacite");
 	observ =request.getParameter("observations");
-
+	etat=request.getParameter("etat");
+	
+	if(etat.compareTo("oui")==0){
+		Etat=true;
+	}
+	else
+		Etat=false;
+	
+	
 	numBat=String.valueOf(session.getAttribute("numBatiment"));
 	numB=Integer.parseInt(numBat);
-	
+	capaciteInt=Integer.parseInt(capacite);
+	anneeInt=Integer.parseInt(annee);
 	numpharmacie=(Integer)session.getAttribute("numpharmacie");
-	
 	numT=(Integer)session.getAttribute("numPersonne");
-	
+		
 	InitialContext ctx = new InitialContext();
 	Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 	ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
@@ -74,6 +94,8 @@
 	java.util.Date date = new java.util.Date();
 	
 	Pharmaciecour=service.recherchePharmacie(numpharmacie);
+	Pharmaciecour=service.remplacementpharmacie(Pharmaciecour, anneeInt, emplacement, observ, capaciteInt, Etat);
+	
 	conclusion=service.rechercheConclusionMaintenancecorrPharmacie(numB);
 	interv = (List<Corrective>) session.getAttribute("interv");
 	if (interv == null) {

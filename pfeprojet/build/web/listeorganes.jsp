@@ -22,7 +22,7 @@
 
 <script type="text/javascript" charset="utf-8">
 	$(document).ready(function() {
-		$('#datatables').dataTable();
+		$('#datatables7').dataTable();
 		$('#datatables1').dataTable();
 		$('#datatables2').dataTable();
 		$('#datatables3').dataTable();
@@ -39,7 +39,6 @@
 			<a class="logo" href="http://www.desentec.fr/"><img
 				src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
 			</a>
-				<br>
 	<%! int statut;
 	%>
 	<%
@@ -115,16 +114,14 @@
 	<%
 	}%>
 		</header>
-		<br><br><br><br><br><br>
 		<div id="container">
 		<%@ page import="java.net.URL"%>
 		<%@ page import="java.net.URLConnection"%>
 		<%@ page import="java.io.* "%>
 		<%@ page import="ejb.sessions.*"%>
 		<%@ page import="ejb.entites.* "%>
-		<%@ page import="java.util.Collection"%>
-		<%@ page import="java.util.Set"%>
 		<%@ page import="java.util.List"%>
+		<%@ page import="java.util.ArrayList"%>
 		<%@ page import="javax.naming.InitialContext"%>
 		<%@ page import="javax.naming.NamingException"%>
 		<%@ page import="java.util.Date"%>
@@ -135,12 +132,26 @@
 		<%!
 		int i; 
 		String numBatiment;
-    	
+		List<Extincteur> extincteur;
+		List<Pharmacie> pharmacie;
+		List<Eclairage> eclairage;
+		List<Poteaux> poteaux;
+		List<RIA> ria;
+		List<Signaletique> signaletique;
+		List<Coupefeu> coupefeu;
     	int num;
-    	String numeroB;
+    	String numeroB,marche;
+   	 	List<Organe> organes;
+   	 	String ajout;
 		%>
 		<%
 		session = request.getSession();
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
+		organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout=null;
 		 numBatiment = request.getParameter("numBatiment");
 		 if(numBatiment==null){
 			 numeroB = (String)session.getAttribute("numBatiment");
@@ -156,134 +167,189 @@
 	 	ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
 		
 	 	out.print("<center>");
-		out.println("<b>Liste des Organes</b><br><br>");
+		out.println("<h3>Liste des Organes</h3><br><br>");
 		
 		// Extincteur
+		
 		List<Organe> organe = service.rechercheOrganeBatiment(num);
 		
-		out.println("Extincteur<br>");
-		out.print("</center>");
-    	out.print("<br/><table id=\"datatables\" class=\"display\" >");
- 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Observation</th><th>Année</th><th>Type</th><th>Marque</th></tr>");
- 	 	out.print("</thead><tbody>");
 		for(int j=0;j<organe.size();j++){
-	    
-		List<Extincteur> extincteur = service.rechercheExtincteurNum(organe.get(j).getNumero());
-		  if(organe.get(j) instanceof Extincteur){
-		    
-		  for(i=0;i<extincteur.size();i++){
-			out.print(" <tr><td>"+extincteur.get(i).getNumero()+"</td><td>"+extincteur.get(i).getEmplacement()+"</td><td>"+extincteur.get(i).getObservation()+"</td>"
-			+"<td>"+extincteur.get(i).getAnnee()+"</td><td>"+extincteur.get(i).getType().getNom()+"</td><td>"+extincteur.get(i).getMarque().getNom()+"</td></tr>");
-		  }
-		  
-		 
-	     }
-		  
-		 }
-		 out.print("</tbody></table><br>");
-		 
-		// Coupefeu
-		out.print("<center>");
-		out.println("Coupefeu<br>");
-		out.print("</center>");
-	    out.print("<br/><table id=\"datatables1\" class=\"display\" >");
-		out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Observation</th><th>Année</th><th>Type</th><th>Marque</th></tr>");
-		out.print("</thead><tbody>");
-		 
-		 for(int j=0;j<organe.size();j++){
-			
-			if(organe.get(j) instanceof Coupefeu){
-	    	 
-		 	 
-		 	
-	      }
-		 }
-		 out.print("</tbody></table><br>");
-		 
-		 //Poteaux
-		 out.print("<center>");
-		 out.println("Poteaux<br>");
-		 out.print("</center>");
-	     out.print("<br/><table id=\"datatables2\" class=\"display\" >");
-		 out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Observation</th><th>Année</th><th>Type</th><th>Marque</th></tr>");
-		 out.print("</thead><tbody>");
-		  
-		  for(int j=0;j<organe.size();j++){
-			 if(organe.get(j) instanceof Poteaux){
-	    	 
-		 	 
-		 	
-	    	 
-	      }
-		 }
-		 out.print("</tbody></table><br>");
-		  
-		 //RIA
-		out.print("<center>");
-		out.println("RIA<br>");
-		out.print("</center>");
-   	    out.print("<br/><table id=\"datatables3\" class=\"display\" >");
-	 	 out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Observation</th><th>Année</th><th>Type</th><th>Marque</th></tr>");
-	 	 out.print("</thead><tbody>");
-		for(int j=0;j<organe.size();j++){
-	     if(organe.get(j) instanceof RIA){
-	    	 
+			if(organe.get(j) instanceof Extincteur){
+				if(extincteur==null){
+					extincteur=new ArrayList<Extincteur>();
+					extincteur.add((Extincteur)organe.get(j));
+				}
+				else
+					extincteur.add((Extincteur)organe.get(j));
+			}
+			else {
+				if(organe.get(j) instanceof Pharmacie){
+					if(pharmacie==null){
+						pharmacie=new ArrayList<Pharmacie>();
+						pharmacie.add((Pharmacie)organe.get(j));
+					}
+					else
+						pharmacie.add((Pharmacie)organe.get(j));
+				}
+				else {
+					if(organe.get(j) instanceof Eclairage){
+						if(eclairage==null){
+							eclairage=new ArrayList<Eclairage>();
+							eclairage.add((Eclairage)organe.get(j));
+						}
+						else
+							eclairage.add((Eclairage)organe.get(j));
+					}
+					else {
+						if(organe.get(j) instanceof Poteaux){
+							if(poteaux==null){
+								poteaux=new ArrayList<Poteaux>();
+								poteaux.add((Poteaux)organe.get(j));
+							}
+							else
+								poteaux.add((Poteaux)organe.get(j));
+						}
+						else {
+							if(organe.get(j) instanceof RIA){
+								if(ria==null){
+									ria=new ArrayList<RIA>();
+									ria.add((RIA)organe.get(j));
+								}
+								else
+									ria.add((RIA)organe.get(j));
+							}
+							else {
+								if(organe.get(j) instanceof Coupefeu){
+									if(coupefeu==null){
+										coupefeu=new ArrayList<Coupefeu>();
+										coupefeu.add((Coupefeu)organe.get(j));
+									}
+									else
+										coupefeu.add((Coupefeu)organe.get(j));
+								}
+								else {
+									if(organe.get(j) instanceof Signaletique){
+										if(signaletique==null){
+											signaletique=new ArrayList<Signaletique>();
+											signaletique.add((Signaletique)organe.get(j));
+										}
+										else
+											signaletique.add((Signaletique)organe.get(j));
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		if(extincteur!=null){
+			out.println("<h4>Extincteur</h4><br>");
+			out.print("</center>");
+	    	out.print("<br/><table id=\"datatables1\" class=\"display\" >");
+	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Année</th><th>Type</th><th>Marque</th><th>Observation</th><th>Etat</th></tr>");
+	 	 	out.print("</thead><tbody>");
+			 for(i=0;i<extincteur.size();i++){
+				if(extincteur.get(i).isMarche()==true)
+					marche="<img src=\"marchtrue.jpg\">";
+				else
+					marche="<img src=\"marchefalse.png\">";
+					
+					out.print(" <tr><td>"+extincteur.get(i).getNumero()
+							+"</td><td>"+extincteur.get(i).getEmplacement()
+							+"</td><td>"+extincteur.get(i).getAnnee()
+							+"</td><td>"+extincteur.get(i).getType().getNom()
+							+"</td><td>"+extincteur.get(i).getMarque().getNom()
+							+"</td><td>"+extincteur.get(i).getObservation()
+							+"</td><td>"+marche
+							+"</td></tr>");
+			 }
+		  out.print("</tbody></table><br>");
+		  extincteur.clear();
+		}
+		
+		if(eclairage!=null) {
+			if(eclairage.get(i).isMarche()==true)
+				marche="<img src=\"marchtrue.jpg\">";
+			else
+				marche="<img src=\"marchefalse.png\">";
+			out.println("<h4>Eclairage</h4><br>");
+			out.print("</center>");
+	    	out.print("<br/><table id=\"datatables2\" class=\"display\" >");
+	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Type</th><th> Marque </th><th>Présence télécommande </th><th>fonctionnement télécommande </th><th>Type télécommande </th><th>Observation</th><th>Etat</th></tr>");
+	 	 	out.print("</thead><tbody>");
+			out.print("</tbody></table><br>");
 
-	    	 
-	      }
 		}
-		out.print("</tbody></table><br>");
-		//Signaletique
-		organe = service.rechercheOrganeBatiment(num);
-		out.print("<center>");
-		out.println("Signaletique<br>");
-		out.print("</center>");
-   	    out.print("<br/><table id=\"datatables4\" class=\"display\" >");
-	 	 out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Observation</th><th>Année</th><th>Type</th><th>Marque</th></tr>");
-	 	 out.print("</thead><tbody>");
-		for(int j=0;j<organe.size();j++){  
-		  if(organe.get(j) instanceof Signaletique){
-	    	 
-		 	 
-		 	
-	    	 
-	       }
-		}
-		out.print("</tbody></table><br>");
 		
-		//Pharmacie
-		out.print("<center>");
-		out.println("Pharmacie<br>");
-		out.print("</center>");
-   	    out.print("<br/><table id=\"datatables5\" class=\"display\" >");
-	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Observation</th><th>Année</th><th>Type</th><th>Marque</th></tr>");
-	 	out.print("</thead><tbody>");
-		for(int j=0;j<organe.size();j++){  
-	        if(organe.get(j) instanceof Pharmacie){
-	    	 
-		 	 
-		 	
-	    	 
-	     }
+		if(pharmacie!=null) {
+			if(pharmacie.get(i).isMarche()==true)
+				marche="<img src=\"marchtrue.jpg\">";
+			else
+				marche="<img src=\"marchefalse.png\">";
+			out.println("<h4>Pharmacie</h4><br>");
+			out.print("</center>");
+	    	out.print("<br/><table id=\"datatables3\" class=\"display\" >");
+	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th> Capacité </th><th> Année </th><th>Observation</th><th>Etat</th></tr>");
+	 	 	out.print("</thead><tbody>");
+			out.print("</tbody></table><br>");
+
 		}
-		out.print("</tbody></table><br>");
-		//Eclairage
-		out.print("<center>");
-		out.println("Eclairage<br>");
-		out.print("</center>");
-   	    out.print("<br/><table id=\"datatables6\" class=\"display\" >");
-	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Observation</th><th>Année</th><th>Type</th><th>Marque</th></tr>");
-	 	out.print("</thead><tbody>");
-		for(int j=0;j<organe.size();j++){  
-		 if(organe.get(j) instanceof Eclairage){
-	    	 
-		 	 
-		 	
-	     }
+		
+		if(coupefeu!=null) {
+			if(coupefeu.get(i).isMarche()==true)
+				marche="<img src=\"marchtrue.jpg\">";
+			else
+				marche="<img src=\"marchefalse.png\">";
+			out.println("<h4>Porte Coupe-feu</h4><br>");
+			out.print("</center>");
+	    	out.print("<br/><table id=\"datatables4\" class=\"display\" >");
+	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Type</th><th>Observation</th><th>Etat</th></tr>");
+	 	 	out.print("</thead><tbody>");
+			out.print("</tbody></table><br>");
+
 		}
-		out.print("</tbody></table><br>");
 		
+		if(ria!=null) {
+			if(ria.get(i).isMarche()==true)
+				marche="<img src=\"marchtrue.jpg\">";
+			else
+				marche="<img src=\"marchefalse.png\">";
+			out.println("<h4>RIA</h4><br>");
+			out.print("</center>");
+	    	out.print("<br/><table id=\"datatables5\" class=\"display\" >");
+	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Type</th><th>Observation</th><th>Etat</th></tr>");
+	 	 	out.print("</thead><tbody>");
+			out.print("</tbody></table><br>");
+
+		}
 		
+		if(poteaux!=null) {
+			if(poteaux.get(i).isMarche()==true)
+				marche="<img src=\"marchtrue.jpg\">";
+			else
+				marche="<img src=\"marchefalse.png\">";
+			out.println("<h4>Poteaux Incendie</h4><br>");
+			out.print("</center>");
+	    	out.print("<br/><table id=\"datatables6\" class=\"display\" >");
+	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>diamètre</th><th> Pression statique </th><th>Pression 60</th><th>Pression 1bar</th><th>Observation</th><th>Etat</th></tr>");
+	 	 	out.print("</thead><tbody>");
+			out.print("</tbody></table><br>");
+		}
+		
+		if(signaletique!=null) {
+			if(signaletique.get(i).isMarche()==true)
+				marche="<img src=\"marchtrue.jpg\">";
+			else
+				marche="<img src=\"marchefalse.png\">";
+			out.println("<h4>Signalétique</h4><br>");
+			out.print("</center>");
+	    	out.print("<br/><table id=\"datatables7\" class=\"display\" >");
+	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Observation</th><th>Etat</th></tr>");
+	 	 	out.print("</thead><tbody>");
+			out.print("</tbody></table><br>");
+		}
+		organe.clear();
 		
 		%>
 		</div>

@@ -46,19 +46,25 @@
 	
 <%!String typeinterv, typeorg, numeroB;
 List<Intervention> interv;
+List<Organe> organes;
+String ajout;
 %>
 <%
 	interv=(List<Intervention>)session.getAttribute("interv");
 	if(interv!=null) interv.clear();
 	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 	pdf=null;
+	organes=(List<Organe>)session.getAttribute("organes");
+	if(organes!=null) organes.clear();
+	ajout=String.valueOf(session.getAttribute("ajout"));
+	if(ajout!=null) ajout=null;
 	typeinterv = request.getParameter("choixinterv");
 
 	typeorg = request.getParameter("choixorg");
 	
 	if(typeinterv.compareTo("installation") == 0){
 		if(typeorg.compareTo("extincteur") == 0){
-			out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationextincteur.jsp\">");
+			out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationextincteur.jsp?ajout=0\">");
 		}
 		else {
 			if(typeorg.compareTo("eclairage") == 0){
@@ -66,7 +72,7 @@ List<Intervention> interv;
 			}
 			else {
 				if(typeorg.compareTo("pharmacie") == 0){
-					out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationpharmacie.jsp\">");
+					out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationpharmacie.jsp?ajout=0\">");
 				}
 				else {
 					if(typeorg.compareTo("signaletique") == 0){
