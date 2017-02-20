@@ -45,19 +45,24 @@
 	</header>
 	
 <%!String typeinterv, typeorg, numeroB;
-List<Intervention> interv;
-List<Organe> organes;
-String ajout;
 %>
 <%
-	interv=(List<Intervention>)session.getAttribute("interv");
+	List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+	if(organes!=null) organes.clear();
+	session.setAttribute("organes",organes);
+	
+	String ajout=String.valueOf(session.getAttribute("ajout"));
+	if(ajout!=null) ajout="0";
+	session.setAttribute("ajout",ajout);
+	
+	List<Intervention> interv=(List<Intervention>)session.getAttribute("interv");
 	if(interv!=null) interv.clear();
+	session.setAttribute("Interv",interv);
+	
 	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 	pdf=null;
-	organes=(List<Organe>)session.getAttribute("organes");
-	if(organes!=null) organes.clear();
-	ajout=String.valueOf(session.getAttribute("ajout"));
-	if(ajout!=null) ajout=null;
+	session.setAttribute("pdf",pdf);
+
 	typeinterv = request.getParameter("choixinterv");
 
 	typeorg = request.getParameter("choixorg");
@@ -80,7 +85,7 @@ String ajout;
 					}
 					else {
 						if(typeorg.compareTo("coupefeu") == 0){
-							out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationcoupefeu.jsp\">");
+							out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationcoupefeu.jsp?ajout=0\">");
 						}
 					}
 				}

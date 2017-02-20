@@ -83,10 +83,21 @@
 		</li>
 		</ul>
 		<% 
-		interv=(List<Intervention>)session.getAttribute("interv");
+		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		session.setAttribute("organes",organes);
+	
+		String ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout="0";
+		session.setAttribute("ajout",ajout);
+		
+		List<Intervention> interv=(List<Intervention>)session.getAttribute("interv");
 		if(interv!=null) interv.clear();
+		session.setAttribute("Interv",interv);
+	
 		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 		pdf=null;
+		session.setAttribute("pdf",pdf);
 			}
 			if(statut==2){
 		%>
@@ -130,16 +141,9 @@
 	%>
 	<%
 		session = request.getSession();
-		
-		organes=(List<Organe>)session.getAttribute("organes");
-		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
-	
-	
-		pdf=(Pdfgenere)session.getAttribute("pdf");
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 		pdf=null;
-		 
+		session.setAttribute("pdf",pdf);
 		numPdf = request.getParameter("numPdf");
 		num = Integer.parseInt(numPdf);
 		
@@ -191,7 +195,7 @@
 		out.println("<br><center>Conclusion : </center>");
 		out.println("<br><center>"+interventions.get(0).getConclusion()+"</center>");
 		session.setAttribute("pdf",pdf);
-		out.println("<br><br><table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionextincteurpdf.jsp'\"></button></td></tr></table>");
+		out.println("<br><br><table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionpdf.jsp'\"></button></td></tr></table>");
 
 	%>
 	</div>

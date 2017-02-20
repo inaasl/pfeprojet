@@ -59,6 +59,8 @@
 
 	pdf=(Pdfgenere)session.getAttribute("pdf");
 	pdf=null;
+	session.setAttribute("pdf",pdf);
+
 	
 	InitialContext ctx = new InitialContext();
 	Object obj = ctx.lookup(
@@ -69,6 +71,9 @@
 	numB=Integer.parseInt(numBat);
 	
 	ajout=String.valueOf(session.getAttribute("ajout"));
+	if(ajout==null){
+		ajout="0";
+	}
 	if(ajout.compareTo("0")==0){
 		conclu = request.getParameter("conclusion");
 		Interv = (List<Intervention>)session.getAttribute("interv");
@@ -77,51 +82,20 @@
 			Interventionajoutee.add(service.ajoutIntervention(numB,Interv.get(i),Interv.get(i).getOrgane(), conclu));
 		}
 		Interv.clear();
+		session.setAttribute("Interv",Interv);
 		pdf=service.ajoutpdf(Interventionajoutee);
 		session.setAttribute("pdf",pdf);
-		if(Interventionajoutee.get(0).getOrgane() instanceof Extincteur){
-		out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionextincteurpdf.jsp'\"></button></td></tr>");
-		}
-		else {
-			if(Interventionajoutee.get(0).getOrgane() instanceof Pharmacie){
-				out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionpharmaciepdf.jsp'\"></button></td></tr>");
-			}
-			else {
-				if(Interventionajoutee.get(0).getOrgane() instanceof Coupefeu){
-					out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventioncoupefeupdf.jsp'\"></button></td></tr>");
-					}
-				else {
-					if(Interventionajoutee.get(0).getOrgane() instanceof Poteaux){
-						out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionpoteauxpdf.jsp'\"></button></td></tr>");
-					}
-					else {
-						if(Interventionajoutee.get(0).getOrgane() instanceof RIA){
-							out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionriapdf.jsp'\"></button></td></tr>");
-						}
-						else {
-							if(Interventionajoutee.get(0).getOrgane() instanceof Signaletique){
-								out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionsignaletiquepdf.jsp'\"></button></td></tr>");
-							}
-							else {
-								if(Interventionajoutee.get(0).getOrgane() instanceof Eclairage){
-									out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventioneclairagepdf.jsp'\"></button></td></tr>");
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		Interventionajoutee.clear();
 		out.println("<center><br>Intervention effectuée avec succès");
+		out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionpdf.jsp'\"></button></td></tr>");
+		Interventionajoutee.clear();
+		out.println("<tr><td><input type=\"button\" name=\"Fichebatiment\" value=\"Retour a la fiche du batiment \" onclick=\"self.location.href='fichebatiment.jsp'\"></button></td></tr></table>");
 		out.println("</center>");
-		out.println("<table><tr><td><input type=\"button\" name=\"Fichebatiment\" value=\"Retour a la fiche du batiment \" onclick=\"self.location.href='fichebatiment.jsp'\"></button></td></tr></table>");
 	}
 	else {
 		organes=(List<Organe>)session.getAttribute("organes");
 		service.ajoutOrgane(organes);
 		organes.clear();
-		//ajout=null;
+		session.setAttribute("organes",organes);
 		if(ajout.compareTo("1")==0){
 			out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationextincteur.jsp\">");
 		}
@@ -141,11 +115,37 @@
 						if(ajout.compareTo("5")==0) {
 							out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrpharmacie.jsp\">");
 						}
+						else {
+							if(ajout.compareTo("10")==0) {
+								out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationcoupefeu.jsp\">");
+							}
+							else {
+								if(ajout.compareTo("11")==0) {
+									out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrcoupefeu.jsp\">");
+								}
+								else {
+									if(ajout.compareTo("12")==0) {
+										out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenanceprevcoupefeu.jsp\">");
+									}
+									else {
+										if(ajout.compareTo("16")==0) {
+											out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationpoteaux.jsp\">");
+										}
+										else {
+											if(ajout.compareTo("17")==0) {
+												out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrpoteaux.jsp\">");
+											}
+										}
+									}
+								}
+							}
+						}
 					}
 				}
 			}
 		}
-		ajout=null;
+		ajout="0";
+		session.setAttribute("ajout",ajout);
 	}
 %>
 </div>

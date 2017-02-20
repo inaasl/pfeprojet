@@ -18,6 +18,12 @@
      $(document).ready(function(){
      $('#datatables').dataTable();
      $('#datatables1').dataTable();
+     $('#datatables2').dataTable();
+     $('#datatables3').dataTable();
+     $('#datatables4').dataTable();
+     $('#datatables5').dataTable();
+     $('#datatables6').dataTable();
+     $('#datatables7').dataTable();
      })
     </script>
 </head>
@@ -83,10 +89,21 @@
 		</li>
 		</ul>
 		<% 
-		interv=(List<Intervention>)session.getAttribute("interv");
+		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		session.setAttribute("organes",organes);
+	
+		String ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout="0";
+		session.setAttribute("ajout",ajout);
+		
+		List<Intervention> interv=(List<Intervention>)session.getAttribute("interv");
 		if(interv!=null) interv.clear();
+		session.setAttribute("Interv",interv);
+	
 		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 		pdf=null;
+		session.setAttribute("pdf",pdf);
 			}
 			if(statut==2){
 		%>
@@ -130,16 +147,9 @@
 	%>
 	<%
 		session = request.getSession();
-		
-		organes=(List<Organe>)session.getAttribute("organes");
-		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
-	
-	
-		pdf=(Pdfgenere)session.getAttribute("pdf");
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 		pdf=null;
-		 
+		session.setAttribute("pdf",pdf);
 		numPdf = request.getParameter("numPdf");
 		num = Integer.parseInt(numPdf);
 		
@@ -170,8 +180,61 @@
 			}
 			out.print("</tbody></table>");
 		}
+		else {
+			if(interventions.get(0).getOrgane() instanceof Pharmacie){
+				out.print("<br><br> <table id=\"datatables1\" class=\"display\" >"); 
+				out.print("<thead><tr><th> Numero de l'intervention </th><th> Numero de l'organe </th><th> Emplacement </th><th> Capacité </th><th> Année </th><th> Observation </th></tr>");
+				out.print("</thead><tbody>");
+				for(i=0;i<interventions.size();i++){
+					out.println("<tr><td>"+interventions.get(i).getNumero()
+								+"</td><td>"+interventions.get(i).getOrgane().getNumero()
+								+"</td><td>"+interventions.get(i).getOrgane().getEmplacement()
+								+"</td><td>"+((Pharmacie)interventions.get(i).getOrgane()).getCapacite()
+								+"</td><td>"+((Pharmacie)interventions.get(i).getOrgane()).getAnnee()
+								+"</td><td>"+interventions.get(i).getOrgane().getObservation()
+							+"</td></tr>");
+					}
+				out.print("</tbody></table>");
+			}
+			else {
+				if(interventions.get(0).getOrgane() instanceof Coupefeu){
+					out.print("<br><br> <table id=\"datatables2\" class=\"display\" >"); 
+					out.print("<thead><tr><th> Numero de l'intervention </th><th> Numero de l'organe </th><th> Emplacement </th><th> Type </th><th> Observation </th></tr>");
+					out.print("</thead><tbody>");
+					for(i=0;i<interventions.size();i++){
+						out.println("<tr><td>"+interventions.get(i).getNumero()
+									+"</td><td>"+interventions.get(i).getOrgane().getNumero()
+									+"</td><td>"+interventions.get(i).getOrgane().getEmplacement()
+									+"</td><td>"+((Coupefeu)interventions.get(i).getOrgane()).getTypeCoupefeu()
+									+"</td><td>"+interventions.get(i).getOrgane().getObservation()
+								+"</td></tr>");
+						}
+					out.print("</tbody></table>");
+				}
+				else {
+					if(interventions.get(0).getOrgane() instanceof Poteaux){
+						out.print("<br><br> <table id=\"datatables3\" class=\"display\" >"); 
+						out.print("<thead><tr><th> Numero de l'intervention </th><th> Numero de l'organe </th><th> Emplacement </th><th> Diamètre </th><th> Pression statique </th><th> Pression 60</th><th> Pression 1bar </th><th> Observation </th></tr>");
+						out.print("</thead><tbody>");
+						for(i=0;i<interventions.size();i++){
+							out.println("<tr><td>"+interventions.get(i).getNumero()
+										+"</td><td>"+interventions.get(i).getOrgane().getNumero()
+										+"</td><td>"+interventions.get(i).getOrgane().getEmplacement()
+										+"</td><td>"+((Poteaux)interventions.get(i).getOrgane()).getDiametre()
+										+"</td><td>"+((Poteaux)interventions.get(i).getOrgane()).getPressionstat()
+										+"</td><td>"+((Poteaux)interventions.get(i).getOrgane()).getPression60()
+										+"</td><td>"+((Poteaux)interventions.get(i).getOrgane()).getPression1bar()
+										+"</td><td>"+interventions.get(i).getOrgane().getObservation()
+									+"</td></tr>");
+							}
+						out.print("</tbody></table>");
+					}
+				}
+			}
+		}
+		out.print("<center><h4>Liste des Pièces</h4></center><br><br>");
 		if(interventions.get(0) instanceof Preventive){		
-			out.print("<br><br> <table id=\"datatables1\" class=\"display\" >"); 
+			out.print("<br><br> <table id=\"datatables7\" class=\"display\" >"); 
 			out.print("<thead><tr><th> Numero de la pièce </th><th> Numero de l'organe </th></th></tr>");
 			out.print("</thead><tbody>");
 			
@@ -191,7 +254,7 @@
 		out.println("<br><center>Conclusion : </center>");
 		out.println("<br><center>"+interventions.get(0).getConclusion()+"</center>");
 		session.setAttribute("pdf",pdf);
-		out.println("<br><br><table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionextincteurpdf.jsp'\"></button></td></tr></table>");
+		out.println("<br><br><table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionpdf.jsp'\"></button></td></tr></table>");
 
 	%>
 	</div>

@@ -56,17 +56,20 @@
 	boolean Etat;
     TypeExtincteur Type;
     MarqueExtincteur Marque;
-	List<Organe> organes;
-	String ajout;
 %>
 <%
+	List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+	if(organes!=null) organes.clear();
+	session.setAttribute("organes",organes);
+	
+	String ajout=String.valueOf(session.getAttribute("ajout"));
+	if(ajout!=null) ajout="0";
+	session.setAttribute("ajout",ajout);
+	
 	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 	pdf=null;
-	
-	organes=(List<Organe>)session.getAttribute("organes");
-	if(organes!=null) organes.clear();
-	ajout=String.valueOf(session.getAttribute("ajout"));
-	if(ajout!=null) ajout=null;
+	session.setAttribute("pdf",pdf);
+
 	
 	annee=request.getParameter("annee");
 	empla=request.getParameter("emplacement");
@@ -116,7 +119,7 @@
 		Marque=service.rechercheMarqueExtincteur(marque);
 	}
 	
-	Extcourant=service.rechercheExtincteur(numextincteur);
+	Extcourant=(Extincteur)service.rechercheOrganeNum(numextincteur);
 	Extcourant=service.remplacementextincteur(Extcourant, anneeInt, empla, observ, String.valueOf(Marque.getNumero()), String.valueOf(Type.getNumero()), Etat);
 	
 	
@@ -125,9 +128,6 @@
 	if (interv == null) {
 		interv = new ArrayList<Corrective>();
 	}
-	
-	
-	
 	
 	interv.add(service.MaintenanceCorrectiveOrgane(observ, Date.valueOf(formater.format(date)), numT, Extcourant));
 

@@ -77,8 +77,6 @@
 	<%
 	
 		session = request.getSession();
-		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
-		pdf=null;
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -88,17 +86,25 @@
  		num=Integer.parseInt(numBat);
 		E.clear();
 
-		organes=(List<Organe>)session.getAttribute("organes");
+		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
 		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
+		session.setAttribute("organes",organes);
+		
+		String ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout="0";
+		session.setAttribute("ajout",ajout);
+		
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
+		session.setAttribute("pdf",pdf);
+
 		
 		E=service.rechercheExtincteurBatiment(num);
 		out.println("<br><center><h3>Maintenance préventive des Extincteurs</h3></center><br>");
 		out.println("<center><input type=\"button\" name=\"AjoutExt\" value=\"Ajouter un extincteur\"  onclick=\"self.location.href='installationextincteur.jsp?ajout=3'\"></button></center>");
 		out.println("<br><center><h4> Liste des Extincteurs </h4></center>");
 		// Tableau
-		out.println("<br><form action=\"maintenanceprevextincteurvalidee.jsp\">");
+		out.println("<br><form action=\"maintenanceprevvalidee.jsp\">");
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
 		out.print("<thead><tr><th> N° Extincteur </th><th> Emplacement </th><th> Type extincteur </th><th>  Marque </th><th>Annee </th><th>Observation</th> <th> Etat défecteux </th></tr>");
 		out.print("</thead><tbody>");
@@ -114,7 +120,7 @@
 						"></td><td><INPUT id=\"oui\" type= \"radio\" name="+(i+100)+" value=\"oui\"><label for=\"oui\">OUI</label>&nbsp;&nbsp;&nbsp;<INPUT id=\"non\" type= \"radio\" name="+(i+100)+" value=\"non\"><label for=\"non\">NON</label></td></tr>"
 						);
 		}
-		conclusion=service.rechercheConclusionMaintenanceprev(num);
+		conclusion=service.rechercheConclusionMaintenanceprevExtincteur(num);
 		out.println("</tbody></table><br><br>"); 
 		%>
 		<div class="panel panel-primary">
@@ -158,7 +164,7 @@
 		<%
 		out.println("<center><table><tr><td>Conclusion</td> <td></td> <td><textarea name=\"Conclusion\" rows=\"5\" cols=\"47\" required>"+conclusion+"</textarea></td></tr></table>");
 		out.println("<br><input type=\"submit\" value=\"Valider\"></center></form>");
-		session.setAttribute("Extincteurs",E);
+		session.setAttribute("organeslist",E);
 	%>
 	</div>
 	     <script src="http://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
@@ -186,11 +192,11 @@
                 data: {
                 	nomPiece: this.inputNom,
                 	numExtincteur: this.inputExtincteur,
-                	ajout: 'oui'
+                	etatajout: 'oui'
                 },
                 });
             <% 
-               String ajout=request.getParameter("ajout");
+               ajout=request.getParameter("etatajout");
          	   if(ajout!=null){
                    nomPiece=request.getParameter("nomPiece");
                    numExtincteur=Integer.parseInt(request.getParameter("numExtincteur"));

@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Verification des Extincteurs</title>
+<title>Maintenance Préventive : Extincteur </title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
@@ -50,45 +50,55 @@
 	<%@ page import="java.text.SimpleDateFormat"%>
 	<%@ page import="java.text.DateFormat"%>
 
-	<%!String numBat, conclusion, observation,etat;
+	<%!String numBat,etat, conclusion, observation;
 	int num, i, numT;
-	boolean Etat;
-	List<Extincteur> E;
+	List<Organe> O;
+	Preventive MP;
 	List<Intervention> Interventionajoutee = new ArrayList<Intervention>();
-	List<Organe> organes;
-	String ajout;
+	List<Piece> listP;
+	boolean Etat;
 	%>
 
 	<%
 		session = request.getSession();
-		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
-		pdf=null;
-		
-		organes=(List<Organe>)session.getAttribute("organes");
-		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
-		
+
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 		ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
+		
+		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		session.setAttribute("organes",organes);
+		
+		String ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout="0";
+		session.setAttribute("ajout",ajout);
+		
+		List<Intervention> interv=(List<Intervention>)session.getAttribute("interv");
+		if(interv!=null) interv.clear();
+		session.setAttribute("Interv",interv);
+		
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
+		session.setAttribute("pdf",pdf);
+		
 
- 		
-		numBat = String.valueOf(session.getAttribute("numBatiment"));
+ 		numBat = String.valueOf(session.getAttribute("numBatiment"));
 		session.setAttribute("numBatiment", numBat);
 		num = Integer.parseInt(numBat); 
-		
+
 		conclusion = request.getParameter("Conclusion");
 		
-		E=(List<Extincteur>)session.getAttribute("Extincteurs");
+		/**/O=(List<Organe>)session.getAttribute("organeslist");
+		
+		listP=(List<Piece>)session.getAttribute("listP");
 		
 		String format = "yyyy-MM-dd";
 		java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
 		java.util.Date date = new java.util.Date();
 		numT=(Integer)session.getAttribute("numPersonne");
-		
-		for (i=0;i <E.size(); i++) {
+		for (i=0;i <O.size(); i++) {
 				observation = request.getParameter(String.valueOf(i));
 				etat = request.getParameter(String.valueOf(i+100));
 				if(etat!=null){
@@ -97,18 +107,24 @@
 					else
 						Etat=true;
 				}
-				Interventionajoutee.add(service.Verification(service.rechercheOrgane(E.get(i).getNumero()).getNumero(),observation,conclusion,numT,
-					Date.valueOf(formater.format(date)),Etat));
+				MP=service.MaintenancePreventiveOrgane(O.get(i), observation, conclusion, numT, Date.valueOf(formater.format(date)),Etat);
+ 				for(int j=0;j<listP.size();j++){
+					if(MP.getOrgane().getNumero()==listP.get(j).getOrgane().getNumero()){
+						listP.get(j).setPreventive(MP);
+						service.AjoutPieceBD(listP.get(j));
+					}
+				}
+ 				Interventionajoutee.add(MP);
 		}
 		pdf=service.ajoutpdf(Interventionajoutee);
 		Interventionajoutee.clear();
-		E.clear();
-		out.println("<center><br>Vérification effectuée avec succès");
+		out.println("<center><br>Maintenance Préventive effectuée avec succès");
 		session.setAttribute("pdf",pdf);
-		out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionextincteurpdf.jsp'\"></button></td></tr>");
+		out.println("<br><table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionpdf.jsp'\"></button></td></tr>");
 		out.println("<tr><td><input type=\"button\" name=\"Fichebatiment\" value=\"Retour a la fiche du batiment \" onclick=\"self.location.href='fichebatiment.jsp'\"></button></td></tr></table>");
 		out.println("</center>");
-
+		O.clear();
+		session.setAttribute("organeslist",O);
 		%>
 	</div>
 	<%

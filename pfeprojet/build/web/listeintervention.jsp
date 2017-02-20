@@ -134,21 +134,28 @@
 		int i,num; 
 		String numBatiment,numeroB,typeintervention,typeorgane,splitpt;
     	List<Pdfgenere> pdf;
-   	 	List<Organe> organes;
-   	 	String ajout;
+
 		%>
 		
 		<%
-		session = request.getSession();
-		organes=(List<Organe>)session.getAttribute("organes");
-		
+		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
 		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
-		numBatiment = request.getParameter("numBatiment");
+		session.setAttribute("organes",organes);
+	
+		String ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout="0";
+		session.setAttribute("ajout",ajout);
 		
+		List<Intervention> interv=(List<Intervention>)session.getAttribute("interv");
+		if(interv!=null) interv.clear();
+		session.setAttribute("Interv",interv);
+	
 		Pdfgenere pdfs=(Pdfgenere)session.getAttribute("pdf");
 		pdfs=null;
+		session.setAttribute("pdf",pdfs);
+
+		numBatiment = request.getParameter("numBatiment");
+		
 		
 		 if(numBatiment==null){
 			 numeroB = (String)session.getAttribute("numBatiment");

@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Verification d'un Extincteur</title>
+<title>Maintenance Préventive : Extincteur </title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
@@ -64,18 +64,29 @@
 
 	<%
 		session = request.getSession();
-		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
-		pdf=null;
+
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 		ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
-
-		organes=(List<Organe>)session.getAttribute("organes");
-		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
 		
+		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		session.setAttribute("organes",organes);
+		
+		String ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout="0";
+		session.setAttribute("ajout",ajout);
+		
+		List<Intervention> interv=(List<Intervention>)session.getAttribute("interv");
+		if(interv!=null) interv.clear();
+		session.setAttribute("Interv",interv);
+		
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
+		session.setAttribute("pdf",pdf);
+		
+
  		numBat = String.valueOf(session.getAttribute("numBatiment"));
 		session.setAttribute("numBatiment", numBat);
 		num = Integer.parseInt(numBat); 
@@ -111,7 +122,7 @@
 		Interventionajoutee.clear();
 		out.println("<center><br>Maintenance Préventive effectuée avec succès");
 		session.setAttribute("pdf",pdf);
-		out.println("<br><table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionextincteurpdf.jsp'\"></button></td></tr>");
+		out.println("<br><table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionpdf.jsp'\"></button></td></tr>");
 		out.println("<tr><td><input type=\"button\" name=\"Fichebatiment\" value=\"Retour a la fiche du batiment \" onclick=\"self.location.href='fichebatiment.jsp'\"></button></td></tr></table>");
 		out.println("</center>");
 		E.clear();

@@ -122,7 +122,8 @@
 		organes=(List<Organe>)session.getAttribute("organes");
 		if(organes!=null) organes.clear();
 		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
+		if(ajout!=null) ajout="0";
+		session.setAttribute("ajout",ajout);
 		
 		newpwd=request.getParameter("nouveaupwd");
 		oldpwd=request.getParameter("ancienpwd");

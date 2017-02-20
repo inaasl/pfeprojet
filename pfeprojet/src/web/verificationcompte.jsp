@@ -35,24 +35,33 @@
 		
 		
         <%! String login,password;
-   		 	List<Organe> organes;
-   	 		String ajout;
         %>
         <%
            		login =request.getParameter("login");
            		password=request.getParameter("password");
            		
-        		organes=(List<Organe>)session.getAttribute("organes");
-        		if(organes!=null) organes.clear();
-        		ajout=String.valueOf(session.getAttribute("ajout"));
-        		if(ajout!=null) ajout=null;
+      			session = request.getSession();
+      			
+      			List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+      			if(organes!=null) organes.clear();
+      			session.setAttribute("organes",organes);
+      		
+      			String ajout=String.valueOf(session.getAttribute("ajout"));
+      			if(ajout!=null) ajout="0";
+      			session.setAttribute("ajout",ajout);
+      			
+      			List<Intervention> interv=(List<Intervention>)session.getAttribute("interv");
+      			if(interv!=null) interv.clear();
+      			session.setAttribute("Interv",interv);
+      		
+      			Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+      			pdf=null;
+      			session.setAttribute("pdf",pdf);
+
            		
            		InitialContext ctx = new InitialContext();
     			Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
     			ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
-    			session = request.getSession();
-    			Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
-    			pdf=null;
     			session.setAttribute("login",login);
     			
     			try{

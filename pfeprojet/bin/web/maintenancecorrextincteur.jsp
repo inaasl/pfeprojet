@@ -66,15 +66,22 @@
 	<%!String numBat,conclusion, observation;
 	int num,i;
 	List<Extincteur> E = new ArrayList<Extincteur>();
-	String ajout;
 	%>
 	<%
 		session = request.getSession();
+
+		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		session.setAttribute("organes",organes);
+	
+		String ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout="0";
+		session.setAttribute("ajout",ajout);
+		
+	
 		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 		pdf=null;
-		
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
+		session.setAttribute("pdf",pdf);
 		
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(

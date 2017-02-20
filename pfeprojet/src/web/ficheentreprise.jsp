@@ -83,10 +83,21 @@
 		</li>
 		</ul>
 		<% 
-		interv=(List<Intervention>)session.getAttribute("interv");
+		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		session.setAttribute("organes",organes);
+	
+		String ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout="0";
+		session.setAttribute("ajout",ajout);
+		
+		List<Intervention> interv=(List<Intervention>)session.getAttribute("interv");
 		if(interv!=null) interv.clear();
+		session.setAttribute("Interv",interv);
+	
 		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 		pdf=null;
+		session.setAttribute("pdf",pdf);
 			}
 			if(statut==2){
 		%>
@@ -127,25 +138,16 @@
 	int num, i;
 	String numeroE;
 	List<Batiment> batiment;
-	List<Intervention>Interventionajoutee;
-	List<Organe> organes;
-	String ajout;
 	%>
 	<%
-		session = request.getSession();
-    	
-		organes=(List<Organe>)session.getAttribute("organes");
-		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
-	
+
 		if(statut==2) {
+			Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+			pdf=null;
+			session.setAttribute("pdf",pdf);
 			num=(Integer)session.getAttribute("numPersonne");
 		}
 		else {
-		Interventionajoutee=(List<Intervention>)session.getAttribute("Interventionajoutee");
-		 if(Interventionajoutee!=null)
-    	 	Interventionajoutee.clear();
 		 numEntreprise = request.getParameter("numEntreprise");
 		 if(numEntreprise==null){
 			 numeroE = (String)session.getAttribute("numeroE");

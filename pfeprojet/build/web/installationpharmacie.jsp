@@ -8,7 +8,7 @@
 <script language="JavaScript">
    function check(f){
 	    var anneevalide = new RegExp (/^(19|20)[0-9][0-9]$/);
-	    var capacitevalide = new RegExp (/^[1-9][0-9]*$/)
+	    var capacitevalide = new RegExp (/^[1-9][0-9]*$/);
 	    if(anneevalide.test(f.annee.value)){
 	    	if(capacitevalide.test(f.capacite.value)){
 	    		return true;

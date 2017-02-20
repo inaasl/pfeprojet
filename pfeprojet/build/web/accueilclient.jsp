@@ -49,6 +49,10 @@
  		statut=(Integer)session.getAttribute("statut");	 
 
  		if(statut==2) {
+ 			
+ 			Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+ 			pdf=null;
+ 			session.setAttribute("pdf",pdf);
 		
 	
 	%>

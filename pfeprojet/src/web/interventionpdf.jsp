@@ -61,10 +61,19 @@
 		numeroB = (String)session.getAttribute("numBatiment");
 		num=Integer.parseInt(numeroB);
 		session.setAttribute("numBatiment",String.valueOf(num));
-		organes=(List<Organe>)session.getAttribute("organes");
+
+		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
 		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
+		session.setAttribute("organes",organes);
+	
+		String ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout="0";
+		session.setAttribute("ajout",ajout);
+		
+		List<Intervention> interv=(List<Intervention>)session.getAttribute("interv");
+		if(interv!=null) interv.clear();
+		session.setAttribute("Interv",interv);
+		
 	    pdf=(Pdfgenere)session.getAttribute("pdf");
 
 		
@@ -108,7 +117,40 @@
         	preface.add(new Paragraph("Date de l'intervention : "+text));
         	document.add(preface);
         	// type de l'organe de sécurité
-        	Paragraph typeorgane = new Paragraph("Extincteurs",catFont);
+        	Paragraph typeorgane = new Paragraph();
+        	if(pdf.getInterventions().get(0).getOrgane() instanceof Extincteur) {
+        	typeorgane = new Paragraph("Extincteurs",catFont);
+        	}
+        	else {
+            	if(pdf.getInterventions().get(0).getOrgane() instanceof Pharmacie) {
+                	typeorgane = new Paragraph("Pharmacie",catFont);
+                }
+            	else {
+                	if(pdf.getInterventions().get(0).getOrgane() instanceof Eclairage) {
+                    	typeorgane = new Paragraph("Eclairage",catFont);
+                    }
+                	else {
+                    	if(pdf.getInterventions().get(0).getOrgane() instanceof Signaletique) {
+                        	typeorgane = new Paragraph("Signalétique",catFont);
+                        }
+                    	else {
+                        	if(pdf.getInterventions().get(0).getOrgane() instanceof RIA) {
+                            	typeorgane = new Paragraph("RIA",catFont);
+                            }
+                        	else {
+                            	if(pdf.getInterventions().get(0).getOrgane() instanceof Coupefeu) {
+                                	typeorgane = new Paragraph("Porte Coupe-feu",catFont);
+                                }
+                            	else {
+                                	if(pdf.getInterventions().get(0).getOrgane() instanceof Poteaux) {
+                                    	typeorgane = new Paragraph("Poteaux Incendie",catFont);
+                                    }
+                            	}
+                        	}
+                    	}
+                	}
+            	}
+        	}
         	typeorgane.setAlignment(Element.ALIGN_CENTER);
         	document.add(typeorgane); 
         	// type de l'intervention
@@ -178,7 +220,7 @@
 		  	document.close();
 		  	
 		  	pdf=null;
-	        
+			session.setAttribute("pdf",pdf);
 	     	}catch(NamingException e){
 	         	  
 	        } 

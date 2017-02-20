@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class Eclairage extends Organe implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private String categorie;
+	private TypeEclairage type;
 	private boolean presencetelecommande;
 	private boolean fonctionnementtelecommande;
 	
@@ -18,12 +18,6 @@ public class Eclairage extends Organe implements java.io.Serializable {
 
 	public Eclairage () { };
 
-	public String getCategorie () {
-		return categorie;
-	}
-	public void setCategorie (String newVar) {
-		this.categorie = newVar;
-	}
 	public boolean isPresencetelecommande () {
 		return presencetelecommande;
 	}
@@ -59,10 +53,20 @@ public class Eclairage extends Organe implements java.io.Serializable {
 	public void addInterventions (Intervention intervention) {
 		this.getInterventions().add(intervention);
 	}
+	
+	@ManyToOne
+	public TypeEclairage getType() {
+		return type;
+	}
+
+	public void setType(TypeEclairage typeeclairage) {
+		this.type = typeeclairage;
+	}
+	
 	public String toString(){
 		return "Fiche de l'eclairage : \n  Numero de l'organe : "+this.getNumero()
-				+"\nCategorie : " +this.categorie
-				+"\nEmplacement : "+this.getEmplacement()
+				+"\nCategorie : " +this.type.getNom()
+			//	+"\nEmplacement : "+this.getEmplacement()
 				+"\nMarque : "+this.marqueeclairage
 				+"\nType Telecommande : "+this.typetelecommande
 				+"\nType Observation : "+this.getObservation()+"\n"+this.getConclusion();

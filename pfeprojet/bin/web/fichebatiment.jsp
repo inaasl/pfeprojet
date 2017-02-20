@@ -70,11 +70,23 @@
 		<li><a href="deconnexion.jsp">Déconnexion</a>
 		</li>
 		</ul>
-		<% 		interv=(List<Intervention>)session.getAttribute("interv");
+		<% 		
+		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		session.setAttribute("organes",organes);
+	
+		String ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout="0";
+		session.setAttribute("ajout",ajout);
+		
+		List<Intervention> interv=(List<Intervention>)session.getAttribute("interv");
 		if(interv!=null) interv.clear();
+		session.setAttribute("Interv",interv);
+	
 		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 		pdf=null;
-		}
+		session.setAttribute("pdf",pdf);
+		 }
 			if(statut==2){
 		%>
 	<ul id="menu">
@@ -94,7 +106,11 @@
 	</li>
 	</ul>
 	<%
-	}%>
+	
+	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+	pdf=null;
+	session.setAttribute("pdf",pdf);
+			}%>
 	</header>
 	  <div id="container">
 	<%@ page import="java.net.URL"%>
@@ -114,19 +130,10 @@
 	Batiment B;
 	int num, i;
 	String numeroB;
-	List<Intervention>Interventionajoutee;
 	%>
 	<%
 		 session = request.getSession();
-		
-		organes=(List<Organe>)session.getAttribute("organes");
-		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
-	
-		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
-		pdf=null;
-		
+				
 		 numBatiment = request.getParameter("numBatiment");
 		 if(numBatiment==null){
 			 numeroB = (String)session.getAttribute("numBatiment");
@@ -136,9 +143,7 @@
 			 num = Integer.parseInt(numBatiment);
 		 }
 		session.setAttribute("numBatiment",String.valueOf(num));
-	    Interventionajoutee=(List<Intervention>)session.getAttribute("Interventionajoutee");
-		if(Interventionajoutee!=null)
-	    	Interventionajoutee.clear();
+		
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");

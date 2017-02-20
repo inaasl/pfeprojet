@@ -66,19 +66,27 @@
 	<%!String numBat,conclusion, observation;
 	int num,i;
 	List<Pharmacie> P = new ArrayList<Pharmacie>();
-	List<Organe> organes;
-	String ajout;
 	%>
 	<%
 		session = request.getSession();
 	
-		organes=(List<Organe>)session.getAttribute("organes");
+	
+		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
 		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
+		session.setAttribute("organes",organes);
+	
+		String ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout="0";
+		session.setAttribute("ajout",ajout);
+		
+		List<Intervention> interv=(List<Intervention>)session.getAttribute("interv");
+		if(interv!=null) interv.clear();
+		session.setAttribute("Interv",interv);
 	
 		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 		pdf=null;
+		session.setAttribute("pdf",pdf);
+
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -92,7 +100,7 @@
 		out.println("<center><input type=\"button\" name=\"AjoutPharm\" value=\"Ajouter une pharmacie\"  onclick=\"self.location.href='installationpharmacie.jsp?ajout=4'\"></button></center>");
 		out.println("<br><center><h4> Liste des Pharmacies </h4></center>");
 		// Tableau
-		out.println("<br><form action=\"verificationpharmacievalidee.jsp\">");
+		out.println("<br><form action=\"verificationvalidee.jsp\">");
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
 		out.print("<thead><tr><th> N° Pharmacie </th><th> Emplacement </th><th> Capacité </th><th>Annee </th><th>Observation</th><th>Etat défecteux</th></tr>");
 		out.print("</thead><tbody>");
@@ -111,7 +119,7 @@
 		out.println("</tbody></table><br><br>"); 
 		out.println("<center><table><tr><td>Conclusion</td> <td></td> <td><textarea name=\"Conclusion\" rows=\"5\" cols=\"47\" required>"+conclusion+"</textarea></td></tr></table>");
 		out.println("<br><input type=\"submit\" value=\"Valider\"></center></form>");
-		session.setAttribute("Pharmacie",P);
+		session.setAttribute("organes",P);
 	%>
 	</div>
 	<%

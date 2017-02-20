@@ -79,7 +79,7 @@
 	
 	ajout=String.valueOf(session.getAttribute("ajout"));
 	
-	if(ajout.compareTo("0")==0){
+	if(ajout.compareTo("0")!=0){
 		extincteurs=(List<Extincteur>)session.getAttribute("organes");
 		if(extincteurs==null){
 			extincteurs=new ArrayList<Extincteur>();

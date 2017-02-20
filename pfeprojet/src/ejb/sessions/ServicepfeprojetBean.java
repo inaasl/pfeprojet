@@ -166,28 +166,26 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	public List<Organe> rechercheOrganeBatiment(int numeroBatiment){
 		return em.createQuery("from Organe o WHERE o.batiment.numero = "+numeroBatiment).getResultList();
 	}
-	
+	// recherche d'un organe par numero
+	public Organe rechercheOrganeNum(int numeroOrgane){
+		return em.find(Organe.class,numeroOrgane);
+	}
+	// recherche des extincteurs d'un batiment
 	public List<Extincteur> rechercheExtincteurBatiment(int numeroBatiment){
 		return em.createQuery("from Extincteur e WHERE e.batiment.numero = "+numeroBatiment).getResultList();
 	}
-	// recherche d'un extincteur
-	public Extincteur rechercheExtincteur(int numeroExtincteur){
-		return em.find(Extincteur.class,numeroExtincteur);
-	}
-	public List<Extincteur> rechercheExtincteurNum(int num){
-		return em.createQuery("from Extincteur e where e.numero="+num).getResultList();
-	}
-	
+	// recherche des pharmacies d'un batiment
 	public List<Pharmacie> recherchePharmacieBatiment(int numeroBatiment){
 		return em.createQuery("from Pharmacie p WHERE p.batiment.numero = "+numeroBatiment).getResultList();
 	}
-	// recherche d'une pharmacie
-	public Pharmacie recherchePharmacie(int numeroPharmacie){
-		return em.find(Pharmacie.class,numeroPharmacie);
+	public List<Coupefeu> rechercheCoupefeuBatiment(int numeroBatiment){
+		return em.createQuery("from Coupefeu c WHERE c.batiment.numero = "+numeroBatiment).getResultList();
 	}
-	public List<Pharmacie> recherchePharmacieNum(int num){
-		return em.createQuery("from Pharmacie p where p.numero="+num).getResultList();
+	
+	public List<Poteaux> recherchePoteauxBatiment(int numeroBatiment){
+		return em.createQuery("from Poteaux p WHERE p.batiment.numero = "+numeroBatiment).getResultList();
 	}
+	
 	// recherche intervention
 	public List<Intervention> rechercheInterventionOrgane(int numeroOrgane) {
 		return em.createQuery("from Intervention i where i.organe.numero="+numeroOrgane).getResultList();
@@ -329,6 +327,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		E.setType(Tp);
 		return E;
 	}
+	// Ajout Pharmacie
 	public Pharmacie ajoutPharmacie(int numbatiment, int Annee, String Emp,String Obs, int capacite)throws BatimentInconnuException{
 		Batiment B = rechercheBatimentnum(numbatiment);
 		Pharmacie P = new Pharmacie();
@@ -337,8 +336,36 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		P.setObservation(Obs);
 		P.setBatiment(B);
 		P.setCapacite(capacite);
+		P.setMarche(true);
 		return P;
 	}
+	// Ajout Coupefeu
+	public Coupefeu ajoutCoupefeu(int numbatiment, String Emp,String Obs, String type)throws BatimentInconnuException{
+		Batiment B = rechercheBatimentnum(numbatiment);
+		Coupefeu C = new Coupefeu();
+		C.setEmplacement(Emp);
+		C.setObservation(Obs);
+		C.setBatiment(B);
+		C.setTypeCoupefeu(type);
+		C.setMarche(true);
+		return C;
+	}
+	// Ajout Poteaux
+	public Poteaux ajoutPoteaux(int numbatiment,String Emp,String Obs, int diametre, int pressionstat,int pression60,int pression1bar)throws BatimentInconnuException{
+		Batiment B = rechercheBatimentnum(numbatiment);
+		Poteaux P = new Poteaux();
+		P.setEmplacement(Emp);
+		P.setObservation(Obs);
+		P.setDiametre(diametre);
+		P.setPressionstat(pressionstat);
+		P.setPression60(pression60);
+		P.setPression1bar(pression1bar);
+		P.setBatiment(B);
+		P.setMarche(true);
+		return P;
+	}
+	
+	
 
 	// Ajout dans la base de donnée
 	// Organe
@@ -437,8 +464,27 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		MC.setOrgane(O);
 		return MC;
 	}
-	// remplacement
-	// remlacement extincteur
+	// remplacement poteaux
+	public Poteaux remplacementpoteaux(Poteaux P, String Emp,String Obs, int diametre,int pressionstat,int pression60,int pression1bar,boolean marche){
+		P.setEmplacement(Emp);
+		P.setObservation(Obs);
+		P.setDiametre(diametre);
+		P.setPressionstat(pressionstat);
+		P.setPression60(pression60);
+		P.setPression1bar(pression1bar);
+		P.setMarche(marche);
+		return P;
+	}
+	// remplacement coupe-feu
+	public Coupefeu remplacementcoupefeu(Coupefeu C, String Emp, String Obs,String type ,boolean marche){
+		C.setEmplacement(Emp);
+		C.setObservation(Obs);
+		C.setMarche(marche);
+		C.setTypeCoupefeu(type);
+		return C;
+	}
+	
+	// remlacement pharmacie
 	public Pharmacie remplacementpharmacie(Pharmacie P, int Annee, String Emp, String Obs, int capacite,boolean marche){
 		P.setAnnee(Annee);
 		P.setEmplacement(Emp);
@@ -589,7 +635,46 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		}
 		return conclusion;
 	}
-	
+	// derniere conclusion : Verification Coupefeu
+	public String rechercheConclusionVerificationCoupefeu(int numeroBatiment) {
+		@SuppressWarnings("unchecked")
+		List<Verification> verifications = em.createQuery("FROM Verification v where v.organe.batiment.numero = "+numeroBatiment).getResultList();
+		int test,i;
+		test=0;
+		i=verifications.size()-1;
+		String conclusion="--";
+		if(verifications.size()!=0){
+			while(test==0 && i>-1) {
+				if(verifications.get(i).getOrgane() instanceof Coupefeu ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=verifications.get(i+1).getConclusion();
+		}
+		return conclusion;
+	}
+	// derniere conclusion : Verification Poteaux
+	public String rechercheConclusionVerificationPoteaux(int numeroBatiment) {
+		@SuppressWarnings("unchecked")
+		List<Verification> verifications = em.createQuery("FROM Verification v where v.organe.batiment.numero = "+numeroBatiment).getResultList();
+		int test,i;
+		test=0;
+		i=verifications.size()-1;
+		String conclusion="--";
+		if(verifications.size()!=0){
+			while(test==0 && i>-1) {
+				if(verifications.get(i).getOrgane() instanceof Poteaux ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=verifications.get(i+1).getConclusion();
+		}
+		return conclusion;
+	}
 	// derniere observation : Maintenance Corrective
 	public String rechercheObservationMaintenancecorr(int numeroOrgane) {
 		@SuppressWarnings("unchecked")
@@ -640,6 +725,48 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		}
 		return conclusion;
 	}
+	// derniere conclusion : Maintenance Corrective Coupefeu
+	public String rechercheConclusionMaintenancecorrCoupefeu(int numeroBatiment) {
+		@SuppressWarnings("unchecked")
+		List<Corrective> maintenancecorrective = em.createQuery("FROM Corrective m where m.organe.batiment.numero = "+numeroBatiment).getResultList();
+		String conclusion="--";
+		int test,i;
+		test=0;
+		i=maintenancecorrective.size()-1;
+		if(maintenancecorrective.size()!=0){
+			while(test==0 && i>-1) {
+				if(maintenancecorrective.get(i).getOrgane() instanceof Coupefeu ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=maintenancecorrective.get(i+1).getConclusion();
+		}
+		return conclusion;
+	}
+	// derniere conclusion : Maintenance Corrective Poteaux
+	public String rechercheConclusionMaintenancecorrPoteaux(int numeroBatiment) {
+		@SuppressWarnings("unchecked")
+		List<Corrective> maintenancecorrective = em.createQuery("FROM Corrective m where m.organe.batiment.numero = "+numeroBatiment).getResultList();
+		String conclusion="--";
+		int test,i;
+		test=0;
+		i=maintenancecorrective.size()-1;
+		if(maintenancecorrective.size()!=0){
+			while(test==0 && i>-1) {
+				if(maintenancecorrective.get(i).getOrgane() instanceof Poteaux ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=maintenancecorrective.get(i+1).getConclusion();
+		}
+		return conclusion;
+	}
+	
+	
 	// derniere observation : Maintenance Preventive
 	public String rechercheObservationMaintenanceprev(int numeroOrgane) {
 		@SuppressWarnings("unchecked")
@@ -650,16 +777,68 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		return observation;
 	}
 
-	// derniere conclusion : Maintenance Preventive
-	public String rechercheConclusionMaintenanceprev(int numeroBatiment) {
+	// derniere conclusion : Maintenance Preventive Extincteur
+	public String rechercheConclusionMaintenanceprevExtincteur(int numeroBatiment) {
 		@SuppressWarnings("unchecked")
 		List<Preventive> maintenancepreventive = em.createQuery("FROM Preventive m where m.organe.batiment.numero = "+numeroBatiment).getResultList();
 		String conclusion="--";
-		if(maintenancepreventive.size()!=0)
-			conclusion=maintenancepreventive.get(maintenancepreventive.size()-1).getConclusion();
+		int test,i;
+		test=0;
+		i=maintenancepreventive.size()-1;
+		if(maintenancepreventive.size()!=0){
+			while(test==0 && i>-1) {
+				if(maintenancepreventive.get(i).getOrgane() instanceof Extincteur ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=maintenancepreventive.get(i+1).getConclusion();
+		}
 		return conclusion;
 	}
 
+	
+	// derniere conclusion : Maintenance Coupefeu
+	public String rechercheConclusionMaintenanceprevCoupefeu(int numeroBatiment) {
+		@SuppressWarnings("unchecked")
+		List<Preventive> maintenancepreventive = em.createQuery("FROM Preventive m where m.organe.batiment.numero = "+numeroBatiment).getResultList();
+		String conclusion="--";
+		int test,i;
+		test=0;
+		i=maintenancepreventive.size()-1;
+		if(maintenancepreventive.size()!=0){
+			while(test==0 && i>-1) {
+				if(maintenancepreventive.get(i).getOrgane() instanceof Coupefeu ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=maintenancepreventive.get(i+1).getConclusion();
+		}
+		return conclusion;
+	}
+	// derniere conclusion : Maintenance Poteaux
+		public String rechercheConclusionMaintenanceprevPoteaux(int numeroBatiment) {
+			@SuppressWarnings("unchecked")
+			List<Preventive> maintenancepreventive = em.createQuery("FROM Preventive m where m.organe.batiment.numero = "+numeroBatiment).getResultList();
+			String conclusion="--";
+			int test,i;
+			test=0;
+			i=maintenancepreventive.size()-1;
+			if(maintenancepreventive.size()!=0){
+				while(test==0 && i>-1) {
+					if(maintenancepreventive.get(i).getOrgane() instanceof Poteaux ){
+						test=1;
+					}
+					i--;
+				}
+				if(test==1)
+					conclusion=maintenancepreventive.get(i+1).getConclusion();
+			}
+			return conclusion;
+		}
 	// Creation des comptes et generations des mots de passe
 	public void creercompteAdmin(String login, int admin, int statut) {
 		Compte session = new Compte();

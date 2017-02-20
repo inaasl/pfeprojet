@@ -58,13 +58,18 @@
 	boolean Etat;
 %>
 <%
+	List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+	if(organes!=null) organes.clear();
+	session.setAttribute("organes",organes);
+	
+	String ajout=String.valueOf(session.getAttribute("ajout"));
+	if(ajout!=null) ajout="0";
+	session.setAttribute("ajout",ajout);
+	
 	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 	pdf=null;
-	
-	organes=(List<Organe>)session.getAttribute("organes");
-	if(organes!=null) organes.clear();
-	ajout=String.valueOf(session.getAttribute("ajout"));
-	if(ajout!=null) ajout=null;
+	session.setAttribute("pdf",pdf);
+
 	
 	annee =request.getParameter("annee");
 	emplacement=request.getParameter("emplacement");
@@ -93,7 +98,7 @@
 	java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
 	java.util.Date date = new java.util.Date();
 	
-	Pharmaciecour=service.recherchePharmacie(numpharmacie);
+	Pharmaciecour=(Pharmacie)service.rechercheOrganeNum(numpharmacie);
 	Pharmaciecour=service.remplacementpharmacie(Pharmaciecour, anneeInt, emplacement, observ, capaciteInt, Etat);
 	
 	conclusion=service.rechercheConclusionMaintenancecorrPharmacie(numB);
@@ -107,7 +112,7 @@
 	
 	out.println("<br><center> Maintenance Corrective effectuée avec succès </center>");
 
-	out.println("<center><a href=\"maintenancecorrextincteur.jsp\">Effectuer une nouvelle maintenance corrective </a></center>");
+	out.println("<center><a href=\"maintenancecorrpharmacie.jsp\">Effectuer une nouvelle maintenance corrective </a></center>");
 	out.println(
 			"<br><center><form action=\"interventionvalidee.jsp\"><table><tr>"+
 	"<td> <p> Conclusion  </td> <td><textarea  name=\"conclusion\" rows=\"5\" cols=\"47\" />"+conclusion+"</textarea></p> <td></tr></table>"+

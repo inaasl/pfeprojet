@@ -5,6 +5,32 @@
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
+<script language="JavaScript">
+   function check(f){
+	    var anneevalide = new RegExp (/^(19|20)[0-9][0-9]$/);
+	    var capacitevalide = new RegExp (/^[1-9][0-9]*$/)
+	    if(anneevalide.test(f.annee.value)){
+	    	if(capacitevalide.test(f.capacite.value)){
+	    		return true;
+	    	}
+	    	else {
+	    		alert('Valeur de la capacité non valide, Veuillez entrer un nombre !');
+	    		return false;
+	    	}
+	    }
+	    else {
+	    	if(capacitevalide.test(f.capacite.value)){
+	    		alert('Année non valide !');
+	    		return false;
+	    	}
+	    	else {
+	    		alert('Valeur de la capacité non valide, Veuillez entrer un nombre !');
+	    		alert('Année non valide !');
+	    		return false;
+	    	}
+	    }
+	}
+</script> 
 	<header class="header">
 		<a class="logo" href="http://www.desentec.fr/"><img
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
@@ -51,19 +77,23 @@
 
 		<%!String numBat,observation;
 			int num,numpharmacie;
-			Pharmacie P;
-			List<Organe> organes;
-	 		String ajout;%>
+			Pharmacie P;%>
 		<%
 			session = request.getSession();
+
+		
+			List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+			if(organes!=null) organes.clear();
+			session.setAttribute("organes",organes);
+			
+			String ajout=String.valueOf(session.getAttribute("ajout"));
+			if(ajout!=null) ajout="0";
+			session.setAttribute("ajout",ajout);
+			
 			Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 			pdf=null;
-			
-			organes=(List<Organe>)session.getAttribute("organes");
-			if(organes!=null) organes.clear();
-			ajout=String.valueOf(session.getAttribute("ajout"));
-			if(ajout!=null) ajout=null;
-			
+			session.setAttribute("pdf",pdf);
+
 			InitialContext ctx = new InitialContext();
 			Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -74,10 +104,10 @@
 			
 			numpharmacie = Integer.parseInt(request.getParameter("numpharmacie"));
 			observation=service.rechercheObservationMaintenancecorr(numpharmacie);
-			P = service.recherchePharmacie(numpharmacie);
+			P = (Pharmacie)service.rechercheOrganeNum(numpharmacie);
 			session.setAttribute("numpharmacie",numpharmacie);
 		%>
-		<form action="maintenancecorrpharmacievalideeconclu.jsp">
+		<form action="maintenancecorrpharmacievalideeconclu.jsp" method="post" onsubmit="return check(this);">
 		 <fieldset>
 		 <legend><b>Maintenance Corrective</b></legend>
 		<br>

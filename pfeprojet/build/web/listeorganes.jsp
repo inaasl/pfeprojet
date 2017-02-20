@@ -92,7 +92,26 @@
 		<li><a href="deconnexion.jsp">Déconnexion</a>
 		</li>
 		</ul>
-		<% }
+		<% 
+		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		session.setAttribute("organes",organes);
+	
+		String ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout="0";
+		session.setAttribute("ajout",ajout);
+		
+		List<Intervention> interv=(List<Intervention>)session.getAttribute("interv");
+		if(interv!=null) interv.clear();
+		session.setAttribute("Interv",interv);
+	
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
+		session.setAttribute("pdf",pdf);
+		 
+		 
+		 
+		 }
 			if(statut==2){
 		%>
 	<ul id="menu">
@@ -112,7 +131,11 @@
 	</li>
 	</ul>
 	<%
-	}%>
+	
+	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+	pdf=null;
+	session.setAttribute("pdf",pdf);
+			}%>
 		</header>
 		<div id="container">
 		<%@ page import="java.net.URL"%>
@@ -146,12 +169,7 @@
 		%>
 		<%
 		session = request.getSession();
-		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
-		pdf=null;
-		organes=(List<Organe>)session.getAttribute("organes");
-		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
+
 		 numBatiment = request.getParameter("numBatiment");
 		 if(numBatiment==null){
 			 numeroB = (String)session.getAttribute("numBatiment");
@@ -283,30 +301,49 @@
 		}
 		
 		if(pharmacie!=null) {
-			if(pharmacie.get(i).isMarche()==true)
-				marche="<img src=\"marchtrue.jpg\">";
-			else
-				marche="<img src=\"marchefalse.png\">";
 			out.println("<h4>Pharmacie</h4><br>");
 			out.print("</center>");
 	    	out.print("<br/><table id=\"datatables3\" class=\"display\" >");
-	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th> Capacité </th><th> Année </th><th>Observation</th><th>Etat</th></tr>");
+	    	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th> Capacité </th><th> Année </th><th>Observation</th><th>Etat</th></tr>");
 	 	 	out.print("</thead><tbody>");
+			 for(i=0;i<pharmacie.size();i++){
+				if(pharmacie.get(i).isMarche()==true)
+					marche="<img src=\"marchtrue.jpg\">";
+				else
+					marche="<img src=\"marchefalse.png\">";
+					
+					out.print(" <tr><td>"+pharmacie.get(i).getNumero()
+							+"</td><td>"+pharmacie.get(i).getEmplacement()
+							+"</td><td>"+pharmacie.get(i).getCapacite()
+							+"</td><td>"+pharmacie.get(i).getAnnee()
+							+"</td><td>"+pharmacie.get(i).getObservation()
+							+"</td><td>"+marche
+							+"</td></tr>");
+			 }
 			out.print("</tbody></table><br>");
 
 		}
 		
 		if(coupefeu!=null) {
-			if(coupefeu.get(i).isMarche()==true)
-				marche="<img src=\"marchtrue.jpg\">";
-			else
-				marche="<img src=\"marchefalse.png\">";
 			out.println("<h4>Porte Coupe-feu</h4><br>");
 			out.print("</center>");
 	    	out.print("<br/><table id=\"datatables4\" class=\"display\" >");
 	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Type</th><th>Observation</th><th>Etat</th></tr>");
 	 	 	out.print("</thead><tbody>");
-			out.print("</tbody></table><br>");
+			 for(i=0;i<coupefeu.size();i++){
+				if(coupefeu.get(i).isMarche()==true)
+					marche="<img src=\"marchtrue.jpg\">";
+				else
+					marche="<img src=\"marchefalse.png\">";
+					
+					out.print(" <tr><td>"+coupefeu.get(i).getNumero()
+							+"</td><td>"+coupefeu.get(i).getEmplacement()
+							+"</td><td>"+coupefeu.get(i).getTypeCoupefeu()
+							+"</td><td>"+coupefeu.get(i).getObservation()
+							+"</td><td>"+marche
+							+"</td></tr>");
+			 }
+	 	 	out.print("</tbody></table><br>");
 
 		}
 		

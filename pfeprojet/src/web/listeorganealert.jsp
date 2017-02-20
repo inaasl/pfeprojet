@@ -92,7 +92,27 @@
 		<li><a href="deconnexion.jsp">Déconnexion</a>
 		</li>
 		</ul>
-		<% }
+		<% 
+		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		session.setAttribute("organes",organes);
+	
+		String ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout="0";
+		session.setAttribute("ajout",ajout);
+		
+		List<Intervention> interv=(List<Intervention>)session.getAttribute("interv");
+		if(interv!=null) interv.clear();
+		session.setAttribute("Interv",interv);
+	
+		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+		pdf=null;
+		session.setAttribute("pdf",pdf);
+		 
+		 
+		 
+		 
+		 }
 			if(statut==2){
 		%>
 	<ul id="menu">
@@ -112,7 +132,13 @@
 	</li>
 	</ul>
 	<%
-	}%>
+	
+	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+	pdf=null;
+	session.setAttribute("pdf",pdf);
+			
+			
+			}%>
 		</header>
 		<div id="container">
 		<%@ page import="java.net.URL"%>
@@ -154,15 +180,8 @@
 		 else{
 			 num = Integer.parseInt(numBatiment);
 		 }
+
 		
-		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
-		pdf=null;
-		
-		organes=(List<Organe>)session.getAttribute("organes");
-		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
-		 
 		session.setAttribute("numBatiment",String.valueOf(num));
 	    
 		InitialContext ctx = new InitialContext();
@@ -284,16 +303,26 @@
 		}
 		
 		if(pharmacie!=null) {
-			if(pharmacie.get(i).isMarche()==true)
-				marche="<img src=\"marchtrue.jpg\">";
-			else
-				marche="<img src=\"marchefalse.png\">";
 			out.println("<h4>Pharmacie</h4><br>");
 			out.print("</center>");
 	    	out.print("<br/><table id=\"datatables3\" class=\"display\" >");
 	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th> Capacité </th><th> Année </th><th>Observation</th><th>Etat</th></tr>");
 	 	 	out.print("</thead><tbody>");
-		  	out.print("</tbody></table><br>");
+			 for(i=0;i<pharmacie.size();i++){
+				if(pharmacie.get(i).isMarche()==true)
+					marche="<img src=\"marchtrue.jpg\">";
+				else
+					marche="<img src=\"marchefalse.png\">";
+					
+					out.print(" <tr><td>"+pharmacie.get(i).getNumero()
+							+"</td><td>"+pharmacie.get(i).getEmplacement()
+							+"</td><td>"+pharmacie.get(i).getCapacite()
+							+"</td><td>"+pharmacie.get(i).getAnnee()
+							+"</td><td>"+pharmacie.get(i).getObservation()
+							+"</td><td>"+marche
+							+"</td></tr>");
+			 }
+	 	 	out.print("</tbody></table><br>");
 		}
 		
 		if(coupefeu!=null) {
@@ -306,7 +335,20 @@
 	    	out.print("<br/><table id=\"datatables4\" class=\"display\" >");
 	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Type</th><th>Observation</th><th>Etat</th></tr>");
 	 	 	out.print("</thead><tbody>");
-		  	out.print("</tbody></table><br>");
+			 for(i=0;i<coupefeu.size();i++){
+				if(coupefeu.get(i).isMarche()==true)
+					marche="<img src=\"marchtrue.jpg\">";
+				else
+					marche="<img src=\"marchefalse.png\">";
+					
+					out.print(" <tr><td>"+coupefeu.get(i).getNumero()
+							+"</td><td>"+coupefeu.get(i).getEmplacement()
+							+"</td><td>"+coupefeu.get(i).getTypeCoupefeu()
+							+"</td><td>"+coupefeu.get(i).getObservation()
+							+"</td><td>"+marche
+							+"</td></tr>");
+			 }
+	 	 	out.print("</tbody></table><br>");
 		}
 		
 		if(ria!=null) {
@@ -331,6 +373,22 @@
 			out.print("</center>");
 	    	out.print("<br/><table id=\"datatables6\" class=\"display\" >");
 	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>diamètre</th><th> Pression statique </th><th>Pression 60</th><th>Pression 1bar</th><th>Observation</th><th>Etat</th></tr>");
+			 for(i=0;i<poteaux.size();i++){
+				if(poteaux.get(i).isMarche()==true)
+					marche="<img src=\"marchtrue.jpg\">";
+				else
+					marche="<img src=\"marchefalse.png\">";
+					
+					out.print(" <tr><td>"+poteaux.get(i).getNumero()
+							+"</td><td>"+poteaux.get(i).getEmplacement()
+							+"</td><td>"+poteaux.get(i).getDiametre()
+							+"</td><td>"+poteaux.get(i).getPressionstat()
+							+"</td><td>"+poteaux.get(i).getPression60()
+							+"</td><td>"+poteaux.get(i).getPressionstat()
+							+"</td><td>"+coupefeu.get(i).getObservation()
+							+"</td><td>"+marche
+							+"</td></tr>");
+			 }
 	 	 	out.print("</thead><tbody>");
 			out.print("</tbody></table><br>");
 		}

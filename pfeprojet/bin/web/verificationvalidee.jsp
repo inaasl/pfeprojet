@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Maintenance Préventive : Extincteur </title>
+<title>Verification des portes coupe-feu </title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
@@ -50,46 +50,50 @@
 	<%@ page import="java.text.SimpleDateFormat"%>
 	<%@ page import="java.text.DateFormat"%>
 
-	<%!String numBat,etat, conclusion, observation;
+	<%!String numBat, conclusion, observation,etat;
 	int num, i, numT;
-	List<Extincteur> E;
-	Extincteur Extcourant;
-	Preventive MP;
+	List<Organe> O;
 	List<Intervention> Interventionajoutee = new ArrayList<Intervention>();
-	List<Piece> listP;
 	boolean Etat;
-	List<Organe> organes;
 	String ajout;
 	%>
 
 	<%
 		session = request.getSession();
+
+/* 		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		session.setAttribute("organes",organes); */
+	
+		String ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout="0";
+		session.setAttribute("ajout",ajout);
+		
+		List<Intervention> interv=(List<Intervention>)session.getAttribute("interv");
+		if(interv!=null) interv.clear();
+		session.setAttribute("Interv",interv);
+	
 		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 		pdf=null;
+		session.setAttribute("pdf",pdf);
+
+				
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 		ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
 
-		organes=(List<Organe>)session.getAttribute("organes");
-		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
-		
  		numBat = String.valueOf(session.getAttribute("numBatiment"));
 		session.setAttribute("numBatiment", numBat);
 		num = Integer.parseInt(numBat); 
-
 		conclusion = request.getParameter("Conclusion");
-		
-		E=(List<Extincteur>)session.getAttribute("Extincteurs");
-		listP=(List<Piece>)session.getAttribute("listP");
+		O=(List<Organe>)session.getAttribute("organes");
 		
 		String format = "yyyy-MM-dd";
 		java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
 		java.util.Date date = new java.util.Date();
 		numT=(Integer)session.getAttribute("numPersonne");
-		for (i=0;i <E.size(); i++) {
+		for (i=0;i <O.size(); i++) {
 				observation = request.getParameter(String.valueOf(i));
 				etat = request.getParameter(String.valueOf(i+100));
 				if(etat!=null){
@@ -98,23 +102,18 @@
 					else
 						Etat=true;
 				}
-				MP=service.MaintenancePreventiveOrgane(E.get(i), observation, conclusion, numT, Date.valueOf(formater.format(date)),Etat);
- 				for(int j=0;j<listP.size();j++){
-					if(MP.getOrgane().getNumero()==listP.get(j).getOrgane().getNumero()){
-						listP.get(j).setPreventive(MP);
-						service.AjoutPieceBD(listP.get(j));
-					}
-				}
- 				Interventionajoutee.add(MP);
+				Interventionajoutee.add(service.Verification(service.rechercheOrgane(O.get(i).getNumero()).getNumero(),observation,conclusion,numT,Date.valueOf(formater.format(date)),Etat));
 		}
 		pdf=service.ajoutpdf(Interventionajoutee);
 		Interventionajoutee.clear();
-		out.println("<center><br>Maintenance Préventive effectuée avec succès");
+		O.clear();
+		session.setAttribute("organes",O);
+		out.println("<center><br>Vérification effectuée avec succès");
 		session.setAttribute("pdf",pdf);
-		out.println("<br><table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionextincteurpdf.jsp'\"></button></td></tr>");
+		out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionpdf.jsp'\"></button></td></tr>");
 		out.println("<tr><td><input type=\"button\" name=\"Fichebatiment\" value=\"Retour a la fiche du batiment \" onclick=\"self.location.href='fichebatiment.jsp'\"></button></td></tr></table>");
 		out.println("</center>");
-		E.clear();
+
 		%>
 	</div>
 	<%

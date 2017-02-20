@@ -5,6 +5,7 @@ import java.util.List;
 import ejb.entites.Batiment;
 import ejb.entites.Compte;
 import ejb.entites.Corrective;
+import ejb.entites.Coupefeu;
 import ejb.entites.Entreprise;
 import ejb.entites.Extincteur;
 import ejb.entites.Installation;
@@ -14,6 +15,7 @@ import ejb.entites.Organe;
 import ejb.entites.Pdfgenere;
 import ejb.entites.Pharmacie;
 import ejb.entites.Piece;
+import ejb.entites.Poteaux;
 import ejb.entites.Preventive;
 import ejb.entites.Technicien;
 import ejb.entites.TypeExtincteur;
@@ -32,7 +34,8 @@ public interface Servicepfeprojet {
 	
 	public Extincteur ajoutExtincteur(int numbatiment, int Annee, String Emp, String Obs, String nommarque, String nomtype) throws BatimentInconnuException;
 	public Pharmacie ajoutPharmacie(int numbatiment, int Annee, String Emp,String Obs, int capacite)throws BatimentInconnuException;
-	
+	public Coupefeu ajoutCoupefeu(int numbatiment, String Emp,String Obs, String type)throws BatimentInconnuException;
+	public Poteaux ajoutPoteaux(int numbatiment,String Emp,String Obs, int diametre, int pressionstat,int pression60,int pression1bar)throws BatimentInconnuException;
 	
 	public Intervention ajoutIntervention(int numbatiment, Intervention Interv, Organe O, String conclusion) throws BatimentInconnuException;
 	public void ajoutOrgane(List<Organe> organes);
@@ -46,11 +49,14 @@ public interface Servicepfeprojet {
 	public Corrective MaintenanceCorrectiveOrgane(String Obs,java.sql.Date date,  int numerotechnicien, Organe O) throws TechnicienInconnuException;	
 	public Extincteur remplacementextincteur(Extincteur E, int Annee, String Emp, String Obs, String nommarque, String nomtype,boolean marche);
 	public Pharmacie remplacementpharmacie(Pharmacie P, int Annee, String Emp, String Obs, int capacite,boolean marche);
+	public Coupefeu remplacementcoupefeu(Coupefeu C, String Emp, String Obs,String type ,boolean marche);
+	public Poteaux remplacementpoteaux(Poteaux P, String Emp,String Obs, int diametre,int pressionstat,int pression60,int pression1bar,boolean marche);
 	public String rechercheObservationMaintenancecorr(int numeroOrgane);
 	
 	public String rechercheConclusionMaintenancecorrExtincteur(int numeroBatiment);
 	public String rechercheConclusionMaintenancecorrPharmacie(int numeroBatiment);
-	
+	public String rechercheConclusionMaintenancecorrCoupefeu(int numeroBatiment);
+	public String rechercheConclusionMaintenancecorrPoteaux(int numeroBatiment);
 	public List<Installation> getlisteInstallation();
 	public List<Verification> getVerificationOrgane(Organe o);
 	public List<Verification> getVerificationBatiment(int numeroBatiment);
@@ -72,14 +78,14 @@ public interface Servicepfeprojet {
 
 	public Organe rechercheOrgane(int numero) throws OrganeInconnuException;
 	public List<Organe> rechercheOrganeBatiment(int numeroBatiment);
-	
-	public Extincteur rechercheExtincteur(int numeroExtincteur);
-	public List<Extincteur> rechercheExtincteurNum(int num);
+	public Organe rechercheOrganeNum(int numeroOrgane);
+
 	public List<Extincteur> rechercheExtincteurBatiment(int numeroBatiment);
 
 	public List<Pharmacie> recherchePharmacieBatiment(int numeroBatiment);
-	public Pharmacie recherchePharmacie(int numeroPharmacie);
-	public List<Pharmacie> recherchePharmacieNum(int num);
+	
+	public List<Coupefeu> rechercheCoupefeuBatiment(int numeroBatiment);
+	public List<Poteaux> recherchePoteauxBatiment(int numeroBatiment);
 	
 	public List<Pdfgenere> recherchePdfgenereBatiment(int numeroBatiment);
 	public Pdfgenere recherchePdfgenereNum(int numeroPdf);
@@ -102,9 +108,13 @@ public interface Servicepfeprojet {
 	public String rechercheObservationVerification(int numeroOrgane);
 	public String rechercheConclusionVerificationExtincteur(int numeroBatiment);
 	public String rechercheConclusionVerificationPharmacie(int numeroBatiment);
+	public String rechercheConclusionVerificationCoupefeu(int numeroBatiment);
+	public String rechercheConclusionVerificationPoteaux(int numeroBatiment);
 	
 	public String rechercheObservationMaintenanceprev(int numeroOrgane);
-	public String rechercheConclusionMaintenanceprev(int numeroBatiment);
+	public String rechercheConclusionMaintenanceprevExtincteur(int numeroBatiment);
+	public String rechercheConclusionMaintenanceprevCoupefeu(int numeroBatiment);
+	public String rechercheConclusionMaintenanceprevPoteaux(int numeroBatiment);
 	
 	public List<Integer> verificationCompte(String login, String pwd) throws CompteInconnuException;
 	public void creercompteAdmin( String login, int admin,int statut);

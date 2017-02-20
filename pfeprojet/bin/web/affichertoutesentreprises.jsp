@@ -79,10 +79,19 @@
 		<li><a href="deconnexion.jsp">Déconnexion</a>
 		</li>
 		</ul>
-	<% 		interv=(List<Intervention>)session.getAttribute("interv");
+	<% 		
+	interv=(List<Intervention>)session.getAttribute("interv");
 	if(interv!=null) interv.clear();
+	session.setAttribute("Interv",interv);
 	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 	pdf=null;
+	session.setAttribute("pdf",pdf);
+	List<Organe >organes=(List<Organe>)session.getAttribute("organes");
+	if(organes!=null) organes.clear();
+	session.setAttribute("organes",organes);
+	String ajout=String.valueOf(session.getAttribute("ajout"));
+	if(ajout!=null) ajout="0";
+	session.setAttribute("ajout",ajout);
 	}
 	%>
 	</header>
@@ -106,8 +115,6 @@
 	<%!String nomEntreprise;
 	List<Entreprise> E;
 	int i;
-	List<Organe> organes;
-	String ajout;
 	%>
 	<%
 		out.println("<h3><center>Liste de toutes les entreprises</center></h3> <br> ");
@@ -117,15 +124,7 @@
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 		ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
 		session = request.getSession();
-
-		organes=(List<Organe>)session.getAttribute("organes");
-		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
-		
-		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
-		pdf=null;
-		
+	
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
 		out.print("<thead><tr><th> Client </th><th> Adresse </th><th> Télephone </th><th> Mail </th><th>Interlocuteur </th><th>Fiche du client</th></tr>");
 		out.print("</thead><tbody>");

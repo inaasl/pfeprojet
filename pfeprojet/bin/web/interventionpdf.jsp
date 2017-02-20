@@ -61,10 +61,19 @@
 		numeroB = (String)session.getAttribute("numBatiment");
 		num=Integer.parseInt(numeroB);
 		session.setAttribute("numBatiment",String.valueOf(num));
-		organes=(List<Organe>)session.getAttribute("organes");
+
+		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
 		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
+		session.setAttribute("organes",organes);
+	
+		String ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout="0";
+		session.setAttribute("ajout",ajout);
+		
+		List<Intervention> interv=(List<Intervention>)session.getAttribute("interv");
+		if(interv!=null) interv.clear();
+		session.setAttribute("Interv",interv);
+		
 	    pdf=(Pdfgenere)session.getAttribute("pdf");
 
 		
@@ -79,14 +88,12 @@
         	document.open();
             PdfContentByte cb = writer.getDirectContent();
         	
-            Paragraph ndoc = new Paragraph("Id document : "+pdf.getNumero());
+        	Paragraph ndoc = new Paragraph("Id document : "+pdf.getNumero());
         	ndoc.setAlignment(Element.ALIGN_CENTER);
         	document.add(ndoc);
-        	
-        	document.add(new Paragraph(" "));
 
-            Image img = Image.getInstance("/home/inas/Documents/pfe/pfeprojet/src/img/logo-site.png");
-            document.add(img);
+        	Image img = Image.getInstance("/home/inas/Documents/pfe/pfeprojet/src/img/logo-site.png");
+        	document.add(img);
         	
         	Paragraph preface = new Paragraph();
         	preface.add(new Paragraph(" "));
@@ -108,10 +115,42 @@
 			DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 			String text = df.format(date);
         	preface.add(new Paragraph("Date de l'intervention : "+text));
-        	preface.add(new Paragraph(" "));
         	document.add(preface);
         	// type de l'organe de sécurité
-        	Paragraph typeorgane = new Paragraph("Pharmacie",catFont);
+        	Paragraph typeorgane = new Paragraph();
+        	if(pdf.getInterventions().get(0).getOrgane() instanceof Extincteur) {
+        	typeorgane = new Paragraph("Extincteurs",catFont);
+        	}
+        	else {
+            	if(pdf.getInterventions().get(0).getOrgane() instanceof Pharmacie) {
+                	typeorgane = new Paragraph("Pharmacie",catFont);
+                }
+            	else {
+                	if(pdf.getInterventions().get(0).getOrgane() instanceof Eclairage) {
+                    	typeorgane = new Paragraph("Eclairage",catFont);
+                    }
+                	else {
+                    	if(pdf.getInterventions().get(0).getOrgane() instanceof Signaletique) {
+                        	typeorgane = new Paragraph("Signalétique",catFont);
+                        }
+                    	else {
+                        	if(pdf.getInterventions().get(0).getOrgane() instanceof RIA) {
+                            	typeorgane = new Paragraph("RIA",catFont);
+                            }
+                        	else {
+                            	if(pdf.getInterventions().get(0).getOrgane() instanceof Coupefeu) {
+                                	typeorgane = new Paragraph("Porte Coupe-feu",catFont);
+                                }
+                            	else {
+                                	if(pdf.getInterventions().get(0).getOrgane() instanceof Poteaux) {
+                                    	typeorgane = new Paragraph("Poteaux Incendie",catFont);
+                                    }
+                            	}
+                        	}
+                    	}
+                	}
+            	}
+        	}
         	typeorgane.setAlignment(Element.ALIGN_CENTER);
         	document.add(typeorgane); 
         	// type de l'intervention
@@ -135,14 +174,7 @@
         	typeintervention.setAlignment(Element.ALIGN_CENTER);
            	document.add(new Paragraph(" "));
         	document.add(typeintervention); 
-        	document.add(new Paragraph(" "));
-        	
            	
-           	Paragraph listeorgane=new Paragraph("Liste des organes de sécurité : ");
-           	listeorgane.setAlignment(Element.ALIGN_CENTER);
-			document.add(listeorgane);
-           	document.add(new Paragraph(" "));
-
        		document.add(new Paragraph(" "));
     		// conclusion
 	    	Paragraph conclusion = new Paragraph();
@@ -150,8 +182,6 @@
 	    	conclusion.add(new Paragraph(chaine,smallBold));
 	    	conclusion.add(new Paragraph(pdf.getInterventions().get(0).getConclusion()));
 	    	document.add(conclusion);
-	       	document.add(new Paragraph(" "));
-	        
 	        for(int i=0;i<5;i++){
 	        	document.add(new Paragraph(" "));
 	        }
@@ -181,7 +211,7 @@
 	        document.add(signaturedesentec);
 	        
 	
-	        Phrase footer = new Phrase("Renseignements administratifs "+"Nombre d'exemplaires : 2                    page 1 sur 1 ");
+	        Phrase footer = new Phrase("Renseignements administratifs "+"Nombre d'exemplaires : 2                    page 1 sur 1");
 	        ColumnText.showTextAligned(cb, Element.ALIGN_CENTER,
 	                footer,
 	                (document.right() - document.left()) / 2 + document.leftMargin(),
@@ -190,7 +220,7 @@
 		  	document.close();
 		  	
 		  	pdf=null;
-	        
+			session.setAttribute("pdf",pdf);
 	     	}catch(NamingException e){
 	         	  
 	        } 

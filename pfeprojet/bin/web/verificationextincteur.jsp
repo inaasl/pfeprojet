@@ -66,19 +66,25 @@
 	<%!String numBat,conclusion, observation;
 	int num,i;
 	List<Extincteur> E = new ArrayList<Extincteur>();
-	List<Organe> organes;
-	String ajout;
 	%>
 	<%
 		session = request.getSession();
+	
+		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+		if(organes!=null) organes.clear();
+		session.setAttribute("organes",organes);
+	
+		String ajout=String.valueOf(session.getAttribute("ajout"));
+		if(ajout!=null) ajout="0";
+		session.setAttribute("ajout",ajout);
+		
+		List<Intervention> interv=(List<Intervention>)session.getAttribute("interv");
+		if(interv!=null) interv.clear();
+		session.setAttribute("Interv",interv);
+	
 		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 		pdf=null;
-		
-		organes=(List<Organe>)session.getAttribute("organes");
-		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout.compareTo("0")!=0) ajout="0";
-		
+		session.setAttribute("pdf",pdf);
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(
 				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
@@ -93,7 +99,7 @@
 		out.println("<center><input type=\"button\" name=\"AjoutExt\" value=\"Ajouter un extincteur\"  onclick=\"self.location.href='installationextincteur.jsp?ajout=1'\"></button></center>");
 		out.println("<br><center><h4> Liste des Extincteurs </h4></center>");
 		// Tableau
-		out.println("<br><form action=\"verificationextincteurvalidee.jsp\">");
+		out.println("<br><form action=\"verificationvalidee.jsp\">");
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
 		out.print("<thead><tr><th> N° Extincteur </th><th> Emplacement </th><th> Type extincteur </th><th>  Marque </th><th>Annee </th><th>Observation</th><th> Etat défecteux </th></tr>");
 		out.print("</thead><tbody>");
@@ -114,7 +120,7 @@
 		out.println("</tbody></table><br><br>"); 
 		out.println("<center><table><tr><td>Conclusion</td> <td></td> <td><textarea name=\"Conclusion\" rows=\"5\" cols=\"47\" required>"+conclusion+"</textarea></td></tr></table>");
 		out.println("<br><input type=\"submit\" value=\"Valider\"></center></form>");
-		session.setAttribute("Extincteurs",E);
+		session.setAttribute("organes",E);
 	%>
 	</div>
 	<%

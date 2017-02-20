@@ -63,18 +63,23 @@
 	<%@ page import="java.util.List"%>
 
 		<%!String numBat,observation;
-			int i,num,numextincteur;
-			List<Organe> organes;
-	 		String ajout;%>
+			int i,num,numextincteur;%>
 		<%
 			session = request.getSession();
+
+			List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+			if(organes!=null) organes.clear();
+			session.setAttribute("organes",organes);
+		
+			String ajout=String.valueOf(session.getAttribute("ajout"));
+			if(ajout!=null) ajout="0";
+			session.setAttribute("ajout",ajout);
+
+		
 			Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 			pdf=null;
-			
-			organes=(List<Organe>)session.getAttribute("organes");
-			if(organes!=null) organes.clear();
-			ajout=String.valueOf(session.getAttribute("ajout"));
-			if(ajout!=null) ajout=null;
+			session.setAttribute("pdf",pdf);
+
 			
 			InitialContext ctx = new InitialContext();
 			Object obj = ctx.lookup(
@@ -86,7 +91,7 @@
 			
 			numextincteur = Integer.parseInt(request.getParameter("numextincteur"));
 			observation=service.rechercheObservationMaintenancecorr(numextincteur);
-			Extincteur E =service.rechercheExtincteur(numextincteur);
+			Extincteur E =(Extincteur)service.rechercheOrganeNum(numextincteur);
 			session.setAttribute("numextincteur",numextincteur);
 		%>
 <form action="maintenancecorrextincteurvalideeconclu" method="post" onsubmit="return check(this);">
