@@ -90,8 +90,22 @@
 			<textarea name="observations" rows="5" cols="47" required placeholder="observations......"><%out.println(observation);%></textarea> 
 	  </td></tr>
 	  <tr></tr>
-	  <tr><td> <label for="typecoupefeu"><i>Type de la porte coupe-feu <font color="#ff0000">*</font></i></label>	 
-			<td><textarea name="typecoupefeu" rows="5" cols="47" required placeholder="type porte coupe-feu..."><%out.println(C.getTypeCoupefeu()); %></textarea></td></tr>
+	 <tr><td> <label for="typecoupefeu"><i>Type du Coupe-feu <font color="#ff0000">*</font></i></label>	 
+			</td> <td> <select name="typecoupefeu" class="class_select">
+
+					<%
+						
+						for (i = 0; i < service.touslesTypeCoupefeu().size(); i++)
+							out.println("<option value=" + service.touslesTypeCoupefeu().get(i).getNumero() + ">"
+									+ service.touslesTypeCoupefeu().get(i).getNom() + "</option>");
+					%>
+				</select>
+			</td>
+			<td><label for="nomType"><i>Ajout d'un nouveau Type </i></label> <input type="text"
+					name="nomType"  placeholder="nom du type..." size="20" class="taille_input_type"/>
+		  
+		 	 </td>
+		</tr>
       <tr></tr>
 		<tr><td> Est-ce que l'organe fonctionne correctement ? </td><td>
 		<INPUT id="oui" type= "radio" name="etat" value="oui">

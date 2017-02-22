@@ -90,6 +90,23 @@
 			<td> <label for="emplacement"><i>Emplacement de la porte coupe-feu <font color="#ff0000">*</font></i></label></td>
 			<td><textarea name="emplacement" rows="5" cols="47" required placeholder="emplacement Porte Coupe-feu..."></textarea></td></tr>
 	  <tr></tr>
+	 <tr><td> <label for="typecoupefeu"><i>Type du Coupe-feu <font color="#ff0000">*</font></i></label>	 
+			</td> <td> <select name="typecoupefeu" class="class_select">
+
+					<%
+						
+						for (i = 0; i < service.touslesTypeCoupefeu().size(); i++)
+							out.println("<option value=" + service.touslesTypeCoupefeu().get(i).getNumero() + ">"
+									+ service.touslesTypeCoupefeu().get(i).getNom() + "</option>");
+					%>
+				</select>
+			</td>
+			<td><label for="nomType"><i>Ajout d'un nouveau Type </i></label> <input type="text"
+					name="nomType"  placeholder="nom du type..." size="20" class="taille_input_type"/>
+		  
+		 	 </td>
+		</tr>
+	  <tr></tr>
 	  <% if(ajout.compareTo("0")==0) { %>
 	  <tr><td><label for="observations"><i>Observations <font color="#ff0000">*</font></i></label></td><td>
 					<textarea name="observations" rows="5" cols="47" required placeholder="observations......"></textarea> 

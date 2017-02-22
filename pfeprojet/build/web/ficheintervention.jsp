@@ -18,6 +18,13 @@
      $(document).ready(function(){
      $('#datatables').dataTable();
      $('#datatables1').dataTable();
+     $('#datatables2').dataTable();
+     $('#datatables3').dataTable();
+     $('#datatables4').dataTable();
+     $('#datatables5').dataTable();
+     $('#datatables6').dataTable();
+     $('#datatables7').dataTable();
+     $('#datatables8').dataTable();
      })
     </script>
 </head>
@@ -174,8 +181,144 @@
 			}
 			out.print("</tbody></table>");
 		}
+		else {
+			if(interventions.get(0).getOrgane() instanceof Pharmacie){
+				out.print("<br><br> <table id=\"datatables1\" class=\"display\" >"); 
+				out.print("<thead><tr><th> Numero de l'intervention </th><th> Numero de l'organe </th><th> Emplacement </th><th> Capacité </th><th> Année </th><th> Observation </th></tr>");
+				out.print("</thead><tbody>");
+				for(i=0;i<interventions.size();i++){
+					out.println("<tr><td>"+interventions.get(i).getNumero()
+								+"</td><td>"+interventions.get(i).getOrgane().getNumero()
+								+"</td><td>"+interventions.get(i).getOrgane().getEmplacement()
+								+"</td><td>"+((Pharmacie)interventions.get(i).getOrgane()).getCapacite()
+								+"</td><td>"+((Pharmacie)interventions.get(i).getOrgane()).getAnnee()
+								+"</td><td>"+interventions.get(i).getOrgane().getObservation()
+							+"</td></tr>");
+					}
+				out.print("</tbody></table>");
+			}
+			else {
+				if(interventions.get(0).getOrgane() instanceof Coupefeu){
+					out.print("<br><br> <table id=\"datatables2\" class=\"display\" >"); 
+					out.print("<thead><tr><th> Numero de l'intervention </th><th> Numero de l'organe </th><th> Emplacement </th><th> Type </th><th> Observation </th></tr>");
+					out.print("</thead><tbody>");
+					for(i=0;i<interventions.size();i++){
+						out.println("<tr><td>"+interventions.get(i).getNumero()
+									+"</td><td>"+interventions.get(i).getOrgane().getNumero()
+									+"</td><td>"+interventions.get(i).getOrgane().getEmplacement()
+									+"</td><td>"+((Coupefeu)interventions.get(i).getOrgane()).getType().getNom()
+									+"</td><td>"+interventions.get(i).getOrgane().getObservation()
+								+"</td></tr>");
+						}
+					out.print("</tbody></table>");
+				}
+				else {
+					if(interventions.get(0).getOrgane() instanceof Poteaux){
+						out.print("<br><br> <table id=\"datatables3\" class=\"display\" >"); 
+						out.print("<thead><tr><th> Numero de l'intervention </th><th> Numero de l'organe </th><th> Emplacement </th><th> Diamètre </th><th> Pression statique </th><th> Pression 60</th><th> Pression 1bar </th><th> Observation </th></tr>");
+						out.print("</thead><tbody>");
+						for(i=0;i<interventions.size();i++){
+							out.println("<tr><td>"+interventions.get(i).getNumero()
+										+"</td><td>"+interventions.get(i).getOrgane().getNumero()
+										+"</td><td>"+interventions.get(i).getOrgane().getEmplacement()
+										+"</td><td>"+((Poteaux)interventions.get(i).getOrgane()).getDiametre()
+										+"</td><td>"+((Poteaux)interventions.get(i).getOrgane()).getPressionstat()
+										+"</td><td>"+((Poteaux)interventions.get(i).getOrgane()).getPression60()
+										+"</td><td>"+((Poteaux)interventions.get(i).getOrgane()).getPression1bar()
+										+"</td><td>"+interventions.get(i).getOrgane().getObservation()
+									+"</td></tr>");
+							}
+						out.print("</tbody></table>");
+					}
+					else {
+						if(interventions.get(0).getOrgane() instanceof Eclairage){
+							String presence;
+							String fonctionne;
+							out.print("<br><br> <table id=\"datatables4\" class=\"display\" >"); 
+							out.print("<thead><tr><th> Numero de l'intervention </th><th> Numero de l'organe </th><th>Emplacement</th><th>Type</th><th> Marque </th><th>Présence télécommande </th><th>fonctionnement télécommande </th><th>Type télécommande </th><th> Observation </th></tr>");
+							out.print("</thead><tbody>");
+							for(i=0;i<interventions.size();i++){
+								 	if(((Eclairage)interventions.get(i).getOrgane()).isPresencetelecommande()==true)
+											presence="oui";
+									else
+											presence="non";
+									if(((Eclairage)interventions.get(i).getOrgane()).isFonctionnementtelecommande()==true)
+											fonctionne="oui";
+										else
+											fonctionne="non";
+								out.println("<tr><td>"+interventions.get(i).getNumero()
+											+"</td><td>"+interventions.get(i).getOrgane().getNumero()
+											+"</td><td>"+interventions.get(i).getOrgane().getEmplacement()
+											+"</td><td>"+((Eclairage)interventions.get(i).getOrgane()).getType().getNom()
+											+"</td><td>"+((Eclairage)interventions.get(i).getOrgane()).getMarque().getNom()
+											+"</td><td>"+presence
+											+"</td><td>"+fonctionne
+											+"</td><td>"+((Eclairage)interventions.get(i).getOrgane()).getTypetelecommande().getNom()
+											+"</td><td>"+interventions.get(i).getOrgane().getObservation()
+											+"</td></tr>");
+							}
+							out.print("</tbody></table>");
+						}
+						else {
+							if(interventions.get(0).getOrgane() instanceof Signaletique){
+								out.print("<br><br> <table id=\"datatables5\" class=\"display\" >"); 
+								out.print("<thead><tr><th> Numero de l'intervention </th><th> Numero de l'organe </th><th>Emplacement</th><th> Observation </th></tr>");
+								out.print("</thead><tbody>");
+								for(i=0;i<interventions.size();i++){
+									out.println("<tr><td>"+interventions.get(i).getNumero()
+											+"</td><td>"+interventions.get(i).getOrgane().getNumero()
+											+"</td><td>"+interventions.get(i).getOrgane().getEmplacement()
+											+"</td><td>"+interventions.get(i).getOrgane().getObservation()
+											+"</td></tr>");
+								}
+								out.print("</tbody></table>");
+							}
+							else {
+								if(interventions.get(0).getOrgane() instanceof RIA){
+									out.print("<br><br> <table id=\"datatables6\" class=\"display\" >"); 
+									out.print("<thead><tr><th> Numero de l'intervention </th><th> Numero de l'organe </th><th>Emplacement</th><th>Type</th><th>Pression Statique</th><th>Pression Dynamique</th><th>Portee</th><th> Observation </th></tr>");
+									out.print("</thead><tbody>");
+									for(i=0;i<interventions.size();i++){
+										out.println("<tr><td>"+interventions.get(i).getNumero()
+												+"</td><td>"+interventions.get(i).getOrgane().getNumero()
+												+"</td><td>"+interventions.get(i).getOrgane().getEmplacement()
+												+"</td><td>"+((RIA)interventions.get(i).getOrgane()).getType().getNom()
+												+"</td><td>"+((RIA)interventions.get(i).getOrgane()).getPressionStatique()
+												+"</td><td>"+((RIA)interventions.get(i).getOrgane()).getPressionDynamique()
+												+"</td><td>"+((RIA)interventions.get(i).getOrgane()).getPortee()
+												+"</td><td>"+interventions.get(i).getOrgane().getObservation()
+												+"</td></tr>");
+									}
+									out.print("</tbody></table>");
+
+								}
+								else{
+									if(interventions.get(0).getOrgane() instanceof Alarme){
+										out.print("<br><br> <table id=\"datatables8\" class=\"display\" >"); 
+										out.print("<thead><tr><th> Numero de l'intervention </th><th> Numero de l'organe </th><th>Emplacement</th><th>Type</th><th> Observation </th><th> Fiche </th></tr>");
+										out.print("</thead><tbody>");
+										for(i=0;i<interventions.size();i++){
+											out.println("<tr><td>"+interventions.get(i).getNumero()
+													+"</td><td>"+interventions.get(i).getOrgane().getNumero()
+													+"</td><td>"+interventions.get(i).getOrgane().getEmplacement()
+													+"</td><td>"+((Alarme)interventions.get(i).getOrgane()).getType().getNom()
+													+"</td><td>"+interventions.get(i).getOrgane().getObservation()
+													+"</td><td> <form action=\"fichealarme.jsp\" method=\"GET\" ><input type=\"hidden\" id=\"idintervention\" name=\"numintervention\" value="
+													+ interventions.get(i).getNumero()
+													+ "> <input type=\"submit\" name=\" Consulter la fiche de l'alarme  \" value=\" Consulter la fiche de l'alarme \" /></form></td></tr>"
+													);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		out.print("<center><h4>Liste des Pièces</h4></center><br><br>");
 		if(interventions.get(0) instanceof Preventive){		
-			out.print("<br><br> <table id=\"datatables1\" class=\"display\" >"); 
+			out.print("<br><br> <table id=\"datatables7\" class=\"display\" >"); 
 			out.print("<thead><tr><th> Numero de la pièce </th><th> Numero de l'organe </th></th></tr>");
 			out.print("</thead><tbody>");
 			

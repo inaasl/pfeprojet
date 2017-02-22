@@ -49,11 +49,13 @@
 		<%@ page import= "java.util.ArrayList"%>
 		
 		
-<%! String numBat,observ,conclusion,empla,type,etat;
+<%! String numBat,observ,conclusion,empla,type,type2,etat;
 	int numB,numT,numcoupefeu;
 	List<Corrective> interv;
 	Coupefeu Coupefeucourant;
 	boolean Etat;
+    TypeCoupefeu Type;
+
 %>
 <%
 	List<Organe> organes=(List<Organe>)session.getAttribute("organes");
@@ -70,7 +72,8 @@
 	
 	empla=request.getParameter("emplacement");
 	type=request.getParameter("typecoupefeu");
-	observ =request.getParameter("observations");
+	observ = request.getParameter("observations");
+	type2 = request.getParameter("nomType");
 	etat=request.getParameter("etat");
 
 	
@@ -90,12 +93,23 @@
 	InitialContext ctx = new InitialContext();
 	Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 	ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
+	
+	if (type2.compareTo("") != 0){ 
+		type=String.valueOf(type2);
+		service.ajouttypecoupefeu(type);
+		Type=service.rechercheTypeCoupefeuNom(type);
+	}
+	else {
+		Type=service.rechercheTypeCoupefeu(type);
+	}
+	
+	
 	String format = "yyyy-MM-dd";
 	java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
 	java.util.Date date = new java.util.Date();
 	
 	Coupefeucourant=(Coupefeu)service.rechercheOrganeNum(numcoupefeu);
-	Coupefeucourant=service.remplacementcoupefeu(Coupefeucourant, empla, observ,type, Etat);
+	Coupefeucourant=service.remplacementcoupefeu(Coupefeucourant, empla, observ,Type, Etat);
 	
 	
 	conclusion=service.rechercheConclusionMaintenancecorrCoupefeu(numB);

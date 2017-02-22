@@ -13,7 +13,7 @@ public class Eclairage extends Organe implements java.io.Serializable {
 	private boolean presencetelecommande;
 	private boolean fonctionnementtelecommande;
 	
-	private MarqueEclairage marqueeclairage;
+	private MarqueEclairage marque;
 	private Typetelecommande typetelecommande;
 
 	public Eclairage () { };
@@ -31,14 +31,14 @@ public class Eclairage extends Organe implements java.io.Serializable {
 		this.fonctionnementtelecommande = newVar;
 	}
 	@ManyToOne
-	public MarqueEclairage getMarqueeclairage () {
-		return marqueeclairage;
+	public MarqueEclairage getMarque () {
+		return marque;
 	}
-	public void setMarqueeclairage(MarqueEclairage marque){
-		this.marqueeclairage=marque;
+	public void setMarque(MarqueEclairage marque){
+		this.marque=marque;
 	}
-	public void addMarqueeclairage (MarqueEclairage new_object) {
-		this.marqueeclairage=new_object;
+	public void addMarque (MarqueEclairage new_object) {
+		this.marque=new_object;
 	}
 	@ManyToOne
 	public Typetelecommande getTypetelecommande () {
@@ -67,7 +67,7 @@ public class Eclairage extends Organe implements java.io.Serializable {
 		return "Fiche de l'eclairage : \n  Numero de l'organe : "+this.getNumero()
 				+"\nCategorie : " +this.type.getNom()
 			//	+"\nEmplacement : "+this.getEmplacement()
-				+"\nMarque : "+this.marqueeclairage
+				+"\nMarque : "+this.marque
 				+"\nType Telecommande : "+this.typetelecommande
 				+"\nType Observation : "+this.getObservation()+"\n"+this.getConclusion();
 	}

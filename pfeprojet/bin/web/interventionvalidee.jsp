@@ -12,6 +12,22 @@
 <title></title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="datatables.css" />
+    <script type="text/javascript" src="jquery.dataTables.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.css"/>
+ 
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
+
+    <script type="text/javascript" charset="utf-8">
+     $(document).ready(function(){
+     $('#datatables').dataTable();
+    
+     })
+    </script>
 </head>
 <body>
 	<header class="header">
@@ -49,10 +65,13 @@
 	<%!
 	List<Intervention> Interv;
 	List<Intervention>Interventionajoutee=new ArrayList<Intervention>();
-	String conclu,numBat,ajout;
+	String conclu,numBat,ajout,nomPiece,nomAlarme;
 	Pdfgenere pdf;
-	int numB;
+	int numB,i,numAlarme;
+	List<Piece> listP = new ArrayList<Piece>() ;
+	Piece piececourante;
 	List<Organe> organes;
+	List<Alarme> A=new ArrayList<Alarme>();
 	%>
 <%
 	session = request.getSession();
@@ -77,19 +96,111 @@
 	if(ajout.compareTo("0")==0){
 		conclu = request.getParameter("conclusion");
 		Interv = (List<Intervention>)session.getAttribute("interv");
-		
-		for(int i=0;i<Interv.size();i++){
-			Interventionajoutee.add(service.ajoutIntervention(numB,Interv.get(i),Interv.get(i).getOrgane(), conclu));
-		}
-		Interv.clear();
-		session.setAttribute("Interv",Interv);
-		pdf=service.ajoutpdf(Interventionajoutee);
-		session.setAttribute("pdf",pdf);
+		if(Interv.get(0) instanceof Preventive && Interv.get(0).getOrgane() instanceof Alarme){
+		A=service.rechercheAlarmeBatiment(numB);
+		%>
+		<div class="panel panel-primary">
+        <div class="panel-heading">Pieces</div>        
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+             <th class="col-sm-4">Nom de la pièce</th>
+             <th class="col-sm-4">Numéro Alarme </th>
+             <th class="col-sm-2"></th>
+            </tr>
+          </thead>
+		 <tbody>
+            <tr v-for="piece in pieces">
+              <td>{{ piece.nom }}</td>
+              <td>{{ piece.alarme }}</td> 
+              <td><button type="button" class="btn btn-warning btn-block" v-on:click="suppression($index)">Supprimer</button></td>
+            </tr>  
+            <tr>
+              <td><input name="nomPiece" type="text" class="form-control" v-model="inputNom" v-el:modif placeholder="Nom"></td>
+              <td><select name="numAlarme" id="liste" class="class_select" v-model="inputAlarme">
+              <%
+              for(i=0;i<A.size();i++){
+            	  out.println("<option value=" + A.get(i).getNumero() + ">"
+							+ A.get(i).getNumero() + "</option>");
+              }
+              %>
+            </select></td>
+              <td colspan="2"><button type="button" class="btn btn-primary btn-block" v-on:click="ajouter()">Ajouter</button></td>
+            </tr>
+          </tbody>
+          </table>
+           <div class="panel-footer">
+          &nbsp
+          <button type="button" class="button btn btn-xs btn-warning" v-on:click="toutSupprimer">Tout supprimer</button>
+        </div>
+      </div>
+				
+		</div>
+	     <script src="http://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
+     <script type="text/javascript">
+    new Vue({
+        el: '#container',
+        data: {
+          pieces: [],
+          supprimer: [],
+          inputNom: '',
+        },
+        methods: {
+          suppression: function(index) {
+            this.supprimer.push(this.pieces[index]);
+            this.pieces.splice(index, 1);
+          },
+          toutSupprimer: function() {
+            this.supprimer = this.supprimer.concat(this.pieces);
+            this.pieces = [];
+          },
+          ajouter: function() {
+           this.pieces.push({nom: this.inputNom, alarme: this.inputAlarme});
+            $.ajax({
+                url: "interventionvalidee.jsp",
+                data: {
+                	nomPiece: this.inputNom,
+                	numAlarme: this.inputAlarme,
+                	etatajout: 'oui'
+                },
+                });
+            <% 
+               ajout=request.getParameter("etatajout");
+         	   if(ajout!=null){
+                   nomPiece=request.getParameter("nomPiece");
+                   numAlarme=Integer.parseInt(request.getParameter("numAlarme"));
+                   piececourante=service.AjoutPiece(nomPiece,numAlarme);
+				   listP.add(piececourante);
+         	   }
+			%>
+			this.inputNom = '';
+          },
+        }
+      });
+    </script>
+			
+			<%
+		session.setAttribute("conclusion",conclu);
 		out.println("<center><br>Intervention effectuée avec succès");
-		out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionpdf.jsp'\"></button></td></tr>");
-		Interventionajoutee.clear();
-		out.println("<tr><td><input type=\"button\" name=\"Fichebatiment\" value=\"Retour a la fiche du batiment \" onclick=\"self.location.href='fichebatiment.jsp'\"></button></td></tr></table>");
-		out.println("</center>");
+		out.println("<center><form action =\"maintenanceprevalarmeajout.jsp\"><input type=\"submit\" value=\"Ajouter les pièces\"></center></form> ");
+		session.setAttribute("listP",listP);
+		}
+		
+		else {
+			for(int i=0;i<Interv.size();i++){
+				Interventionajoutee.add(service.ajoutIntervention(numB,Interv.get(i),Interv.get(i).getOrgane(), conclu));
+			}
+			Interv.clear();
+			session.setAttribute("interv",Interv);
+			pdf=service.ajoutpdf(Interventionajoutee);
+			session.setAttribute("pdf",pdf);
+			
+			out.println("<center><br>Intervention effectuée avec succès");
+			out.println("<table><tr><td><input type=\"button\" name=\"Imprimerpdf\" value=\"Imprimer la fiche de l'intervention\"  onclick=\"self.location.href='interventionpdf.jsp'\"></button></td></tr>");
+			Interventionajoutee.clear();
+			out.println("<tr><td><input type=\"button\" name=\"Fichebatiment\" value=\"Retour a la fiche du batiment \" onclick=\"self.location.href='fichebatiment.jsp'\"></button></td></tr></table>");
+			out.println("</center>");
+		}
 	}
 	else {
 		organes=(List<Organe>)session.getAttribute("organes");
@@ -134,6 +245,51 @@
 										else {
 											if(ajout.compareTo("17")==0) {
 												out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrpoteaux.jsp\">");
+											}
+											else {
+												if(ajout.compareTo("7")==0){
+													out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationeclairage.jsp\">");
+												}
+												else {
+													if(ajout.compareTo("8")==0){
+														out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorreclairage.jsp\">");
+													}
+													else {
+														if(ajout.compareTo("9")==0){
+															out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancepreveclairage.jsp\">");
+														}
+														else {
+															if(ajout.compareTo("13")==0){
+																out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationria.jsp\">");
+															}
+															else {
+																if(ajout.compareTo("14")==0){
+																	out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrria.jsp\">");
+																}
+																else {
+																	if(ajout.compareTo("15")==0){
+																		out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenanceprevria.jsp\">");
+																	}
+																	else {
+																		if(ajout.compareTo("21")==0){
+																			out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationalarme.jsp\">");
+																		}							
+																		else{
+																			if(ajout.compareTo("23")==0){
+																				out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenanceprevalarme.jsp\">");
+																			}
+																			else {
+																				if(ajout.compareTo("22")==0){
+																					out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorralarme.jsp\">");
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
 											}
 										}
 									}

@@ -69,6 +69,8 @@
 	<label for="poteaux">Poteaux Incendie</label>
 	<INPUT id="coupefeu" type= "radio" name="choixorg" value="coupefeu"> 
 	<label for="coupefeu">Porte Coupe-Feu</label> 
+	<INPUT id="alarme" type= "radio" name="choixorg" value="alarme"> 
+	<label for="alarme">Alarme Incendie</label> 
 </fieldset>	
 	<br><br><center><input type="submit" value="Valider"></center>
 </FORM>

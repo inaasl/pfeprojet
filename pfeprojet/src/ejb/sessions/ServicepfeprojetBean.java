@@ -19,6 +19,58 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	public ServicepfeprojetBean() {
 	}
 
+	// fonction observation Alarme
+	
+	public String ObservationsAlarme(String observation,String optique,String ionique
+			,String thermique, String thermov,String flamme,
+			String aspiration, String report,
+			String manuel,String sonore,String lumineux){
+		
+		String result = "Observation Globale : ";
+		result = result + observation + "||";
+		result = result + "Observation detecteur optique : " ;
+		result = result + optique + "||";
+		result = result + "Observation detecteur ionique : " ;
+		result = result + ionique + "||";
+		result = result + "Observation detecteur thermique : ";
+		result = result + thermique + "||";
+		result = result + "Observation detecteur thermovelocimetrique : ";
+		result = result + thermov + "||";
+		result = result + "Observation detecteur de flammes : " ;
+		result = result + flamme + "||";
+		result = result + "Observation detecteur par aspiration : ";
+		result = result + aspiration + "||";
+		result = result + "Observation autre report : ";
+		result = result + report + "||";
+		result = result + "Observation declencheur manuel : " ;
+		result = result + manuel + "||";
+		result = result + "Observation diffuseur sonore : ";
+		result = result + sonore + "||";
+		result = result + "Observation diffuseur lumineux : ";
+		result = result + lumineux + "||";
+		return result;
+		
+	}
+	// Test alarme
+		public String testAlarme(int testvoltbatterie,int testampbatterie,int chargeur,int testvoltaes,
+				int testampaes,int testchargeuraes){
+			String result="";
+			result = result + "Test Batterie : " ;
+			result = result + String.valueOf(testvoltbatterie) + "Volts ||";
+			result = result + String.valueOf(testampbatterie) + "Ampère/h ";
+			result = result + "Test Chargeur : " ;
+			result = result + String.valueOf(chargeur) + "Volts";
+			result = result + "Test Batterie AES : " + "||";
+			result = result + String.valueOf(testvoltaes) + "Volts ||";
+			result = result + String.valueOf(testampaes) + "Ampère/h ";
+			result = result + "Test Chargeur : " ;
+			result = result + String.valueOf(testchargeuraes) + "Volts";
+			return result;
+		}
+	
+	
+	
+	
 	// fonction check
 	// fonction check batiment
 	public void checkbatiment(int numerobatiment) throws BatimentInconnuException{
@@ -161,6 +213,108 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	public MarqueExtincteur rechercheMarqueExtincteurNom(String nom) {
 		return (MarqueExtincteur) em.createQuery("from MarqueExtincteur m WHERE m.nom like :name").setParameter("name",nom).getSingleResult();
 	}
+	
+	// Recherche du type d'eclairage
+	public TypeEclairage rechercheTypeEclairage(String Num) {
+		int Numero = Integer.parseInt(Num);
+		TypeEclairage T = em.find(TypeEclairage.class, Numero);
+		return T;
+	}
+	
+	public TypeEclairage rechercheTypeEclairageNom(String nom) {
+		return (TypeEclairage) em.createQuery("from TypeEclairage t WHERE t.nom like :name").setParameter("name",nom).getSingleResult();
+	}
+	// recherche marque d'eclairage
+	public MarqueEclairage rechercheMarqueEclairage(String Num) {
+		int Numero = Integer.parseInt(Num);
+		MarqueEclairage M = em.find(MarqueEclairage.class, Numero);
+		return M;
+	}
+	public MarqueEclairage rechercheMarqueEclairageNom(String nom) {
+		return (MarqueEclairage) em.createQuery("from MarqueEclairage m WHERE m.nom like :name").setParameter("name",nom).getSingleResult();
+	}
+	// Recherche du type de telecommande
+	public Typetelecommande rechercheTypeTelecommande(String Num) {
+		int Numero = Integer.parseInt(Num);
+		Typetelecommande T = em.find(Typetelecommande.class, Numero);
+		return T;
+	}
+	
+	public Typetelecommande rechercheTypeTelecommandeNom(String nom) {
+		return (Typetelecommande) em.createQuery("from Typetelecommande t WHERE t.nom like :name").setParameter("name",nom).getSingleResult();
+	}
+	// Recherche du type
+	public TypeRia rechercheTypeRia(String Num) {
+		int Numero = Integer.parseInt(Num);
+		TypeRia T = em.find(TypeRia.class, Numero);
+		return T;
+	}
+	
+	public TypeRia rechercheTypeRiaNom(String nom) {
+		return (TypeRia) em.createQuery("from TypeRia t WHERE t.nom like :name").setParameter("name",nom).getSingleResult();
+	}
+	// Recherche du type coupe-feu
+	public TypeCoupefeu rechercheTypeCoupefeu(String Num) {
+		int Numero = Integer.parseInt(Num);
+		TypeCoupefeu T = em.find(TypeCoupefeu.class, Numero);
+		return T;
+	}
+	
+	public TypeCoupefeu rechercheTypeCoupefeuNom(String nom) {
+		return (TypeCoupefeu) em.createQuery("from TypeCoupefeu t WHERE t.nom like :name").setParameter("name",nom).getSingleResult();
+	}
+	
+	// Recherche du type Alarme
+	public TypeAlarme rechercheTypeAlarme(String Num) {
+		int Numero = Integer.parseInt(Num);
+		TypeAlarme T = em.find(TypeAlarme.class, Numero);
+		return T;
+	}
+	
+	public TypeAlarme rechercheTypeAlarmeNom(String nom) {
+		return (TypeAlarme) em.createQuery("from TypeAlarme t WHERE t.nom like :name").setParameter("name",nom).getSingleResult();
+	}
+	// recherche marque alarme
+	public MarqueAlarme rechercheMarqueAlarme(String Num) {
+		int Numero = Integer.parseInt(Num);
+		MarqueAlarme M = em.find(MarqueAlarme.class, Numero);
+		return M;
+	}
+	public MarqueAlarme rechercheMarqueAlarmeNom(String nom) {
+		return (MarqueAlarme) em.createQuery("from MarqueAlarme m WHERE m.nom like :name").setParameter("name",nom).getSingleResult();
+	}
+	// Recherche du type de batterie
+	public TypeBatterie rechercheTypeBatterie(String Num) {
+		int Numero = Integer.parseInt(Num);
+		TypeBatterie T = em.find(TypeBatterie.class, Numero);
+		return T;
+	}
+	
+	public TypeBatterie rechercheTypeBatterieNom(String nom) {
+		return (TypeBatterie) em.createQuery("from TypeBatterie t WHERE t.nom like :name").setParameter("name",nom).getSingleResult();
+	}
+	// Recherche du type de batterie AES
+	public TypeBatterieAES rechercheTypeBatterieaes(String Num) {
+		int Numero = Integer.parseInt(Num);
+		TypeBatterieAES T = em.find(TypeBatterieAES.class, Numero);
+		return T;
+	}
+	
+	public TypeBatterieAES rechercheTypeBatterieaesNom(String nom) {
+		return (TypeBatterieAES) em.createQuery("from TypeBatterieAES t WHERE t.nom like :name").setParameter("name",nom).getSingleResult();
+	}
+	
+	// Recherche du type de AES
+	public TypeAES rechercheTypeaes(String Num) {
+		int Numero = Integer.parseInt(Num);
+		TypeAES T = em.find(TypeAES.class, Numero);
+		return T;
+	}
+	
+	public TypeAES rechercheTypeaesNom(String nom) {
+		return (TypeAES) em.createQuery("from TypeAES t WHERE t.nom like :name").setParameter("name",nom).getSingleResult();
+	}
+	
 	// recherche des organes d'un batiment 
 	@SuppressWarnings("unchecked")
 	public List<Organe> rechercheOrganeBatiment(int numeroBatiment){
@@ -178,14 +332,26 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	public List<Pharmacie> recherchePharmacieBatiment(int numeroBatiment){
 		return em.createQuery("from Pharmacie p WHERE p.batiment.numero = "+numeroBatiment).getResultList();
 	}
+	// recherche des coupe-feu d'un batiment
 	public List<Coupefeu> rechercheCoupefeuBatiment(int numeroBatiment){
 		return em.createQuery("from Coupefeu c WHERE c.batiment.numero = "+numeroBatiment).getResultList();
 	}
-	
+	// recherche des poteaux d'un batiment
 	public List<Poteaux> recherchePoteauxBatiment(int numeroBatiment){
 		return em.createQuery("from Poteaux p WHERE p.batiment.numero = "+numeroBatiment).getResultList();
 	}
-	
+	// recherche des eclairages d'un batiment
+	public List<Eclairage> rechercheEclairageBatiment(int numeroBatiment){
+		return em.createQuery("from Eclairage e WHERE e.batiment.numero = "+numeroBatiment).getResultList();
+	}
+	// recherche des eclairages d'un batiment
+	public List<RIA> rechercheRiaBatiment(int numeroBatiment){
+		return em.createQuery("from RIA r WHERE r.batiment.numero = "+numeroBatiment).getResultList();
+	}
+	// recherche des alarmes d'un batiment
+	public List<Alarme> rechercheAlarmeBatiment(int numeroBatiment){
+		return em.createQuery("from Alarme a WHERE a.batiment.numero = "+numeroBatiment).getResultList();
+	}
 	// recherche intervention
 	public List<Intervention> rechercheInterventionOrgane(int numeroOrgane) {
 		return em.createQuery("from Intervention i where i.organe.numero="+numeroOrgane).getResultList();
@@ -194,6 +360,11 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	public List<Intervention> rechercheInterventionPdf(int numeroPdf) {
 		return em.createQuery("from Intervention i where i.pdf.numero="+numeroPdf).getResultList();
 	}
+	// recherche intervention num
+	public Intervention rechercheInterventionNum(int numeroIntervention){
+		return em.find(Intervention.class,numeroIntervention);
+	}
+	
 	// recherche pdf batiment
 	public List<Pdfgenere> recherchePdfgenereBatiment(int numeroBatiment){
 		List<Pdfgenere> listetotale = getlistePdfgenere();
@@ -298,6 +469,69 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		em.persist(M);
 	}
 
+	// Ajout Type Eclairage
+	public void ajouttypeeclairage(String nom) {
+		TypeEclairage T = new TypeEclairage();
+		T.setNom(nom);
+		em.persist(T);
+	}
+	// Ajout Marque Extincteur
+	public void ajoutmarqueeclairage(String nom) {
+		MarqueEclairage M = new MarqueEclairage();
+		M.setNom(nom);
+		em.persist(M);
+	}
+	// Ajout Type Telecommande
+	public void ajouttypetelecommande(String nom) {
+		Typetelecommande T = new Typetelecommande();
+		T.setNom(nom);
+		em.persist(T);
+	}
+	// Ajout Type RIA
+	public void ajouttyperia(String nom) {
+		TypeRia T = new TypeRia();
+		T.setNom(nom);
+		em.persist(T);
+	}
+	// Ajout Type Coupefeu
+	public void ajouttypecoupefeu(String nom) {
+		TypeCoupefeu T = new TypeCoupefeu();
+		T.setNom(nom);
+		em.persist(T);
+	}
+	// Ajout Type Alarme
+	public void ajouttypealarme(String nom) {
+		TypeAlarme T = new TypeAlarme();
+		T.setNom(nom);
+		em.persist(T);
+	}
+	// Ajout Marque Alarme
+	public void ajoutmarquealarme(String nom) {
+		MarqueAlarme M = new MarqueAlarme();
+		M.setNom(nom);
+		em.persist(M);
+	}
+
+	// Ajout Type Batterie
+	public void ajouttypebatterie(String nom) {
+		TypeBatterie T = new TypeBatterie();
+		T.setNom(nom);
+		em.persist(T);
+	}
+	
+	// Ajout Type Batterie AES
+	public void ajouttypebatterieaes(String nom) {
+		TypeBatterieAES T = new TypeBatterieAES();
+		T.setNom(nom);
+		em.persist(T);
+	}
+	
+	// Ajout Type Type AES
+	public void ajouttypeaes(String nom) {
+		TypeAES T = new TypeAES();
+		T.setNom(nom);
+		em.persist(T);
+	}
 	
 	// Interventions sur les extincteurs
 	// Intervention : Installation
@@ -325,6 +559,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		E.setMarque(M);
 		TypeExtincteur Tp = rechercheTypeExtincteur(nomtype);
 		E.setType(Tp);
+		E.setConclusion("--");
 		return E;
 	}
 	// Ajout Pharmacie
@@ -337,17 +572,19 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		P.setBatiment(B);
 		P.setCapacite(capacite);
 		P.setMarche(true);
+		P.setConclusion("--");
 		return P;
 	}
 	// Ajout Coupefeu
-	public Coupefeu ajoutCoupefeu(int numbatiment, String Emp,String Obs, String type)throws BatimentInconnuException{
+	public Coupefeu ajoutCoupefeu(int numbatiment, String Emp,String Obs, TypeCoupefeu type)throws BatimentInconnuException{
 		Batiment B = rechercheBatimentnum(numbatiment);
 		Coupefeu C = new Coupefeu();
 		C.setEmplacement(Emp);
 		C.setObservation(Obs);
 		C.setBatiment(B);
-		C.setTypeCoupefeu(type);
+		C.setType(type);
 		C.setMarche(true);
+		C.setConclusion("--");
 		return C;
 	}
 	// Ajout Poteaux
@@ -362,17 +599,137 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		P.setPression1bar(pression1bar);
 		P.setBatiment(B);
 		P.setMarche(true);
+		P.setConclusion("--");
 		return P;
 	}
-	
-	
+	// Ajout eclairage
+	public Eclairage ajoutEclairage(int numbatiment,String Emp,String Obs,TypeEclairage type, MarqueEclairage marque, boolean presence,boolean fonctionne,Typetelecommande typetel)throws BatimentInconnuException{
+		Batiment B = rechercheBatimentnum(numbatiment);
+		Eclairage E = new Eclairage();
+		E.setEmplacement(Emp);
+		E.setObservation(Obs);
+		E.setType(type);
+		E.setMarque(marque);
+		E.setPresencetelecommande(presence);
+		E.setFonctionnementtelecommande(fonctionne);
+		E.setTypetelecommande(typetel);
+		E.setBatiment(B);
+		E.setMarche(true);
+		E.setConclusion("--");
+		return E;
+	}
+	// Ajout signaletique
+	public Signaletique ajoutSignaletique(int numbatiment,String Emp,String Obs)throws BatimentInconnuException{
+		Batiment B = rechercheBatimentnum(numbatiment);
+		Signaletique S = new Signaletique();
+		S.setEmplacement(Emp);
+		S.setObservation(Obs);
+		S.setBatiment(B);
+		S.setMarche(true);
+		S.setConclusion("--");
+		return S;
+	}
+	// Ajout RIA
+	public RIA ajoutRia(int numbatiment,String Emp, String Obs, TypeRia type,int pressionstat,int pressiondynam,int portee)throws BatimentInconnuException{
+		Batiment B = rechercheBatimentnum(numbatiment);
+		RIA R = new RIA();
+		R.setEmplacement(Emp);
+		R.setObservation(Obs);
+		R.setConclusion("--");
+		R.setType(type);
+		R.setBatiment(B);
+		R.setPressionStatique(pressionstat);
+		R.setPressionDynamique(pressiondynam);
+		R.setPortee(portee);
+		R.setMarche(true);
+		return R;
+	}
+	// Verification Alarme
+	public Alarme verificationAlarme(Alarme A,int testvoltbatterie,int testampbatterie,int testchargeurbatterie,String optique,String obsionique,String thermique,String thermov,
+			String flamme,String aspiration,String report,String manuel,String sonore,String lumineux,int testvoltaes,int testampaes, int testchargeuraes){
+		A.setTestVoltBatterie(testvoltbatterie);
+		A.setTestAmpereBatterie(testampbatterie);
+		A.setTestVoltChargeur(testchargeurbatterie);
+		A.setObservationDetecteurOptique(optique);
+		A.setObservationDetecteurIonique(obsionique);
+		A.setObservationDetecteurThermique(thermique);
+		A.setObservationDetecteurThermovelocimetrique(thermov);
+		A.setObservationDetecteurFlammes(flamme);
+		A.setObservationDetecteurAspiration(aspiration);
+		A.setObservationAutreReport(report);
+		A.setObservationDeclencheurManuel(manuel);
+		A.setObservationDiffusionSonore(sonore);
+		A.setObservationDiffusionSonoreFlash(lumineux);
+		A.setTestVoltBatterieAES(testvoltaes);
+		A.setTestAmpereBatterieAES(testampaes);
+		A.setTestVoltChargeurAES(testchargeuraes);
+		em.merge(A);
+		return A;
+	}
+	// Ajout Alarme
+	public Alarme ajoutAlarme(int numbatiment,String Emp,String Obs,MarqueAlarme marquealarme,TypeAlarme typealarme,int annee,int nombrebatterie,int xbatterie,int ybatterie,
+			int hbatterie,TypeBatterie typebatterie,int testvoltbatterie,int testampbatterie,int testchargeurbatterie,int nboptique, 
+			String optique,int nbionique,String obsionique,int nbthermique,String thermique,int nbthermov,String thermov,
+			int nbflamme,String flamme,int nbaspiration,String aspiration,int nbreport,String report,int nbmanuel,String manuel,
+			int nbsonore,String sonore,int nblumineux,String lumineux,int nbAES,TypeAES typeaes, int nbbatterieaes, int xbatterieaes,
+			int ybatterieaes,int hbatterieaes,TypeBatterieAES typebatterieaes, int testvoltaes,int testampaes, int testchargeuraes ) throws BatimentInconnuException{
+		Batiment B = rechercheBatimentnum(numbatiment);
+		Alarme A = new Alarme();
+		A.setEmplacement(Emp);
+		A.setObservation(Obs);
+		A.setMarque(marquealarme);
+		A.setType(typealarme);
+		A.setAnnee(annee);
+		A.setNombreBatterie(nombrebatterie);
+		A.setXbatterie(xbatterie);
+		A.setYbatterie(ybatterie);
+		A.setHbatterie(hbatterie);
+		A.setTypeBatterie(typebatterie);
+		A.setTestVoltBatterie(testvoltbatterie);
+		A.setTestAmpereBatterie(testampbatterie);
+		A.setTestVoltChargeur(testchargeurbatterie);
+		A.setNombreDetecteurOptique(nboptique);
+		A.setObservationDetecteurOptique(optique);
+		A.setNombreDetecteurIonique(nbionique);
+		A.setObservationDetecteurIonique(obsionique);
+		A.setNombreDetecteurThermique(nbthermique);
+		A.setObservationDetecteurThermique(thermique);
+		A.setNombreDetecteurThermovelocimetrique(nbthermov);
+		A.setObservationDetecteurThermovelocimetrique(thermov);
+		A.setNombreDetecteurFlammes(nbflamme);
+		A.setObservationDetecteurFlammes(flamme);
+		A.setNombreDetecteurAspiration(nbaspiration);
+		A.setObservationDetecteurAspiration(aspiration);
+		A.setNombreAutreReport(nbreport);
+		A.setObservationAutreReport(report);
+		A.setNombreDeclencheurManuel(nbmanuel);
+		A.setObservationDeclencheurManuel(manuel);
+		A.setNombreDiffusionSonore(nbsonore);
+		A.setObservationDiffusionSonore(sonore);
+		A.setNombreDiffusionSonoreFlash(nblumineux);
+		A.setObservationDiffusionSonoreFlash(lumineux);
+		A.setNombreAES(nbAES);
+		A.setTypeAES(typeaes);
+		A.setNombreBatterieAES(nbbatterieaes);
+		A.setxBatterieAES(xbatterieaes);
+		A.setyBatterieAES(ybatterieaes);
+		A.sethBatteriesAES(hbatterieaes);
+		A.setTypeBatterieAES(typebatterieaes);
+		A.setTestVoltBatterieAES(testvoltaes);
+		A.setTestAmpereBatterieAES(testampaes);
+		A.setTestVoltChargeurAES(testchargeuraes);
+		A.setMarche(true);
+		A.setBatiment(B);
+		A.setConclusion("--");
+		return A;
+	}
 
 	// Ajout dans la base de donnée
 	// Organe
 	public void ajoutOrgane(List<Organe> organes){
 		int i;
 		for(i=0;i<organes.size();i++){
-			em.persist(organes.get(i));
+			em.merge(organes.get(i));
 		}
 	}
 	
@@ -385,7 +742,10 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		List<Intervention> interv = new ArrayList<Intervention>();
 		O.setInterventions(interv);
 		}
-		
+		if(Interv instanceof Verification && Interv.getOrgane() instanceof Alarme )
+			em.merge(Interv);
+		else
+		em.persist(Interv);
 		O.addInterventions(Interv);
 		O.setConclusion(conclusion);
 		if(Interv instanceof Installation){
@@ -394,10 +754,24 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 			em.persist(O);
 		}
 		else {
+			if(Interv instanceof Preventive && O instanceof Alarme){
+				if (O.getInterventions() == null) {
+				List<Intervention> interv = new ArrayList<Intervention>();
+				O.setInterventions(interv);
+				}
+			O.addInterventions(Interv);
+			O.setObservation(Interv.getObservation());
 			em.merge(O);
+			}
+			else
+				em.merge(O);
 		}
-		em.persist(Interv);
 		return Interv;
+	}
+	public Pdfgenere ajoutnewpdf(){
+		Pdfgenere pdf = new Pdfgenere();
+		em.merge(pdf);
+		return pdf;
 	}
 	// Ajout pdf
 	public Pdfgenere ajoutpdf(List<Intervention> interventions){
@@ -410,6 +784,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		}
 		return pdf;
 	}
+	
 	// Intervention : Verification
 	public Verification Verification(int numero, String Obs, String conclusion, int numerotechnicien, java.sql.Date date, boolean marche)
 			throws OrganeInconnuException, TechnicienInconnuException, BatimentInconnuException {
@@ -464,6 +839,18 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		MC.setOrgane(O);
 		return MC;
 	}
+	// remplacement eclairage
+	public Eclairage remplacementeclairage(Eclairage E,String Emp,String Obs, TypeEclairage type, MarqueEclairage marque, boolean presence,boolean fonctionne,Typetelecommande typetel,boolean marche){
+		E.setEmplacement(Emp);
+		E.setObservation(Obs);
+		E.setType(type);
+		E.setMarque(marque);
+		E.setPresencetelecommande(presence);
+		E.setFonctionnementtelecommande(fonctionne);
+		E.setTypetelecommande(typetel);
+		E.setMarche(marche);
+		return E;
+	}
 	// remplacement poteaux
 	public Poteaux remplacementpoteaux(Poteaux P, String Emp,String Obs, int diametre,int pressionstat,int pression60,int pression1bar,boolean marche){
 		P.setEmplacement(Emp);
@@ -476,11 +863,11 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		return P;
 	}
 	// remplacement coupe-feu
-	public Coupefeu remplacementcoupefeu(Coupefeu C, String Emp, String Obs,String type ,boolean marche){
+	public Coupefeu remplacementcoupefeu(Coupefeu C, String Emp, String Obs,TypeCoupefeu type ,boolean marche){
 		C.setEmplacement(Emp);
 		C.setObservation(Obs);
 		C.setMarche(marche);
-		C.setTypeCoupefeu(type);
+		C.setType(type);
 		return C;
 	}
 	
@@ -505,9 +892,69 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		E.setType(Tp);
 		return E;
 	}
+	public RIA remplacementria(RIA R,String Emp,String Obs,TypeRia type,int pressionstat,int pressiondynam,int portee, boolean marche){
+		R.setEmplacement(Emp);
+		R.setObservation(Obs);
+		R.setMarche(marche);
+		R.setType(type);
+		R.setPressionStatique(pressionstat);
+		R.setPressionDynamique(pressiondynam);
+		R.setPortee(portee);
+		return R;
+	}
 	
-	
-	
+	public Alarme remplacementalarme(Alarme A, String Emp,String Obs,MarqueAlarme marquealarme,TypeAlarme typealarme,int annee,int nombrebatterie,int xbatterie,int ybatterie,
+			int hbatterie,TypeBatterie typebatterie,int testvoltbatterie,int testampbatterie,int testchargeurbatterie,int nboptique, 
+			String optique,int nbionique,String obsionique,int nbthermique,String thermique,int nbthermov,String thermov,
+			int nbflamme,String flamme,int nbaspiration,String aspiration,int nbreport,String report,int nbmanuel,String manuel,
+			int nbsonore,String sonore,int nblumineux,String lumineux,int nbAES,TypeAES typeaes, int nbbatterieaes, int xbatterieaes,
+			int ybatterieaes,int hbatterieaes,TypeBatterieAES typebatterieaes, int testvoltaes,int testampaes, int testchargeuraes,boolean marche ){
+		A.setEmplacement(Emp);
+		A.setObservation(Obs);
+		A.setMarque(marquealarme);
+		A.setType(typealarme);
+		A.setAnnee(annee);
+		A.setNombreBatterie(nombrebatterie);
+		A.setXbatterie(xbatterie);
+		A.setYbatterie(ybatterie);
+		A.setHbatterie(hbatterie);
+		A.setTypeBatterie(typebatterie);
+		A.setTestVoltBatterie(testvoltbatterie);
+		A.setTestAmpereBatterie(testampbatterie);
+		A.setTestVoltChargeur(testchargeurbatterie);
+		A.setNombreDetecteurOptique(nboptique);
+		A.setObservationDetecteurOptique(optique);
+		A.setNombreDetecteurIonique(nbionique);
+		A.setObservationDetecteurIonique(obsionique);
+		A.setNombreDetecteurThermique(nbthermique);
+		A.setObservationDetecteurThermique(thermique);
+		A.setNombreDetecteurThermovelocimetrique(nbthermov);
+		A.setObservationDetecteurThermovelocimetrique(thermov);
+		A.setNombreDetecteurFlammes(nbflamme);
+		A.setObservationDetecteurFlammes(flamme);
+		A.setNombreDetecteurAspiration(nbaspiration);
+		A.setObservationDetecteurAspiration(aspiration);
+		A.setNombreAutreReport(nbreport);
+		A.setObservationAutreReport(report);
+		A.setNombreDeclencheurManuel(nbmanuel);
+		A.setObservationDeclencheurManuel(manuel);
+		A.setNombreDiffusionSonore(nbsonore);
+		A.setObservationDiffusionSonore(sonore);
+		A.setNombreDiffusionSonoreFlash(nblumineux);
+		A.setObservationDiffusionSonoreFlash(lumineux);
+		A.setNombreAES(nbAES);
+		A.setTypeAES(typeaes);
+		A.setNombreBatterieAES(nbbatterieaes);
+		A.setxBatterieAES(xbatterieaes);
+		A.setyBatterieAES(ybatterieaes);
+		A.sethBatteriesAES(hbatterieaes);
+		A.setTypeBatterieAES(typebatterieaes);
+		A.setTestVoltBatterieAES(testvoltaes);
+		A.setTestAmpereBatterieAES(testampaes);
+		A.setTestVoltChargeurAES(testchargeuraes);
+		A.setMarche(marche);
+		return A;
+	}
 	
 	
 	
@@ -536,6 +983,34 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		em.merge(O);
 		return MP;
 	}
+	
+	
+	// Maintenance : Preventive
+	public Preventive MaintenancePreventiveAlarme(Organe O, String Obs, String Obsraj, int numerotechnicien, 
+			java.sql.Date date, boolean marche) throws OrganeInconnuException, TechnicienInconnuException {
+		Technicien T = em.find(Technicien.class, numerotechnicien);
+		if (T == null) {
+			throw new TechnicienInconnuException();
+		}
+		Preventive MP = new Preventive();
+		MP.setDate(date);
+		MP.setObservation(Obs);
+		MP.setConclusion(Obsraj);
+		MP.setTechnicien(T);
+		MP.setOrgane(O);
+//		if (O.getInterventions() == null) {
+//			List<Intervention> interv = new ArrayList<Intervention>();
+//			O.setInterventions(interv);
+//		}
+//		O.addInterventions(MP);
+//		O.setObservation(Obs);
+//		O.setConclusion(Obsraj);
+//		O.setMarche(marche);
+//		em.persist(MP);
+//		em.merge(O);
+		return MP;
+	}
+	
 	
 	
 	public Preventive rechercheMaintenancePreventive(int numeroMaintenance){
@@ -584,6 +1059,64 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		return M;
 	}
 
+	// liste de tous les types d'eclairage
+	public List<TypeEclairage> touslesTypeEclairage() {
+		List<TypeEclairage> T = em.createQuery("from TypeEclairage t").getResultList();
+		return T;
+	}
+	// liste de toutes les marques d'eclairage
+	@SuppressWarnings("unchecked")
+	public List<MarqueEclairage> touteslesMarqueEclairage() {
+		List<MarqueEclairage> M = em.createQuery("from MarqueEclairage m").getResultList();
+		return M;
+	}
+	// liste de tous les types de telecommande
+	public List<Typetelecommande> touslesTypetelecommande() {
+		List<Typetelecommande> T = em.createQuery("from Typetelecommande t").getResultList();
+		return T;
+	}
+	// liste de tous les types RIA
+	@SuppressWarnings("unchecked")
+	public List<TypeRia> touslesTypeRIA() {
+		List<TypeRia> T = em.createQuery("from TypeRia t").getResultList();
+		return T;
+	}
+	// liste de tous les types de Coupe-feu
+	@SuppressWarnings("unchecked")
+	public List<TypeCoupefeu> touslesTypeCoupefeu() {
+		List<TypeCoupefeu> T = em.createQuery("from TypeCoupefeu t").getResultList();
+		return T;
+	}
+	// liste de tous les types d'alarme
+	@SuppressWarnings("unchecked")
+	public List<TypeAlarme> touslesTypeAlarme() {
+		List<TypeAlarme> T = em.createQuery("from TypeAlarme t").getResultList();
+		return T;
+	}
+	// liste de toutes les marques d'alarme
+	@SuppressWarnings("unchecked")
+	public List<MarqueAlarme> touteslesMarqueAlarme() {
+		List<MarqueAlarme> M = em.createQuery("from MarqueAlarme m").getResultList();
+		return M;
+	}
+	// liste de tous les types de batterie
+	@SuppressWarnings("unchecked")
+	public List<TypeBatterie> touslesTypeBatterie() {
+		List<TypeBatterie> T = em.createQuery("from TypeBatterie t").getResultList();
+		return T;
+	}
+	// liste de tous les types AES
+	@SuppressWarnings("unchecked")
+	public List<TypeAES> touslesTypeAES() {
+		List<TypeAES> T = em.createQuery("from TypeAES t").getResultList();
+		return T;
+	}
+	// liste de tous les types de batterie AES
+	@SuppressWarnings("unchecked")
+	public List<TypeBatterieAES> touslesTypeBatterieAES() {
+		List<TypeBatterieAES> T = em.createQuery("from TypeBatterieAES t").getResultList();
+		return T;
+	}
 	// derniere observation : Verification
 	public String rechercheObservationVerification(int numeroOrgane) {
 		@SuppressWarnings("unchecked")
@@ -592,6 +1125,27 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		if(verifications.size()!=0)
 			observation=verifications.get(verifications.size()-1).getObservation();
 		return observation;
+	}
+	
+	// derniere conclusion : Verification Alarme
+	public String rechercheConclusionVerificationAlarme(int numeroBatiment) {
+		@SuppressWarnings("unchecked")
+		List<Verification> verifications = em.createQuery("FROM Verification v where v.organe.batiment.numero = "+numeroBatiment).getResultList();
+		int test,i;
+		test=0;
+		i=verifications.size()-1;
+		String conclusion="--";
+		if(verifications.size()!=0){
+			while(test==0 && i>-1) {
+				if(verifications.get(i).getOrgane() instanceof Alarme ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=verifications.get(i+1).getConclusion();
+		}
+		return conclusion;
 	}
 
 	// derniere conclusion : Verification Extincteur
@@ -666,6 +1220,46 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		if(verifications.size()!=0){
 			while(test==0 && i>-1) {
 				if(verifications.get(i).getOrgane() instanceof Poteaux ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=verifications.get(i+1).getConclusion();
+		}
+		return conclusion;
+	}
+	// derniere conclusion : Verification Eclairage
+	public String rechercheConclusionVerificationEclairage(int numeroBatiment) {
+		@SuppressWarnings("unchecked")
+		List<Verification> verifications = em.createQuery("FROM Verification v where v.organe.batiment.numero = "+numeroBatiment).getResultList();
+		int test,i;
+		test=0;
+		i=verifications.size()-1;
+		String conclusion="--";
+		if(verifications.size()!=0){
+			while(test==0 && i>-1) {
+				if(verifications.get(i).getOrgane() instanceof Eclairage ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=verifications.get(i+1).getConclusion();
+		}
+		return conclusion;
+	}
+	// derniere conclusion : Verification RIA
+	public String rechercheConclusionVerificationRia(int numeroBatiment) {
+		@SuppressWarnings("unchecked")
+		List<Verification> verifications = em.createQuery("FROM Verification v where v.organe.batiment.numero = "+numeroBatiment).getResultList();
+		int test,i;
+		test=0;
+		i=verifications.size()-1;
+		String conclusion="--";
+		if(verifications.size()!=0){
+			while(test==0 && i>-1) {
+				if(verifications.get(i).getOrgane() instanceof RIA ){
 					test=1;
 				}
 				i--;
@@ -765,7 +1359,68 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		}
 		return conclusion;
 	}
+	// derniere conclusion : Maintenance Corrective Eclairage
+	public String rechercheConclusionMaintenancecorrEclairage(int numeroBatiment) {
+		@SuppressWarnings("unchecked")
+		List<Corrective> maintenancecorrective = em.createQuery("FROM Corrective m where m.organe.batiment.numero = "+numeroBatiment).getResultList();
+		String conclusion="--";
+		int test,i;
+		test=0;
+		i=maintenancecorrective.size()-1;
+		if(maintenancecorrective.size()!=0){
+			while(test==0 && i>-1) {
+				if(maintenancecorrective.get(i).getOrgane() instanceof Eclairage ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=maintenancecorrective.get(i+1).getConclusion();
+		}
+		return conclusion;
+	}
 	
+	// derniere conclusion : Maintenance Corrective Eclairage
+	public String rechercheConclusionMaintenancecorrRia(int numeroBatiment) {
+		@SuppressWarnings("unchecked")
+		List<Corrective> maintenancecorrective = em.createQuery("FROM Corrective m where m.organe.batiment.numero = "+numeroBatiment).getResultList();
+		String conclusion="--";
+		int test,i;
+		test=0;
+		i=maintenancecorrective.size()-1;
+		if(maintenancecorrective.size()!=0){
+			while(test==0 && i>-1) {
+				if(maintenancecorrective.get(i).getOrgane() instanceof RIA ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=maintenancecorrective.get(i+1).getConclusion();
+		}
+		return conclusion;
+	}
+	
+	// derniere conclusion : Maintenance Corrective Alarme
+	public String rechercheConclusionMaintenancecorrAlarme(int numeroBatiment) {
+		@SuppressWarnings("unchecked")
+		List<Corrective> maintenancecorrective = em.createQuery("FROM Corrective m where m.organe.batiment.numero = "+numeroBatiment).getResultList();
+		String conclusion="--";
+		int test,i;
+		test=0;
+		i=maintenancecorrective.size()-1;
+		if(maintenancecorrective.size()!=0){
+			while(test==0 && i>-1) {
+				if(maintenancecorrective.get(i).getOrgane() instanceof Alarme ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=maintenancecorrective.get(i+1).getConclusion();
+		}
+		return conclusion;
+	}
 	
 	// derniere observation : Maintenance Preventive
 	public String rechercheObservationMaintenanceprev(int numeroOrgane) {
@@ -788,6 +1443,27 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		if(maintenancepreventive.size()!=0){
 			while(test==0 && i>-1) {
 				if(maintenancepreventive.get(i).getOrgane() instanceof Extincteur ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=maintenancepreventive.get(i+1).getConclusion();
+		}
+		return conclusion;
+	}
+	
+	// derniere conclusion : Maintenance Preventive RIA
+	public String rechercheConclusionMaintenanceprevRia(int numeroBatiment) {
+		@SuppressWarnings("unchecked")
+		List<Preventive> maintenancepreventive = em.createQuery("FROM Preventive m where m.organe.batiment.numero = "+numeroBatiment).getResultList();
+		String conclusion="--";
+		int test,i;
+		test=0;
+		i=maintenancepreventive.size()-1;
+		if(maintenancepreventive.size()!=0){
+			while(test==0 && i>-1) {
+				if(maintenancepreventive.get(i).getOrgane() instanceof RIA ){
 					test=1;
 				}
 				i--;
@@ -839,6 +1515,49 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 			}
 			return conclusion;
 		}
+		// derniere conclusion : Maintenance Eclairage
+		public String rechercheConclusionMaintenanceprevEclairage(int numeroBatiment) {
+			@SuppressWarnings("unchecked")
+			List<Preventive> maintenancepreventive = em.createQuery("FROM Preventive m where m.organe.batiment.numero = "+numeroBatiment).getResultList();
+			String conclusion="--";
+			int test,i;
+			test=0;
+			i=maintenancepreventive.size()-1;
+			if(maintenancepreventive.size()!=0){
+				while(test==0 && i>-1) {
+					if(maintenancepreventive.get(i).getOrgane() instanceof Eclairage ){
+						test=1;
+					}
+					i--;
+				}
+				if(test==1)
+					conclusion=maintenancepreventive.get(i+1).getConclusion();
+			}
+			return conclusion;
+		}
+		// derniere conclusion : Maintenance Preventive Alarme
+		public String rechercheConclusionMaintenanceprevAlarme(int numeroBatiment) {
+			@SuppressWarnings("unchecked")
+			List<Preventive> maintenancepreventive = em.createQuery("FROM Preventive m where m.organe.batiment.numero = "+numeroBatiment).getResultList();
+			String conclusion="--";
+			int test,i;
+			test=0;
+			i=maintenancepreventive.size()-1;
+			if(maintenancepreventive.size()!=0){
+				while(test==0 && i>-1) {
+					if(maintenancepreventive.get(i).getOrgane() instanceof Alarme ){
+						test=1;
+					}
+					i--;
+				}
+				if(test==1)
+					conclusion=maintenancepreventive.get(i+1).getConclusion();
+			}
+			return conclusion;
+		}		
+		
+		
+
 	// Creation des comptes et generations des mots de passe
 	public void creercompteAdmin(String login, int admin, int statut) {
 		Compte session = new Compte();

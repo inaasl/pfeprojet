@@ -9,15 +9,17 @@ import javax.persistence.*;
 public class Coupefeu extends Organe implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private String Type;
+	private TypeCoupefeu Type;
 
 	public Coupefeu () { };
 	
-	public void setTypeCoupefeu (String newVar) {
-		this.Type = newVar;
-	}
-	public String getTypeCoupefeu () {
+
+	@ManyToOne
+	public TypeCoupefeu getType () {
 		return Type;
+	}
+	public void setType(TypeCoupefeu newVar) {
+		this.Type = newVar;
 	}
 	public void addInterventions (Intervention intervention) {
 		this.getInterventions().add(intervention);

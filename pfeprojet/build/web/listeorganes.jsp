@@ -29,6 +29,7 @@
 		$('#datatables4').dataTable();
 		$('#datatables5').dataTable();
 		$('#datatables6').dataTable();
+		$('#datatables8').dataTable();
 	})
 </script>
 </head>
@@ -162,6 +163,7 @@
 		List<RIA> ria;
 		List<Signaletique> signaletique;
 		List<Coupefeu> coupefeu;
+		List<Alarme> alarme;
     	int num;
     	String numeroB,marche;
    	 	List<Organe> organes;
@@ -254,6 +256,14 @@
 										else
 											signaletique.add((Signaletique)organe.get(j));
 									}
+									else {
+										if(organe.get(j) instanceof Alarme){
+											if(alarme==null){
+												alarme=new ArrayList<Alarme>();	
+											}
+											alarme.add((Alarme)organe.get(j));
+										}
+									}
 								}
 							}
 						}
@@ -287,15 +297,38 @@
 		}
 		
 		if(eclairage!=null) {
-			if(eclairage.get(i).isMarche()==true)
-				marche="<img src=\"marchtrue.jpg\">";
-			else
-				marche="<img src=\"marchefalse.png\">";
+			String presence;
+			String fonctionne;
 			out.println("<h4>Eclairage</h4><br>");
 			out.print("</center>");
 	    	out.print("<br/><table id=\"datatables2\" class=\"display\" >");
 	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Type</th><th> Marque </th><th>Présence télécommande </th><th>fonctionnement télécommande </th><th>Type télécommande </th><th>Observation</th><th>Etat</th></tr>");
 	 	 	out.print("</thead><tbody>");
+			 for(i=0;i<eclairage.size();i++){
+				if(eclairage.get(i).isPresencetelecommande()==true)
+					presence="oui";
+				else
+					presence="non";
+				if(eclairage.get(i).isFonctionnementtelecommande()==true)
+					fonctionne="oui";
+				else
+					fonctionne="non";
+				if(eclairage.get(i).isMarche()==true)
+					marche="<img src=\"marchtrue.jpg\">";
+				else
+					marche="<img src=\"marchefalse.png\">";
+					
+					out.print(" <tr><td>"+eclairage.get(i).getNumero()
+							+"</td><td>"+eclairage.get(i).getEmplacement()
+							+"</td><td>"+eclairage.get(i).getType().getNom()
+							+"</td><td>"+eclairage.get(i).getMarque().getNom()
+							+"</td><td>"+presence
+							+"</td><td>"+fonctionne
+							+"</td><td>"+eclairage.get(i).getTypetelecommande().getNom()
+							+"</td><td>"+pharmacie.get(i).getObservation()
+							+"</td><td>"+marche
+							+"</td></tr>");
+			 }
 			out.print("</tbody></table><br>");
 
 		}
@@ -338,7 +371,7 @@
 					
 					out.print(" <tr><td>"+coupefeu.get(i).getNumero()
 							+"</td><td>"+coupefeu.get(i).getEmplacement()
-							+"</td><td>"+coupefeu.get(i).getTypeCoupefeu()
+							+"</td><td>"+coupefeu.get(i).getType().getNom()
 							+"</td><td>"+coupefeu.get(i).getObservation()
 							+"</td><td>"+marche
 							+"</td></tr>");
@@ -348,44 +381,102 @@
 		}
 		
 		if(ria!=null) {
-			if(ria.get(i).isMarche()==true)
-				marche="<img src=\"marchtrue.jpg\">";
-			else
-				marche="<img src=\"marchefalse.png\">";
 			out.println("<h4>RIA</h4><br>");
 			out.print("</center>");
 	    	out.print("<br/><table id=\"datatables5\" class=\"display\" >");
-	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Type</th><th>Observation</th><th>Etat</th></tr>");
+	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Type</th><th>Pression statique</th><th>Pression dynamique</th><th>Portee</th><th>Observation</th><th>Etat</th></tr>");
 	 	 	out.print("</thead><tbody>");
-			out.print("</tbody></table><br>");
+			 for(i=0;i<ria.size();i++){
+				if(ria.get(i).isMarche()==true)
+					marche="<img src=\"marchtrue.jpg\">";
+				else
+					marche="<img src=\"marchefalse.png\">";
+					
+					out.print(" <tr><td>"+ria.get(i).getNumero()
+							+"</td><td>"+ria.get(i).getEmplacement()
+							+"</td><td>"+ria.get(i).getType().getNom()
+							+"</td><td>"+ria.get(i).getPressionStatique()
+							+"</td><td>"+ria.get(i).getPressionDynamique()
+							+"</td><td>"+ria.get(i).getPortee()
+							+"</td><td>"+ria.get(i).getObservation()
+							+"</td><td>"+marche
+							+"</td></tr>");
+			 }
+	 	 	out.print("</tbody></table><br>");
 
 		}
 		
 		if(poteaux!=null) {
-			if(poteaux.get(i).isMarche()==true)
-				marche="<img src=\"marchtrue.jpg\">";
-			else
-				marche="<img src=\"marchefalse.png\">";
 			out.println("<h4>Poteaux Incendie</h4><br>");
 			out.print("</center>");
 	    	out.print("<br/><table id=\"datatables6\" class=\"display\" >");
 	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>diamètre</th><th> Pression statique </th><th>Pression 60</th><th>Pression 1bar</th><th>Observation</th><th>Etat</th></tr>");
 	 	 	out.print("</thead><tbody>");
-			out.print("</tbody></table><br>");
+			 for(i=0;i<poteaux.size();i++){
+				if(poteaux.get(i).isMarche()==true)
+					marche="<img src=\"marchtrue.jpg\">";
+				else
+					marche="<img src=\"marchefalse.png\">";
+					
+					out.print(" <tr><td>"+poteaux.get(i).getNumero()
+							+"</td><td>"+poteaux.get(i).getEmplacement()
+							+"</td><td>"+poteaux.get(i).getDiametre()
+							+"</td><td>"+poteaux.get(i).getPressionstat()
+							+"</td><td>"+poteaux.get(i).getPression60()
+							+"</td><td>"+poteaux.get(i).getPressionstat()
+							+"</td><td>"+coupefeu.get(i).getObservation()
+							+"</td><td>"+marche
+							+"</td></tr>");
+			 }
+	 	 	out.print("</tbody></table><br>");
 		}
 		
 		if(signaletique!=null) {
-			if(signaletique.get(i).isMarche()==true)
-				marche="<img src=\"marchtrue.jpg\">";
-			else
-				marche="<img src=\"marchefalse.png\">";
 			out.println("<h4>Signalétique</h4><br>");
 			out.print("</center>");
 	    	out.print("<br/><table id=\"datatables7\" class=\"display\" >");
 	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Observation</th><th>Etat</th></tr>");
 	 	 	out.print("</thead><tbody>");
-			out.print("</tbody></table><br>");
+			 for(i=0;i<signaletique.size();i++){
+				if(signaletique.get(i).isMarche()==true)
+					marche="<img src=\"marchtrue.jpg\">";
+				else
+					marche="<img src=\"marchefalse.png\">";
+					
+					out.print(" <tr><td>"+signaletique.get(i).getNumero()
+							+"</td><td>"+signaletique.get(i).getEmplacement()
+							+"</td><td>"+signaletique.get(i).getObservation()
+							+"</td><td>"+marche
+							+"</td></tr>");
+			 }
+	 	 	out.print("</tbody></table><br>");
 		}
+		
+		if(alarme!=null) {
+			out.println("<h4>Alarme</h4><br>");
+			out.print("</center>");
+	    	out.print("<br/><table id=\"datatables8\" class=\"display\" >");
+	 	 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Type</th><th>Observation</th><th>Etat</th><th>Fiche</th></tr>");
+	 	 	out.print("</thead><tbody>");
+			 for(i=0;i<alarme.size();i++){
+				if(alarme.get(i).isMarche()==true)
+					marche="<img src=\"marchtrue.jpg\">";
+				else
+					marche="<img src=\"marchefalse.png\">";
+					
+					out.print(" <tr><td>"+alarme.get(i).getNumero()
+							+"</td><td>"+alarme.get(i).getEmplacement()
+							+"</td><td>"+alarme.get(i).getType().getNom()
+							+"</td><td>"+alarme.get(i).getObservation()
+							+"</td><td>"+marche
+							+"</td><td> <form action=\"fichealarme.jsp\" method=\"GET\" ><input type=\"hidden\" id=\"idalarme\" name=\"numalarme\" value="
+							+ alarme.get(i).getNumero()
+							+ "> <input type=\"submit\" name=\" Consulter la fiche de l'alarme \" value=\" Consulter la fiche de l'alarme \" /></form></td></tr>"
+							);
+			 }
+	 	 	out.print("</tbody></table><br>");
+		}
+		
 		organe.clear();
 		
 		%>

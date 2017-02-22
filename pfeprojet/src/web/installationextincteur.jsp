@@ -129,7 +129,7 @@
 				</select>
 			</td>
 			<td><label for="nomType"><i>Ajout d'un nouveau Type </i></label> <input type="text"
-					name="nomType"  placeholder="type..." size="20" class="taille_input_annee"/>
+					name="nomType"  placeholder="nom du type..." size="20" class="taille_input_type"/>
 		  
 		 	 </td>
 		</tr>
@@ -143,7 +143,7 @@
 					%>
 			</select></td>
 			<td><label for="nomMarque"><i>Ajout d'une nouvelle Marque </i></label> <input type="text"
-					name="nomMarque"  placeholder="type..." size="20" class="taille_input_annee"/>
+					name="nomMarque"  placeholder="nom de la marque..." size="20" class="taille_input_marque"/>
 		  
 		 	 </td>
 			</tr></table>

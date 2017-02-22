@@ -101,7 +101,7 @@
 		for(i=0;i<C.size();i++){
 					out.println(" <tr><td > " + C.get(i).getNumero()+
 						"</td> <td>" + C.get(i).getEmplacement()+
-						"</td> <td >" + C.get(i).getTypeCoupefeu()+
+						"</td> <td >" + C.get(i).getType().getNom()+
 						"</td><td> <form action=\"maintenancecorrcoupefeuvalidee.jsp\" method=\"GET\" ><input type=\"hidden\" id=\"idcf\" name=\"numcoupefeu\" value="
 						+ C.get(i).getNumero()
 						+ "> <input type=\"submit\" name=\" Effectuer une maintenance corrective \" value=\" Effectuer une maintenance corrective \" /></form></td></tr>"

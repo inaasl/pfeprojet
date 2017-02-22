@@ -73,7 +73,7 @@
 		}
 		else {
 			if(typeorg.compareTo("eclairage") == 0){
-				out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationeclairage.jsp\">");
+				out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationeclairage.jsp?ajout=0\">");
 			}
 			else {
 				if(typeorg.compareTo("pharmacie") == 0){
@@ -81,11 +81,16 @@
 				}
 				else {
 					if(typeorg.compareTo("signaletique") == 0){
-						out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationsignaletique.jsp\">");
+						out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationsignaletique.jsp?ajout=0\">");
 					}
 					else {
 						if(typeorg.compareTo("coupefeu") == 0){
 							out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationcoupefeu.jsp?ajout=0\">");
+						}
+						else {
+							if(typeorg.compareTo("alarme")==0){
+								out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationalarme.jsp?ajout=0\">");
+							}
 						}
 					}
 				}
@@ -116,6 +121,11 @@
 							else {
 								if(typeorg.compareTo("coupefeu") == 0){
 									out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationcoupefeu.jsp\">");
+								}
+								else {
+									if(typeorg.compareTo("alarme")==0){
+										out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationalarme.jsp?ajout=0\">");
+									}
 								}
 							}
 						}
@@ -148,6 +158,11 @@
 									if(typeorg.compareTo("coupefeu") == 0){
 										out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrcoupefeu.jsp\">");
 									}
+									else {
+										if(typeorg.compareTo("alarme")==0){
+											out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorralarme.jsp?ajout=0\">");
+										}
+									}
 								}
 							}
 						}
@@ -170,6 +185,11 @@
 							else {
 								if(typeorg.compareTo("coupefeu") == 0){
 									out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenanceprevcoupefeu.jsp\">");
+								}
+								else {
+									if(typeorg.compareTo("alarme")==0){
+										out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenanceprevalarme.jsp?ajout=0\">");
+									}
 								}
 							}
 						}

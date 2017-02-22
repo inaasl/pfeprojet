@@ -112,7 +112,7 @@
 					observation=service.rechercheObservationVerification(C.get(i).getNumero());
 					out.println(" <tr><td > " + C.get(i).getNumero()+
 						"</td> <td>" + C.get(i).getEmplacement()+
-						"</td> <td >" + C.get(i).getTypeCoupefeu()+
+						"</td> <td >" + C.get(i).getType().getNom()+
 						"</td> <td> <input type=\"text\" name="+i+" value="+observation+
 						"></td><td><INPUT id=\"oui\" type= \"radio\" name="+(i+100)+" value=\"oui\"><label for=\"oui\">OUI</label>&nbsp;&nbsp;&nbsp;<INPUT id=\"non\" type= \"radio\" name="+(i+100)+" value=\"non\"><label for=\"non\">NON</label></td></tr>"
 						);

@@ -49,16 +49,19 @@
 		<%@ page import= "java.util.ArrayList"%>
 		
 		
-<%! String numBat,observ,empla, type,ajout;
+<%! String numBat,observ,empla, type,type2,ajout;
 	int numB,numT;
 	List<Installation> interv;
 	Coupefeu Coupefeucourant;
     List<Coupefeu> coupesfeu;
+    TypeCoupefeu Type;
 %>
 <%
 	observ =request.getParameter("observations");
 	empla=request.getParameter("emplacement");
 	type=request.getParameter("typecoupefeu");
+	type2= request.getParameter("nomType");
+
 
 	
 	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
@@ -83,12 +86,21 @@
 	Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
 	ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
 	
+	if (type2.compareTo("") != 0){ 
+		type=String.valueOf(type2);
+		service.ajouttypecoupefeu(type);
+		Type=service.rechercheTypeCoupefeuNom(type);
+	}
+	else {
+		Type=service.rechercheTypeCoupefeu(type);
+	}
+	
  	String format = "yyyy-MM-dd"; 
 	java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
 	java.util.Date date = new java.util.Date();
 	
 	if(ajout.compareTo("0")==0){
-		Coupefeucourant=service.ajoutCoupefeu(numB, empla, observ,type);
+		Coupefeucourant=service.ajoutCoupefeu(numB, empla, observ,Type);
 		interv = (List<Installation>) session.getAttribute("interv");
 		if (interv == null) {
 			interv = new ArrayList<Installation>();
@@ -99,7 +111,7 @@
 	}
 	else {
 		observ="--";
-		Coupefeucourant=service.ajoutCoupefeu(numB, empla, observ,type);
+		Coupefeucourant=service.ajoutCoupefeu(numB, empla, observ,Type);
 		coupesfeu.add(Coupefeucourant);
 	}
 	
