@@ -91,6 +91,11 @@
 							if(typeorg.compareTo("alarme")==0){
 								out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationalarme.jsp?ajout=0\">");
 							}
+							else {
+								if(typeorg.compareTo("desenfumagenaturel") == 0){
+									out.println("<meta http-equiv=\"refresh\" content=\"1; URL=installationdesenfumagenaturel.jsp?ajout=0\">");
+								}
+							}
 						}
 					}
 				}
@@ -125,6 +130,12 @@
 								else {
 									if(typeorg.compareTo("alarme")==0){
 										out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationalarme.jsp?ajout=0\">");
+									}
+									else {
+										if(typeorg.compareTo("desenfumagenaturel") == 0){
+											out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationdesenfumagenaturel.jsp\">");
+										}
+										
 									}
 								}
 							}
@@ -162,6 +173,12 @@
 										if(typeorg.compareTo("alarme")==0){
 											out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorralarme.jsp?ajout=0\">");
 										}
+										else {
+											if(typeorg.compareTo("desenfumagenaturel") == 0){
+												out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrdesenfumagenaturel.jsp\">");
+											}
+											
+										}
 									}
 								}
 							}
@@ -189,6 +206,11 @@
 								else {
 									if(typeorg.compareTo("alarme")==0){
 										out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenanceprevalarme.jsp?ajout=0\">");
+									}
+									else {
+										if(typeorg.compareTo("desenfumagenaturel") == 0){
+											out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenanceprevdesenfumagenaturel.jsp\">");
+										}
 									}
 								}
 							}

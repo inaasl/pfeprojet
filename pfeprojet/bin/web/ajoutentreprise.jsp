@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Ajout d'une entreprise</title>
+<title>Ajout d'un client </title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>

@@ -1,7 +1,7 @@
 
 <html>
 <head>
-<title>Liste de toutes les entreprises</title>
+<title>Liste de tous les clients </title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">

@@ -1,7 +1,7 @@
 <html>
 
 <head>
-<title>Ajout d'une Entreprise</title>
+<title>Ajout d'un technicien</title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>

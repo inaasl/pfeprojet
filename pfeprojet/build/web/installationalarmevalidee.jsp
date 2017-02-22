@@ -205,7 +205,7 @@
 			testamperebatterieaes, testvoltchargeurbatterieaes);
 	
 	//observationgroupee = observationgroupee + Test;
-	
+	//observationgroupee=observations+" "+obsoptique;
  	String format = "yyyy-MM-dd"; 
 	java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
 	java.util.Date date = new java.util.Date();

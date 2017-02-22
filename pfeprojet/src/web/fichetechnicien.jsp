@@ -1,7 +1,7 @@
 <html>
 
    <head>
-    <title>Fiche : entreprise </title>
+    <title>Fiche : Technicien </title>
     <meta charset="UTF-8" />
     <link href="style.css" rel="stylesheet" type="text/css">
   </head>

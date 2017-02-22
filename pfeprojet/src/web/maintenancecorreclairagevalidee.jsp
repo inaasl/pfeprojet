@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Maintenance Corrective : Extincteur </title>
+<title>Maintenance Corrective : Eclairage </title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>

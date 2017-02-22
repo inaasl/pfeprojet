@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Verification des portes coupe-feu </title>
+<title>Verification  </title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>

@@ -25,7 +25,7 @@ public abstract class Intervention implements java.io.Serializable {
 	private Date date;
 	private String conclusion;
 	
-	@Column(length=10000)
+
 	private String observation;
 	
 	private Pdfgenere pdf;	
@@ -54,6 +54,7 @@ public abstract class Intervention implements java.io.Serializable {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+	@Column(length=1000)
 	public String getConclusion() {
 		return conclusion;
 	}

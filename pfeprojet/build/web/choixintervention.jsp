@@ -71,6 +71,8 @@
 	<label for="coupefeu">Porte Coupe-Feu</label> 
 	<INPUT id="alarme" type= "radio" name="choixorg" value="alarme"> 
 	<label for="alarme">Alarme Incendie</label> 
+	<INPUT id="desenfumagenaturel" type= "radio" name="choixorg" required value="desenfumagenaturel"> 
+	<label for="desenfumagenaturel">Désenfumage naturel</label> 
 </fieldset>	
 	<br><br><center><input type="submit" value="Valider"></center>
 </FORM>

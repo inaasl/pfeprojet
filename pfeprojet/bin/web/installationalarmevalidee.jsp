@@ -205,7 +205,7 @@
 			testamperebatterieaes, testvoltchargeurbatterieaes);
 	
 	//observationgroupee = observationgroupee + Test;
-	
+	//observationgroupee=observations+" "+obsoptique;
  	String format = "yyyy-MM-dd"; 
 	java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
 	java.util.Date date = new java.util.Date();
@@ -221,7 +221,7 @@
 		if (interv == null) {
 			interv = new ArrayList<Installation>();
 		}
-		interv.add(service.InstallationOrgane(observations, Date.valueOf(formater.format(date)), numT, numB, Alarmecourant));
+		interv.add(service.InstallationOrgane(observationgroupee, Date.valueOf(formater.format(date)), numT, numB, Alarmecourant));
 		
 		session.setAttribute("interv", interv);
 	}

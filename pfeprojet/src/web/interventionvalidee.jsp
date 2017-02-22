@@ -9,7 +9,7 @@
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.ArrayList"%>
 <head>
-<title></title>
+<title>Intervention</title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -281,6 +281,21 @@
 																			else {
 																				if(ajout.compareTo("22")==0){
 																					out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorralarme.jsp\">");
+																				}
+																				else {
+																					if(ajout.compareTo("18")==0) {
+																						out.println("<meta http-equiv=\"refresh\" content=\"1; URL=verificationdesenfumagenaturel.jsp\">");
+																					}
+																					else {
+																						if(ajout.compareTo("20")==0) {
+																							out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenanceprevdesenfumagenaturel.jsp\">");
+																						}
+																						else {
+																							if(ajout.compareTo("19")==0) {
+																								out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrdesenfumagenaturel.jsp\">");
+																							}
+																						}
+																					}
 																				}
 																			}
 																		}

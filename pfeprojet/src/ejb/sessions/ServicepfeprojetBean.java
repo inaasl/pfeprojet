@@ -27,42 +27,42 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 			String manuel,String sonore,String lumineux){
 		
 		String result = "Observation Globale : ";
-		result = result + observation + "||";
-		result = result + "Observation detecteur optique : " ;
-		result = result + optique + "||";
+		result = result + observation + "\n";
+		result = result +"Observation detecteur optique : " ;
+		result = result + optique + "\n";
 		result = result + "Observation detecteur ionique : " ;
-		result = result + ionique + "||";
+		result = result + ionique + "\n";
 		result = result + "Observation detecteur thermique : ";
-		result = result + thermique + "||";
+		result = result + thermique + "\n";
 		result = result + "Observation detecteur thermovelocimetrique : ";
-		result = result + thermov + "||";
+		result = result + thermov + "\n";
 		result = result + "Observation detecteur de flammes : " ;
-		result = result + flamme + "||";
+		result = result + flamme + "\n";
 		result = result + "Observation detecteur par aspiration : ";
-		result = result + aspiration + "||";
+		result = result + aspiration + "\n";
 		result = result + "Observation autre report : ";
-		result = result + report + "||";
+		result = result + report + "\n";
 		result = result + "Observation declencheur manuel : " ;
-		result = result + manuel + "||";
+		result = result + manuel + "\n";
 		result = result + "Observation diffuseur sonore : ";
-		result = result + sonore + "||";
+		result = result + sonore + "\n";
 		result = result + "Observation diffuseur lumineux : ";
-		result = result + lumineux + "||";
+		result = result + lumineux + "\n";
 		return result;
 		
 	}
 	// Test alarme
 		public String testAlarme(int testvoltbatterie,int testampbatterie,int chargeur,int testvoltaes,
 				int testampaes,int testchargeuraes){
-			String result="";
-			result = result + "Test Batterie : " ;
-			result = result + String.valueOf(testvoltbatterie) + "Volts ||";
+			String result;
+			result =  "Test Batterie : " ;
+			result = result + String.valueOf(testvoltbatterie) + "Volts \n";
 			result = result + String.valueOf(testampbatterie) + "Ampère/h ";
 			result = result + "Test Chargeur : " ;
 			result = result + String.valueOf(chargeur) + "Volts";
-			result = result + "Test Batterie AES : " + "||";
-			result = result + String.valueOf(testvoltaes) + "Volts ||";
-			result = result + String.valueOf(testampaes) + "Ampère/h ";
+			result = result + "Test Batterie AES : " + "\n";
+			result = result + String.valueOf(testvoltaes) + "Volts \n";
+			result = result + String.valueOf(testampaes) + "Ampère/h \n";
 			result = result + "Test Chargeur : " ;
 			result = result + String.valueOf(testchargeuraes) + "Volts";
 			return result;
@@ -108,7 +108,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	// Recherche d'une entreprise par nom
 	public List<Entreprise> rechercheEntreprise(String Nom) throws EntrepriseInconnueException {
 		@SuppressWarnings("unchecked")
-		List<Entreprise> E = em.createQuery("from Entreprise e where nom like '%' || :name ||'%'")
+		List<Entreprise> E = em.createQuery("from Entreprise e where nom like '%' || :name \n'%'")
 				.setParameter("name", Nom).getResultList();
 		if (E == null)
 			throw new EntrepriseInconnueException();
@@ -1607,4 +1607,108 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	}
 
 
+	public DesenfumageNaturel ajoutDesenfumage(int numbatiment,String Emp, String Obs, String ouvrant, int quantite,int commandes,int ouvrants,String cartouche,String commande ) throws BatimentInconnuException{
+		Batiment B = rechercheBatimentnum(numbatiment);
+				if (B==null)
+					throw new BatimentInconnuException();
+				DesenfumageNaturel D = new DesenfumageNaturel();
+				
+				D.setEmplacement(Emp);
+				D.setObservation(Obs);
+				D.setBatiment(B);
+				D.setCartouches(cartouche);
+				D.setCommande(commande);
+				D.setOuvrant(ouvrant);
+				D.setQuantite(quantite);
+				D.setCommandes(commandes);
+				D.setOuvrants(ouvrants);
+				D.setMarche(true);
+				return D;
+			}
+	// derniere conclusion : Verification DesenfumageNaturel
+	public String rechercheConclusionVerificationDesenfumageNaturel(int numeroBatiment) {
+		@SuppressWarnings("unchecked")
+		List<Verification> verifications = em.createQuery("FROM Verification v where v.organe.batiment.numero = "+numeroBatiment).getResultList();
+		int test,i;
+		test=0;
+		i=verifications.size()-1;
+		String conclusion="--";
+		if(verifications.size()!=0){
+			while(test==0 && i>-1) {
+				if(verifications.get(i).getOrgane() instanceof DesenfumageNaturel ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=verifications.get(i+1).getConclusion();
+		}
+		return conclusion;
+	}
+	// derniere conclusion : Maintenance Corrective DesenfumageNaturel
+	public String rechercheConclusionMaintenancecorrDesenfumageNaturel(int numeroBatiment) {
+		@SuppressWarnings("unchecked")
+		List<Corrective> maintenancecorrective = em.createQuery("FROM Corrective m where m.organe.batiment.numero = "+numeroBatiment).getResultList();
+		String conclusion="--";
+		int test,i;
+		test=0;
+		i=maintenancecorrective.size()-1;
+		if(maintenancecorrective.size()!=0){
+			while(test==0 && i>-1) {
+				if(maintenancecorrective.get(i).getOrgane() instanceof DesenfumageNaturel ){
+					test=1;
+				}
+				i--;
+			}
+			if(test==1)
+				conclusion=maintenancecorrective.get(i+1).getConclusion();
+		}
+		return conclusion;
+	}
+
+	
+	// recherche d'un organe 
+		public DesenfumageNaturel rechercheDesenfumageNaturel(int numeroDesenfumageNaturel){
+			return em.find(DesenfumageNaturel.class,numeroDesenfumageNaturel);
+		}
+		public List<DesenfumageNaturel> rechercheDesenfumageNaturelBatiment(int numeroBatiment){
+			return em.createQuery("from DesenfumageNaturel e WHERE e.batiment.numero = "+numeroBatiment).getResultList();
+		}
+		public DesenfumageNaturel remplacementdesenfumagenaturel(DesenfumageNaturel D, String Emp, String Obs,String ouvrant, int quantite,int commandes,int ouvrants,String cartouche,String commande,boolean marche){
+			
+			D.setEmplacement(Emp);
+			D.setObservation(Obs);
+			D.setMarche(marche);
+			D.setCartouches(cartouche);
+			D.setCommande(commande);
+			D.setOuvrant(ouvrant);
+			D.setQuantite(quantite);
+			D.setCommandes(commandes);
+			D.setOuvrants(ouvrants);
+			
+			return D;
+			
+			
+		}
+		// derniere conclusion : Maintenance Preventive Desenfumage naturel
+		public String rechercheConclusionMaintenanceprevdesenfumagenaturel(int numeroBatiment) {
+			@SuppressWarnings("unchecked")
+			List<Preventive> maintenancepreventive = em.createQuery("FROM Preventive m where m.organe.batiment.numero = "+numeroBatiment).getResultList();
+			String conclusion="--";
+			int test,i;
+			test=0;
+			i=maintenancepreventive.size()-1;
+			if(maintenancepreventive.size()!=0){
+				while(test==0 && i>-1) {
+					if(maintenancepreventive.get(i).getOrgane() instanceof DesenfumageNaturel ){
+						test=1;
+					}
+					i--;
+				}
+				if(test==1)
+					conclusion=maintenancepreventive.get(i+1).getConclusion();
+			}
+			return conclusion;
+		}
+	
 }

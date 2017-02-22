@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Maintenance Préventive : Extincteur </title>
+<title>Maintenance Préventive </title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>

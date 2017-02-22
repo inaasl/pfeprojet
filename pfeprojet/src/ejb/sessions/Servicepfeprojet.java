@@ -7,6 +7,7 @@ import ejb.entites.Batiment;
 import ejb.entites.Compte;
 import ejb.entites.Corrective;
 import ejb.entites.Coupefeu;
+import ejb.entites.DesenfumageNaturel;
 import ejb.entites.Eclairage;
 import ejb.entites.Entreprise;
 import ejb.entites.Extincteur;
@@ -236,4 +237,15 @@ public interface Servicepfeprojet {
 	
 	public Piece AjoutPiece(String nom,int numero) throws OrganeInconnuException;
 	public void AjoutPieceBD(Piece P);
+
+
+	public DesenfumageNaturel ajoutDesenfumage(int numbatiment,String Emp, String Obs, String ouvrant, int quantite,int commandes,int ouvrants,String cartouche,String commande ) throws BatimentInconnuException;
+	public String rechercheConclusionVerificationDesenfumageNaturel(int numeroBatiment);
+	public String rechercheConclusionMaintenancecorrDesenfumageNaturel(int numeroBatiment);
+	public DesenfumageNaturel rechercheDesenfumageNaturel(int numeroDesenfumageNaturel);
+	public String rechercheConclusionMaintenanceprevdesenfumagenaturel(int numeroBatiment);
+	public DesenfumageNaturel remplacementdesenfumagenaturel(DesenfumageNaturel D, String Emp, String Obs,String ouvrant, int quantite,int commandes,int ouvrants,String cartouche,String commande,boolean marche);
+	public List<DesenfumageNaturel> rechercheDesenfumageNaturelBatiment(int numeroBatiment);
+
+
 }
