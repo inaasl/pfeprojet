@@ -96,7 +96,6 @@
 	observations="";
 	for(int i=0;i<ouvrants.size();i++){
 		observations=observations+ouvrants.get(i).getObservation()+";";
-		out.println("<br> Nom : "+ouvrants.get(i).getNom());
 	}
 	
 	if(ajout.compareTo("0")==0){

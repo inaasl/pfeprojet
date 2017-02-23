@@ -101,7 +101,7 @@
 		
 		P=service.recherchePoteauxBatiment(num);
 		out.println("<br><center><h3>Maintenance préventive des Poteaux Incendie</h3></center><br>");
-		out.println("<center><input type=\"button\" name=\"AjoutPoteaux\" value=\"Ajouter un poteau incendie\"  onclick=\"self.location.href='installationpoteaux.jsp?ajout=18'\"></button></center>");
+		out.println("<center><input type=\"button\" name=\"AjoutPoteaux\" value=\"Ajouter un poteau incendie\"  onclick=\"self.location.href='installationpoteaux.jsp?ajout=6'\"></button></center>");
 		out.println("<br><center><h4> Liste des Poteaux Incendie </h4></center>");
 		// Tableau
 		out.println("<br><form action=\"maintenanceprevvalidee.jsp\">");

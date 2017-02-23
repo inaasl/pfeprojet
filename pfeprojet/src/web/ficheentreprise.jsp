@@ -171,7 +171,7 @@
 		// formulaire d'ajout d'un batiment
 		if(statut==0)
 	 	{
-		  out.print("<br><br><form action=\"ajoutbatiment\" method=\"POST\" >");
+		  out.print("<br><br><form action=\"ajoutBatiment.jsp\" method=\"POST\" >");
 		  out.print("<input type=\"hidden\" id=\"thisField\" name=\"numEntreprise\" value="+num
 				+"> <input type=\"submit\" name=\" Ajout batiment \" value=\" Ajout batiment \" /></form>");
 	 	}	

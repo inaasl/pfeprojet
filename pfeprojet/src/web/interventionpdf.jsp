@@ -231,6 +231,7 @@
 		  	
 		  	pdf=null;
 			session.setAttribute("pdf",pdf);
+			out.println("<meta http-equiv=\"refresh\" content=\"1; URL=fichebatiment.jsp\">");
 	     	}catch(NamingException e){
 	         	  
 	        } 

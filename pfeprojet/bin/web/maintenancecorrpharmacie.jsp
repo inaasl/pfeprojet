@@ -99,7 +99,7 @@
 		out.println("<br><center><h4> Liste des Pharmacies </h4></center>");
 		// Tableau
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
-		out.print("<thead><tr><th> N° Pharmacie </th><th> Emplacement </th><th> Capacité </th><th>Annee </th></tr>");
+		out.print("<thead><tr><th> N° Pharmacie </th><th> Emplacement </th><th> Capacité </th><th>Annee </th><th></th></tr>");
 		out.print("</thead><tbody>");
 	      
 		for(i=0;i<P.size();i++){

@@ -70,6 +70,7 @@
 			
 		numBat = String.valueOf(session.getAttribute("num"));
 		
+		ouvrants=new ArrayList<Ouvrant>();
 		
 		session.setAttribute("num", numBat);
 		

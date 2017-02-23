@@ -101,7 +101,7 @@
 		
 		C=service.rechercheCoupefeuBatiment(num);
 		out.println("<br><center><h3>Maintenance préventive des Portes Coupe-feu</h3></center><br>");
-		out.println("<center><input type=\"button\" name=\"AjoutCF\" value=\"Ajouter une Porte Coupe-feu\"  onclick=\"self.location.href='installationcoupefeu.jsp?ajout=13'\"></button></center>");
+		out.println("<center><input type=\"button\" name=\"AjoutCF\" value=\"Ajouter une Porte Coupe-feu\"  onclick=\"self.location.href='installationcoupefeu.jsp?ajout=12'\"></button></center>");
 		out.println("<br><center><h4> Liste des Portes Coupe-feu </h4></center>");
 		// Tableau
 		out.println("<br><form action=\"maintenanceprevvalidee.jsp\">");

@@ -108,7 +108,7 @@
 		<tr></tr>
 		<tr>
 			<td> <label for="emplacement"><i>Emplacement <font color="#ff0000">*</font></i></label></td>
-			<td><textarea name="emplacement" rows="5" cols="47" required placeholder="emplacement Poteau Incendie..."></textarea></td></tr>
+			<td><textarea name="emplacement" rows="5" cols="47" required placeholder="emplacement RIA ..."></textarea></td></tr>
 	  <tr></tr>
 	  <tr><td> <label for="typeria"><i>Type RIA <font color="#ff0000">*</font></i></label>	 
 			</td> <td> <select name="typeria" class="class_select">

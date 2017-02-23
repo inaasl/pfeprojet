@@ -102,7 +102,7 @@
 			DesenfumageNaturel D =(DesenfumageNaturel)service.rechercheOrganeNum(numdesenfumage);
 			session.setAttribute("numdesenfumage",numdesenfumage);
 		
-			out.println("<center><input type=\"button\" name=\"AjoutOuv\" value=\"Ajout ouvrants\"  onclick=\"self.location.href='ajoutouvrant.jsp?ajout=18'\"></button></center>");
+			out.println("<center><input type=\"button\" name=\"AjoutOuv\" value=\"Ajout ouvrants\"  onclick=\"self.location.href='ajoutouvrant.jsp?ajout=20'\"></button></center>");
 
 			%>
 		
@@ -176,7 +176,7 @@
         </div>
       </div>
       <%
-		out.println("<br><input type=\"submit\" value=\"Valider\"></center>");
+		out.println("<br><center><input type=\"submit\" value=\"Valider\"></center>");
 		%>
 	</fieldset>
 	</form>

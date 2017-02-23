@@ -264,7 +264,7 @@
 	
 	out.println("<br><center> Maintenance Corrective effectuée avec succès </center>");
 
-	out.println("<center><a href=\"maintenancecorrcoupefeu.jsp\">Effectuer une nouvelle maintenance corrective </a></center>");
+	out.println("<center><a href=\"maintenancecorralarme.jsp\">Effectuer une nouvelle maintenance corrective </a></center>");
 	out.println(
 			"<br><center><form action=\"interventionvalidee.jsp\"><table><tr>"+
 	"<td> <p> Conclusion  </td> <td><textarea  name=\"conclusion\" rows=\"5\" cols=\"47\" />"+conclusion+"</textarea></p> <td></tr></table>"+

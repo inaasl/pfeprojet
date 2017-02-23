@@ -50,7 +50,8 @@
 	<%@ page import="java.util.List"%>
 
 		<%!String numBat,observation;
-			int i,num,numalarme;%>
+			int i,num,numalarme;
+			String[] result;%>
 		<%
 			session = request.getSession();
 
@@ -78,6 +79,7 @@
 			observation=service.rechercheObservationVerification(numalarme);
 			Alarme A =(Alarme)service.rechercheOrganeNum(numalarme);
 			session.setAttribute("numalarme",numalarme);
+			result=observation.split(";");
 		%>
 		
 <form action="maintenanceprevalarmevalideeconclu.jsp" method="post">
@@ -254,7 +256,7 @@
 	</td></tr>
 	<tr></tr>
 	<tr><td><label for="observations"><i>Observations <font color="#ff0000">*</font></i></label></td><td>
-	<textarea name="observations" rows="5" cols="47" required placeholder="observations......"><%out.println(observation);%></textarea> 
+	<textarea name="observations" rows="5" cols="47" required placeholder="observations......"><%out.println(result[0]);%></textarea> 
 	</td>
 	</tr>
 	<tr><td> Est-ce que l'organe fonctionne correctement ? </td><td>

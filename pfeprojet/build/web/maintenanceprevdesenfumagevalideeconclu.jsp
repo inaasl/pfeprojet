@@ -133,7 +133,7 @@
 	
 	out.println("<br><center> Maintenance Préventive effectuée avec succès </center>");
 
-	out.println("<center><a href=\"maintenanceprevdesenfumagenaturel.jsp\">Effectuer une nouvelle vérification </a></center>");
+	out.println("<center><a href=\"maintenanceprevdesenfumagenaturel.jsp\">Effectuer une nouvelle Maintenance Préventive </a></center>");
 	out.println(
 			"<br><center><form action=\"interventionvalidee.jsp\"><table><tr>"+
 	"<td> <p> Conclusion  </td> <td><textarea  name=\"conclusion\" rows=\"5\" cols=\"47\" />"+conclusion+"</textarea></p> <td></tr></table>"+

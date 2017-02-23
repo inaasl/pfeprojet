@@ -83,7 +83,7 @@
 		%>
 <form action="maintenancecorreclairagevalideeconclu.jsp" method="post">
 		 <fieldset>
-		 <legend><b>Installation Eclairage</b></legend>
+		 <legend><b>Maintenance Corrective Eclairage</b></legend>
 		<br>
 		<table>
 		<tr>

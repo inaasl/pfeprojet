@@ -122,7 +122,7 @@
 		<tr></tr>
 		<tr>
 			<td> <label for="emplacement"><i>Emplacement de la pharmacie <font color="#ff0000">*</font></i></label></td>
-			<td><textarea name="emplacement" rows="5" cols="47" required value="<%out.println(P.getEmplacement());%>"></textarea></td></tr>
+			<td><textarea name="emplacement" rows="5" cols="47" required value="<%out.println(P.getEmplacement());%>"><%out.println(P.getEmplacement());%></textarea></td></tr>
 	  <tr></tr>
 	  <tr>
 	  	<td>

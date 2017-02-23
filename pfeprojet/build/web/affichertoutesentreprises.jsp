@@ -117,7 +117,7 @@
 	int i;
 	%>
 	<%
-		out.println("<h3><center>Liste de toutes les entreprises</center></h3> <br> ");
+		out.println("<h3><center>Liste de tous les clients </center></h3> <br> ");
 
 		InitialContext ctx = new InitialContext();
 		Object obj = ctx.lookup(

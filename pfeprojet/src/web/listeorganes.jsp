@@ -283,7 +283,9 @@
 				}
 			}
 		}
+		out.print("</center>");
 		if(extincteur!=null){
+			out.print("<center>");
 			out.println("<h4>Extincteur</h4><br>");
 			out.print("</center>");
 	    	out.print("<br/><table id=\"datatables1\" class=\"display\" >");
@@ -311,6 +313,7 @@
 		if(eclairage!=null) {
 			String presence;
 			String fonctionne;
+			out.print("<center>");
 			out.println("<h4>Eclairage</h4><br>");
 			out.print("</center>");
 	    	out.print("<br/><table id=\"datatables2\" class=\"display\" >");
@@ -346,6 +349,7 @@
 		}
 		
 		if(pharmacie!=null) {
+			out.print("<center>");
 			out.println("<h4>Pharmacie</h4><br>");
 			out.print("</center>");
 	    	out.print("<br/><table id=\"datatables3\" class=\"display\" >");
@@ -370,6 +374,7 @@
 		}
 		
 		if(coupefeu!=null) {
+			out.print("<center>");
 			out.println("<h4>Porte Coupe-feu</h4><br>");
 			out.print("</center>");
 	    	out.print("<br/><table id=\"datatables4\" class=\"display\" >");
@@ -393,6 +398,7 @@
 		}
 		
 		if(ria!=null) {
+			out.print("<center>");
 			out.println("<h4>RIA</h4><br>");
 			out.print("</center>");
 	    	out.print("<br/><table id=\"datatables5\" class=\"display\" >");
@@ -419,6 +425,7 @@
 		}
 		
 		if(poteaux!=null) {
+			out.print("<center>");
 			out.println("<h4>Poteaux Incendie</h4><br>");
 			out.print("</center>");
 	    	out.print("<br/><table id=\"datatables6\" class=\"display\" >");
@@ -444,6 +451,7 @@
 		}
 		
 		if(signaletique!=null) {
+			out.print("<center>");
 			out.println("<h4>Signalétique</h4><br>");
 			out.print("</center>");
 	    	out.print("<br/><table id=\"datatables7\" class=\"display\" >");
@@ -465,6 +473,7 @@
 		}
 		
 		if(alarme!=null) {
+			out.print("<center>");
 			out.println("<h4>Alarme</h4><br>");
 			out.print("</center>");
 	    	out.print("<br/><table id=\"datatables8\" class=\"display\" >");
@@ -489,29 +498,29 @@
 	 	 	out.print("</tbody></table><br>");
 		}
 		if(desenfumagenaturel!=null) {
+			out.print("<center>");
 			out.println("<h4>Désenfumage Naturel</h4><br>");
 			out.print("</center>");
-			    out.print("<br/><table id=\"datatables9\" class=\"display\" >");
-			 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Commande</th><th>Ouvrant</th><th>Quantite</th><th>commandes</th><th>ouvrants</th><th>Cartouches</th><th>Etat</th></tr>");
-			 	out.print("</thead><tbody>");
-			 	for(i=0;i<desenfumagenaturel.size();i++){
-			if(desenfumagenaturel.get(i).isMarche()==true)
-			marche="<img src=\"marchtrue.jpg\">";
-			else
-			marche="<img src=\"marchefalse.png\">"; 
-			out.print(" <tr><td>"+desenfumagenaturel.get(i).getNumero()
-				+"</td><td>"+desenfumagenaturel.get(i).getEmplacement()
-				+"</td><td>"+desenfumagenaturel.get(i).getCommande()
-				+"</td><td>"+desenfumagenaturel.get(i).getOuvrant()
-				+"</td><td>"+desenfumagenaturel.get(i).getQuantite()
-				+"</td><td>"+desenfumagenaturel.get(i).getCommandes()
-				+"</td><td>"+desenfumagenaturel.get(i).getOuvrants()
-				+"</td><td>"+desenfumagenaturel.get(i).getCartouches()
-				+"</td><td>"+marche
-				+"</td></tr>");
-			 }
-			 out.print("</tbody></table><br>");
+			out.print("<br/><table id=\"datatables9\" class=\"display\" >");
+			out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Nombre d'ouvrants</th><th>Cartouches</th><th>Etat</th><th></th>Fiche</tr>");
+			out.print("</thead><tbody>");
+			for(i=0;i<desenfumagenaturel.size();i++){
+				if(desenfumagenaturel.get(i).isMarche()==true)
+					marche="<img src=\"marchtrue.jpg\">";
+				else
+					marche="<img src=\"marchefalse.png\">"; 
+				out.print(" <tr><td>"+desenfumagenaturel.get(i).getNumero()
+						+"</td><td>"+desenfumagenaturel.get(i).getEmplacement()
+						+"</td><td>"+desenfumagenaturel.get(i).getOuvrants().size()
+						+"</td><td>"+desenfumagenaturel.get(i).getCartouches()
+						+"</td><td>"+marche
+						+"</td><td> <form action=\"fichedesenfumage.jsp\" method=\"GET\" ><input type=\"hidden\" id=\"iddesenfumage\" name=\"numdesenfumage\" value="
+						+ desenfumagenaturel.get(i).getNumero()
+						+ "> <input type=\"submit\" name=\" Consulter la fiche de du désenfumage \" value=\" Consulter la fiche du désenfumage \" /></form></td></tr>"
+				);
 			}
+			out.print("</tbody></table><br>");
+		}
 		
 		organe.clear();
 		

@@ -162,9 +162,9 @@
 	session.setAttribute("interv", interv);
 	session.setAttribute("alarmes",alarmes);
 	
-	out.println("<br><center> Vérification effectuée avec succès </center>");
+	out.println("<br><center> Maintenance Préventive effectuée avec succès </center>");
 
-	out.println("<center><a href=\"verificationalarme.jsp\">Effectuer une nouvelle vérification </a></center>");
+	out.println("<center><a href=\"maintenanceprevalarme.jsp\">Effectuer une nouvelle vérification </a></center>");
 	out.println(
 			"<br><center><form action=\"interventionvalidee.jsp\"><table><tr>"+
 	"<td> <p> Conclusion  </td> <td><textarea  name=\"conclusion\" rows=\"5\" cols=\"47\" />"+conclusion+"</textarea></p> <td></tr></table>"+

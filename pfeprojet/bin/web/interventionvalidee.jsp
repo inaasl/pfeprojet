@@ -238,7 +238,6 @@
 		if(organes.get(0) instanceof DesenfumageNaturel){
 			for(int i=0;i<organes.size();i++){
 				n=((DesenfumageNaturel)organes.get(i)).getOuvrants().size();
-				out.println("<br> n = "+n);
  				for(int j=0;j<n;j++){
 				((DesenfumageNaturel)organes.get(i)).getOuvrants().get(j).setDesenfumagenaturel((DesenfumageNaturel)organes.get(i));
 				//service.MAJOuvrantBD(((DesenfumageNaturel)organes.get(i)).getOuvrants().get(j));
@@ -334,6 +333,11 @@
 																						else {
 																							if(ajout.compareTo("19")==0) {
 																								out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenancecorrdesenfumagenaturel.jsp\">");
+																							}
+																							else {
+																								if(ajout.compareTo("6")==0){
+																									out.println("<meta http-equiv=\"refresh\" content=\"1; URL=maintenanceprevpoteaux.jsp\">");	
+																								}
 																							}
 																						}
 																					}

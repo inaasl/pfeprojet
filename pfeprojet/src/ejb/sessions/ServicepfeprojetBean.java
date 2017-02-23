@@ -705,8 +705,12 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 			if( Interv.getOrgane() instanceof Alarme || Interv.getOrgane() instanceof DesenfumageNaturel)
 			em.merge(Interv);
 		}
-		else 
-			em.persist(Interv);
+		else {
+			if(Interv instanceof Preventive && Interv.getOrgane() instanceof DesenfumageNaturel)
+				em.merge(Interv);
+			else 
+				em.persist(Interv);
+		}
 		
 		O.addInterventions(Interv);
 		O.setConclusion(conclusion);

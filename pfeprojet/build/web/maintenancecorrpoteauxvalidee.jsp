@@ -8,9 +8,9 @@
 <script language="JavaScript">
    function check(f){
 	    var diametrevalide = new RegExp (/^[1-9][0-9]*$/);
-	    var pressionstatvalide = new RegExp (/^[1-9][0-9]*$/);
-	    var pression60valide = new RegExp (/^[1-9][0-9]*$/);
-	    var pression1barvalide = new RegExp (/^[1-9][0-9]*$/);
+	    var pressionstatvalide = new RegExp (/^[0-9][0-9]*$/);
+	    var pression60valide = new RegExp (/^[0-9][0-9]*$/);
+	    var pression1barvalide = new RegExp (/^[0-9][0-9]*$/);
 	    
 	    if(diametrevalide.test(f.diametre.value)){
 	    	if(pressionstatvalide.test(f.pressionstat.value)){

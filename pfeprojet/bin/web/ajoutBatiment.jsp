@@ -70,7 +70,7 @@
 	       numEntreprise = request.getParameter("numEntreprise");
 	     %>
 	     
-		<form action="ajoutbatimentvalide" method="post"  onsubmit="return check(this);">
+		<form action="ajoutbatimentvalide.jsp" method="post"  onsubmit="return check(this);">
 				<fieldset>
                 <legend><b>Remplir les champs du formulaire</b></legend>
 				<br />

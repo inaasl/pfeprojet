@@ -9,7 +9,7 @@
    <script language="JavaScript">
    function check(f){
 	   
-	    var numvalide = new RegExp (/^07[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/);
+	    var numvalide = new RegExp (/^0(6|7)[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/);
 	    var mailvalide = new RegExp (/^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/);
 	    
 	    if(numvalide.test(f.telTechnicien.value)){
