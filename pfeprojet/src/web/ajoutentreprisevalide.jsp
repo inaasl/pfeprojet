@@ -60,7 +60,7 @@
 
 
 		
-        <%! String nomEntreprise,adresseEntreprise,telEntreprise, nomInterlocuteur, adresseemailEntreprise;
+        <%! String nomEntreprise,adresseEntreprise,telEntreprise, nomInterlocuteur, adresseemailEntreprise,prenomInterlocuteur;
         Compte compteajoute;
         
         %>
@@ -71,14 +71,14 @@
            		telEntreprise=request.getParameter("telEntreprise");
            		nomInterlocuteur=request.getParameter("nomInterlocuteur");
            		adresseemailEntreprise=request.getParameter("adresseemailEntreprise");
-           		
+           		prenomInterlocuteur=request.getParameter("prenomInterlocuteur");
            		
            		session = request.getSession();
            		InitialContext ctx = new InitialContext();
     			Object obj = ctx.lookup("ejb:pfeprojet/pfeprojetSessions/"+ "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
     			ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
     			
-    			compteajoute=service.ajouterEntreprise(nomEntreprise,adresseEntreprise,adresseemailEntreprise,telEntreprise,nomInterlocuteur);    			
+    			compteajoute=service.ajouterEntreprise(nomEntreprise,adresseEntreprise,adresseemailEntreprise,telEntreprise,nomInterlocuteur,prenomInterlocuteur);    			
     			
     			out.println("<center><h3>Ajout effectué avec succès<h3><br>");
     			out.println("<table border=\"1\" cellpadding=\"10\" cellspacing=\"1\" >");

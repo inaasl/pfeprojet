@@ -7,7 +7,20 @@
 </head>
 
 <body>
-   
+    <script language="JavaScript">
+   function check(f){
+	    var numvalide = new RegExp (/^0(6|7)[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]$/);
+	    
+	    if(numvalide.test(f.telEntreprise.value)){
+	    		return true;
+	    }
+	    else {
+			alert('Numéro de téléphone non valide !');
+	    	return false;
+	    }
+	    
+	}
+    </script> 
 	<header class="header">
 		<a class="logo" href="http://www.desentec.fr/"><img
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
@@ -57,7 +70,7 @@
 	       numEntreprise = request.getParameter("numEntreprise");
 	     %>
 	     
-		<form action="ajoutbatimentvalide" method="post">
+		<form action="ajoutbatimentvalide" method="post"  onsubmit="return check(this);">
 				<fieldset>
                 <legend><b>Remplir les champs du formulaire</b></legend>
 				<br />
@@ -91,7 +104,13 @@
                     <input type="text" name="prenomresponsable" required placeholder="Prenom..." size="40" class="taille_input_annee"/>
                </td>
           </tr>  
-          
+                    <tr></tr> 
+            <tr><td>   
+                 <label for="telresponsable"><i> Numéro de téléphone du responsable <font color="#ff0000">*</font></i></label>
+                </td> <td>
+                    <input type="text" name="telresponsable" required placeholder="numéro de téléphone" size="40" class="taille_input_annee"/>
+               </td>
+          </tr>  
           </table>
         <br /><br />
         <% 

@@ -3,40 +3,11 @@
 <title>Ajout d'un désenfumage naturel</title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css" media="screen and (max-width: 2560px)">
+<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 </head>
 <body>
-
-
-<script language="JavaScript">
-   function check(f){
-	    var quantitevalide = new RegExp (/^[0-9][0-9]*$/);
-	    var commandevalide = new RegExp (/^[0-9][0-9]*$/);
-	    var ouvrantvalide = new RegExp (/^[0-9][0-9]*$/);
-	    
-	    
-	    if(quantitevalide.test(f.quantite.value)){
-	    	if(commandevalide.test(f.commandes.value)){
-		    	if(ouvrantvalide.test(f.ouvrants.value)){
-			    	
-			    		return true
-			    }
-		    	else {
-		    		alert('Valeur de louvrant non valide, Veuillez entrer un nombre !');
-		    		return false
-		    	}
-	    	}
-	    	else {
-	    		alert('Valeur de la commande non valide, Veuillez entrer un nombre !');
-	    		return false
-	    	
-	            }
-	    }
-	    else {
-    		alert('La valeur de la quantite est non valide, Veuillez entrer un nombre');
-    		return false
-	    }
-   }
-</script>
 
 	<header class="header">
 		<a class="logo" href="http://www.desentec.fr/"><img
@@ -75,17 +46,16 @@
 	<%@ page import="java.io.* "%>
 	<%@ page import="ejb.sessions.*"%>
 	<%@ page import="ejb.entites.* "%>
-	<%@ page import="java.util.Collection"%>
-	<%@ page import="java.util.Set"%>
 	<%@ page import="javax.naming.InitialContext"%>
 	<%@ page import="javax.naming.NamingException"%>
-	<%@ page import="java.util.Date"%>
-	<%@ page import="java.text.SimpleDateFormat"%>
-	<%@ page import="java.text.DateFormat"%>
-	<%@ page import="java.util.HashSet"%>
+	<%@ page import="java.util.List"%>
+	<%@ page import="java.util.ArrayList"%>
 	
-	<%!String numBat,ajout;
-	int num, i;%>
+	<%!String numBat,ajout,commandeOuvrant,nomOuvrant,observationOuvrant;
+	int num, i;
+	Ouvrant Ouvrantcourant;
+	List<Ouvrant> ouvrants;
+	%>
 	
 	<%
 		session = request.getSession();
@@ -110,77 +80,140 @@
 			ajout=String.valueOf(session.getAttribute("ajout"));
 		}
 
-	
+	if(ajout.compareTo("0")==0){
 	%>
-<form action="installationdesenfumagenaturelvalidee" method="post" onsubmit="return check(this);">
+<form action="installationdesenfumagenaturelvalidee.jsp" method="post">
 		 <fieldset>
 		 <legend><b>Installation Désenfumage Naturel</b></legend>
 		<br>
 		<table>
-		 <tr>
-			<td>
-                <label for="ouvrant"><i>Ouvrant <font color="#ff0000">*</font></i></label>
-                </td>	  
-		   <td><textarea name="ouvrant" rows="3" cols="47" required placeholder="ouvrant..."></textarea>
-		  </td></tr>
-		<tr></tr>
-		<tr>
-			<td>
-                <label for="commande"><i>Commande <font color="#ff0000">*</font></i></label>
-                </td>	  
-		   <td><textarea name="commande" rows="3" cols="47" required placeholder="commande..."></textarea>
-		  </td></tr>
-		<tr></tr>
 		<tr>
 			<td> <label for="emplacement"><i>Emplacement <font color="#ff0000">*</font></i></label></td>
 			<td><textarea name="emplacement" rows="5" cols="47" required placeholder="emplacement..."></textarea></td></tr>
 	  <tr></tr>
-	  <% if(ajout.compareTo("0")==0) { %>
-	  <tr><td><label for="observations"><i>Observations <font color="#ff0000">*</font></i></label></td><td>
-					<textarea name="observations" rows="5" cols="47" required placeholder="observations......"></textarea> 
-			</td>
-	 </tr>
-	 <% } %>
 	 <tr></tr>
-	 <tr>
-			<td>
-                <label for="cartouches"><i>Cartouches <font color="#ff0000">*</font></i></label>
-                </td>	  
-		   <td><textarea name="cartouches" rows="3" cols="47" required placeholder="cartouches..."></textarea>
-		  </td></tr>
-		<tr></tr>
-	 <tr>
-			<td>
-                <label for="quantite"><i>Quantite <font color="#ff0000">*</font></i></label>
-                </td>	  
-		   <td><input type="text"
-					name="quantite" required placeholder="Quantite..." size="40" class="taille_input_annee"/>
-		  </td></tr>
-		<tr></tr>
-		<tr>
-			<td>
-                <label for="commandes"><i>Commandes <font color="#ff0000">*</font></i></label>
-                </td>	  
-		   <td><input type="text"
-					name="commandes" required placeholder="Commandes..." size="40" class="taille_input_annee"/>
-		  </td></tr>
-		<tr></tr>
-		<tr>
-			<td>
-                <label for="ouvrants"><i>Ouvrants <font color="#ff0000">*</font></i></label>
-                </td>	  
-		   <td><input type="text"
-					name="ouvrants" required placeholder="Ouvrants..." size="40" class="taille_input_annee"/>
-		  </td></tr>
-		<tr></tr>
-	 
-	 
+	 <tr></tr>
+	 <tr></tr>
+	 <tr><td>
+        <label for="cartouches"><i>Cartouches <font color="#ff0000">*</font></i></label>
+        </td>	  
+		<td><textarea name="cartouches" rows="3" cols="47" required placeholder="cartouches..."></textarea>
+	 </td></tr>
+     <tr></tr>
 	 </table>
-			<br><center><input type="submit" value="Valider"> </center>
-			</fieldset>
+	 <div class="panel panel-primary">
+        <div class="panel-heading">Ouvrants</div>        
+        <table class="table table-bordered table-striped">
+          <thead>
+            <tr>
+             <th class="col-sm-4">Commande</th>
+             <th class="col-sm-4">Ouvrant</th>
+             <th class="col-sm-4">Observation</th>
+             <th class="col-sm-2"></th>
+            </tr>
+          </thead>
+		 <tbody>
+            <tr v-for="ouvrant in ouvrants">
+              <td>{{ ouvrant.commande }}</td>
+              <td>{{ ouvrant.nom }}</td> 
+              <td>{{ ouvrant.observation }}</td> 
+              <td><button type="button" class="btn btn-warning btn-block" v-on:click="suppression($index)">Supprimer</button></td>
+            </tr>  
+            <tr>
+              <td><input name="commandeOuvrant" type="text" class="form-control" v-model="inputCommande" v-el:modif placeholder="Commande"></td>
+              <td><input name="nomOuvant" type="text" class="form-control" v-model="inputNom" v-el:modif placeholder="Nom"></td>
+              <td><input name="observationOuvrant" type="text" class="form-control" v-model="inputObservation" v-el:modif placeholder="Observation"></td>
+              <td colspan="2"><button type="button" class="btn btn-primary btn-block" v-on:click="ajouter()">Ajouter</button></td>
+            </tr>
+          </tbody>
+          </table>
+           <div class="panel-footer">
+          &nbsp
+          <button type="button" class="button btn btn-xs btn-warning" v-on:click="toutSupprimer">Tout supprimer</button>
+        </div>
+      </div>
+		<br><center><input type="submit" value="Valider"> </center>
+		</fieldset>
 		</form>
 		</div>
+	<script src="http://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
+     <script type="text/javascript">
+    new Vue({
+        el: '#container',
+        data: {
+          ouvrants: [],
+          supprimer: [],
+          inputCommande: '',
+          inputNom: '',
+          inputObservation: '',
+        },
+        methods: {
+          suppression: function(index) {
+            this.supprimer.push(this.ouvrants[index]);
+            this.ouvrants.splice(index, 1);
+          },
+          toutSupprimer: function() {
+            this.supprimer = this.supprimer.concat(this.ouvrants);
+            this.ouvrants = [];
+          },
+          ajouter: function() {
+            this.ouvrants.push({commande: this.inputCommande, nom: this.inputNom, observation: this.inputObservation});
+            $.ajax({
+                url: "installationdesenfumagenaturel.jsp",
+                data: {
+                	commandeOuvrant: this.inputCommande,
+                	nomOuvrant: this.inputNom,
+                	observationOuvrant: this.inputObservation,
+                	etatajout: 'oui'
+                },
+                });
+            <% 
+               ajout=request.getParameter("etatajout");
+         	   if(ajout!=null){
+         		   commandeOuvrant=request.getParameter("commandeOuvrant");
+         		   nomOuvrant=request.getParameter("nomOuvrant");
+         		   observationOuvrant=request.getParameter("observationOuvrant");
+         		   Ouvrantcourant=service.ajoutOuvrant(nomOuvrant,observationOuvrant,commandeOuvrant);
+				   if(ouvrants==null){
+					   ouvrants=new ArrayList<Ouvrant>();
+				   }
+				   ouvrants.add(Ouvrantcourant);
+         	   }
+			%>
+			this.inputCommande = '';
+			this.inputObservation ='';
+			this.inputNom = '';
+			
+          },
+        }
+      });
+    </script>
+    		
 	<%
+	   session.setAttribute("ouvrants",ouvrants);
+	 }
+	else {%>
+	<form action="installationdesenfumagenaturelvalidee.jsp" method="post">
+	<fieldset>
+	<legend><b>Installation Désenfumage Naturel</b></legend>
+	<br>
+	<table>
+	<tr>
+	<td><label for="emplacement"><i>Emplacement <font color="#ff0000">*</font></i></label></td>
+	<td><textarea name="emplacement" rows="5" cols="47" required placeholder="emplacement..."></textarea></td></tr>
+	<tr></tr>
+	<tr></tr>
+	<tr><td>
+    <label for="cartouches"><i>Cartouches <font color="#ff0000">*</font></i></label>
+    </td>	  
+	<td><textarea name="cartouches" rows="3" cols="47" required placeholder="cartouches..."></textarea>
+	 </td></tr>
+     <tr></tr>
+	 </table>
+	<br><center><input type="submit" value="Valider"> </center>
+	</fieldset>
+	</form>
+	<%}
 	 }
 	 }
 	 else

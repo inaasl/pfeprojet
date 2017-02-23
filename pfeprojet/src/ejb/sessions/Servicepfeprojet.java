@@ -17,6 +17,7 @@ import ejb.entites.MarqueAlarme;
 import ejb.entites.MarqueEclairage;
 import ejb.entites.MarqueExtincteur;
 import ejb.entites.Organe;
+import ejb.entites.Ouvrant;
 import ejb.entites.Pdfgenere;
 import ejb.entites.Pharmacie;
 import ejb.entites.Piece;
@@ -37,14 +38,16 @@ import ejb.entites.Typetelecommande;
 import ejb.entites.Verification;
 
 public interface Servicepfeprojet {
+	public void MAJOuvrantBD(Ouvrant O);
+	public void AjoutOuvrantBD(Ouvrant O);
+	public List<Ouvrant> RechercheOuvrantDesenfumage(int numeroDesenfumage);
 	
 	public void checkbatiment(int numerobatiment) throws BatimentInconnuException;
 	public List<Organe> rechercheOrganeDefectBatiment(int numerobatiment);
 	
-	public Compte ajouterEntreprise(String nom, String adresse,String email, String tel, String interlocuteur);
+	public Compte ajouterEntreprise(String nom, String adresse,String email, String tel, String nominterlocuteur,String prenomInterlocuteur);
 	public Compte ajouterTechnicien(String nom, String prenom, String adresse, String tel, String email);
-	public void ajouterBatiment(String nomentreprise, String nom, String adresse) throws EntrepriseInconnueException;
-
+	public void ajouterBatiment(int num, String nom, String adresse,String nominterlocuteur,String prenominterlocuteur, String numtel) throws EntrepriseInconnueException;
 	public Installation InstallationOrgane(String Obs, java.sql.Date date, int numtechnicien,int numbatiment,Organe O) throws TechnicienInconnuException, BatimentInconnuException, EntrepriseInconnueException;	
 	
 	public Extincteur ajoutExtincteur(int numbatiment, int Annee, String Emp, String Obs, String nommarque, String nomtype) throws BatimentInconnuException;
@@ -62,14 +65,6 @@ public interface Servicepfeprojet {
 			int ybatterieaes,int hbatterieaes,TypeBatterieAES typebatterieaes, int testvoltaes,int testampaes, int testchargeuraes ) throws BatimentInconnuException;
 	
 	
-	public String ObservationsAlarme(String observation,String optique,String ionique,String thermique, String thermov,String flamme,
-			String aspiration, String report, String manuel,String sonore,String lumineux);
-	
-	
-	public String testAlarme(int testvoltbatterie,int testampbatterie,int chargeur,int testvoltaes,
-			int testampaes,int testchargeuraes);
-	
-	
 	public Intervention ajoutIntervention(int numbatiment, Intervention Interv, Organe O, String conclusion) throws BatimentInconnuException;
 	public void ajoutOrgane(List<Organe> organes);
 	public Pdfgenere ajoutpdf(List<Intervention> interventions);
@@ -82,7 +77,7 @@ public interface Servicepfeprojet {
 	
 	public Verification Verification(int numero,String Obs, String conclusion, int numerotechnicien, java.sql.Date date,boolean marche) throws OrganeInconnuException,TechnicienInconnuException,BatimentInconnuException;
 	public Alarme verificationAlarme(Alarme A,int testvoltbatterie,int testampbatterie,int testchargeurbatterie,String optique,String obsionique,String thermique,String thermov,
-			String flamme,String aspiration,String report,String manuel,String sonore,String lumineux,int testvoltaes,int testampaes, int testchargeuraes);
+			String flamme,String aspiration,String report,String manuel,String sonore,String lumineux,int testvoltaes,int testampaes, int testchargeuraes,String observation);
 	
 	
 	public Corrective MaintenanceCorrectiveOrgane(String Obs,java.sql.Date date,  int numerotechnicien, Organe O) throws TechnicienInconnuException;	
@@ -239,13 +234,20 @@ public interface Servicepfeprojet {
 	public void AjoutPieceBD(Piece P);
 
 
-	public DesenfumageNaturel ajoutDesenfumage(int numbatiment,String Emp, String Obs, String ouvrant, int quantite,int commandes,int ouvrants,String cartouche,String commande ) throws BatimentInconnuException;
+	public DesenfumageNaturel ajoutDesenfumage(int numbatiment,String Emp, String Obs,String cartouches, List<Ouvrant> ouvrants ) throws BatimentInconnuException;
+	public Ouvrant ajoutOuvrant(String nom, String observation,String commande);
+	
 	public String rechercheConclusionVerificationDesenfumageNaturel(int numeroBatiment);
 	public String rechercheConclusionMaintenancecorrDesenfumageNaturel(int numeroBatiment);
+	
 	public DesenfumageNaturel rechercheDesenfumageNaturel(int numeroDesenfumageNaturel);
+	
 	public String rechercheConclusionMaintenanceprevdesenfumagenaturel(int numeroBatiment);
-	public DesenfumageNaturel remplacementdesenfumagenaturel(DesenfumageNaturel D, String Emp, String Obs,String ouvrant, int quantite,int commandes,int ouvrants,String cartouche,String commande,boolean marche);
+		
 	public List<DesenfumageNaturel> rechercheDesenfumageNaturelBatiment(int numeroBatiment);
 
+	
+	public DesenfumageNaturel remplacementdesenfumagenaturel(DesenfumageNaturel D, String observation, String Emp, List<Ouvrant> ouvrants, String cartouches);
+	public Ouvrant remplacementouvrant(Ouvrant O, String Commande,String Observation,String nom);
 
 }

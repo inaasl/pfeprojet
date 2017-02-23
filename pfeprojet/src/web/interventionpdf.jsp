@@ -145,6 +145,16 @@
                                 	if(pdf.getInterventions().get(0).getOrgane() instanceof Poteaux) {
                                     	typeorgane = new Paragraph("Poteaux Incendie",catFont);
                                     }
+                                	else {
+                                    	if(pdf.getInterventions().get(0).getOrgane() instanceof Alarme) {
+                                        	typeorgane = new Paragraph("Alarme Incendie",catFont);
+                                        }
+                                    	else {
+                                        	if(pdf.getInterventions().get(0).getOrgane() instanceof DesenfumageNaturel) {
+                                            	typeorgane = new Paragraph("Désenfumage Naturel",catFont);
+                                            }
+                                    	}
+                                	}
                             	}
                         	}
                     	}

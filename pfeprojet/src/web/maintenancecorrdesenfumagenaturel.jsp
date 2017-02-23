@@ -65,7 +65,7 @@
 
 	<%!String numBat,conclusion, observation;
 	int num,i;
-	List<DesenfumageNaturel> E = new ArrayList<DesenfumageNaturel>();
+	List<DesenfumageNaturel> D = new ArrayList<DesenfumageNaturel>();
 	%>
 	<%
 		session = request.getSession();
@@ -90,30 +90,29 @@
 		numBat = String.valueOf(session.getAttribute("numBatiment"));
 		session.setAttribute("numBatiment", numBat);
  		num=Integer.parseInt(numBat);
-		E.clear();
+		D.clear();
 		
-		E=service.rechercheDesenfumageNaturelBatiment(num);
+		D=service.rechercheDesenfumageNaturelBatiment(num);
 		out.println("<br><center><h3>Maintenance Corrective des Désenfumages naturels</h3></center><br>");
-		out.println("<center><input type=\"button\" name=\"AjoutExt\" value=\"Ajout d'un désenfumage\"  onclick=\"self.location.href='installationdesenfumagenaturel.jsp?ajout=19'\"></button></center>");
+		out.println("<center><input type=\"button\" name=\"AjoutDes\" value=\"Ajout d'un désenfumage\"  onclick=\"self.location.href='installationdesenfumagenaturel.jsp?ajout=19'\"></button></center>");
 		out.println("<br><center><h4> Liste des Désenfumages </h4></center>");
 		// Tableau
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
-		out.print("<thead><tr><th> N° Désenfumage </th><th> Emplacement </th><th>Commande </th><th>Ouvrant</th><th>Cartouches</th><th></th></tr>");
+		out.print("<thead><tr><th> N° Désenfumage </th><th> Emplacement </th><th>Nombre d'Ouvrants</th><th>cartouches</th><th></th></tr>");
 		out.print("</thead><tbody>");
 	      
-		for(i=0;i<E.size();i++){
-					out.println(" <tr><td > " + E.get(i).getNumero()+
-						"</td> <td>" + E.get(i).getEmplacement()+
-						"</td> <td >" + E.get(i).getCommande()+
-						"</td> <td >" + E.get(i).getOuvrant()+
-						"</td> <td >" + E.get(i).getCartouches()+
-						"</td><td> <form action=\"maintenancecorrdesenfumagenaturelvalidee\" method=\"GET\" ><input type=\"hidden\" id=\"idextinct\" name=\"numdesenfumage\" value="
-						+ E.get(i).getNumero()
+		for(i=0;i<D.size();i++){
+					out.println(" <tr><td > " + D.get(i).getNumero()+
+						"</td> <td>" + D.get(i).getEmplacement()+
+						"</td> <td >" + D.get(i).getOuvrants().size()+
+						"</td> <td >" + D.get(i).getCartouches()+
+						"</td><td> <form action=\"maintenancecorrdesenfumagenaturelvalidee.jsp\" method=\"GET\" ><input type=\"hidden\" id=\"idextinct\" name=\"numdesenfumage\" value="
+						+ D.get(i).getNumero()
 						+ "> <input type=\"submit\" name=\" Effectuer une maintenance corrective \" value=\" Effectuer une maintenance corrective \" /></form></td></tr>"
 						);
 		}
 		out.println("</tbody></table><br><br>"); 
-		session.setAttribute("Desenfumagenaturel",E);
+		session.setAttribute("Desenfumagenaturel",D);
 	%>
 	</div>
 	<%

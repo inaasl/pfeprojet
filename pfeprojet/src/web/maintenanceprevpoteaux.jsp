@@ -168,7 +168,7 @@
 		session.setAttribute("organeslist",P);
 	%>
 	</div>
-	     <script src="http://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
+	 <script src="http://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
      <script type="text/javascript">
     new Vue({
         el: '#container',

@@ -122,23 +122,34 @@
 	Alarmecourant=service.verificationAlarme(Alarmecourant,testvoltbatterie,testamperebatterie,testvoltchargeurbatterie,obsoptique,obsionique,
 			obsthermique,obsthermov,obsflamme,obsaspiration,obsreport,obsmanuel,
 			obssonore,obslumineux,testvoltbatterieaes,testamperebatterieaes,
-			testvoltchargeurbatterieaes);
+			testvoltchargeurbatterieaes,observations);
 	
 	conclusion=service.rechercheConclusionVerificationAlarme(numB);
 	interv = (List<Verification>)session.getAttribute("interv");
 	if (interv == null) {
 		interv = new ArrayList<Verification>();
 	}
+	String result = "";
+	result = result + observations+";";
+	result = result + obsoptique +";";
+	result = result + obsionique + ";";
+	result = result + obsthermique + ";";
+	result = result + obsthermov + ";";
+	result = result + obsflamme + ";";
+	result = result + obsaspiration + ";";
+	result = result + obsreport + ";";
+	result = result + obsmanuel + ";";
+	result = result + obssonore + ";";
+	result = result + obslumineux + ";"; 
 	
-	String observationgroupee=service.ObservationsAlarme(observations,obsoptique,obsionique,obsthermique, obsthermov,obsflamme,
-			obsaspiration, obsreport, obsmanuel,obssonore,obslumineux);
+	result = result + String.valueOf(testvoltbatterie) + ";"; 
+	result = result + String.valueOf(testamperebatterie) + ";"; 
+	result = result + String.valueOf(testvoltchargeurbatterie) + ";"; 
+	result = result +  String.valueOf(testvoltbatterieaes) + ";"; 
+	result = result + String.valueOf(testamperebatterieaes) + ";"; 
+	result = result + String.valueOf(testvoltchargeurbatterieaes) + ";";
 	
-	String Test = service.testAlarme(testvoltbatterie,testamperebatterie,testvoltchargeurbatterie,testvoltbatterieaes,
-			testamperebatterieaes, testvoltchargeurbatterieaes);
-	
-	observationgroupee = observationgroupee + Test;
-	
-	interv.add(service.Verification(Alarmecourant.getNumero(),observationgroupee,"--",numT, Date.valueOf(formater.format(date)), Etat));
+	interv.add(service.Verification(Alarmecourant.getNumero(),result,"--",numT, Date.valueOf(formater.format(date)), Etat));
 
 	session.setAttribute("interv", interv);
 	

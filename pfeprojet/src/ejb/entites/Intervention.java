@@ -54,7 +54,7 @@ public abstract class Intervention implements java.io.Serializable {
 	public void setDate(Date date) {
 		this.date = date;
 	}
-	@Column(length=1000)
+	@Column(length=2000)
 	public String getConclusion() {
 		return conclusion;
 	}

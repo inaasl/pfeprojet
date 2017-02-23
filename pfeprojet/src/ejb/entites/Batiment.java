@@ -14,6 +14,7 @@ public class Batiment implements java.io.Serializable {
 	private String adresse;
 	private String nomresp;
 	private String prenomresp;
+	private String telresp;
 	private boolean marche;
 	
 	private List<Organe> organes;
@@ -100,6 +101,14 @@ public class Batiment implements java.io.Serializable {
 
 	public void setMarche(boolean marche) {
 		this.marche = marche;
+	}
+
+	public String getTelresp() {
+		return telresp;
+	}
+
+	public void setTelresp(String telresp) {
+		this.telresp = telresp;
 	}
 
 

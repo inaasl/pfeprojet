@@ -116,6 +116,12 @@
                    <input type="text" name="nomInterlocuteur" required placeholder="Nom interlocuteur..."size="40" class="taille_input_annee"/>
               </td>
           </tr>   
+          <tr><td> 
+               <label for="prenomInterlocuteur"><i>  Prénom de l'interlocuteur <font color="#ff0000">*</font></i></label>
+                </td> <td> 
+                   <input type="text" name="prenomInterlocuteur" required placeholder="Prénom interlocuteur..."size="40" class="taille_input_annee"/>
+              </td>
+          </tr>   
           </table>
         <br /><br />
           <center>      <input  type="submit" value="Valider"> </center>

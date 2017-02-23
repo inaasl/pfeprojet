@@ -9,7 +9,7 @@
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.ArrayList"%>
 <head>
-<title></title>
+<title>Intervention</title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -71,6 +71,7 @@
 	List<Piece> listP = new ArrayList<Piece>() ;
 	Piece piececourante;
 	List<Organe> organes;
+	int n;
 	List<Alarme> A=new ArrayList<Alarme>();
 	%>
 <%
@@ -96,6 +97,8 @@
 	if(ajout.compareTo("0")==0){
 		conclu = request.getParameter("conclusion");
 		Interv = (List<Intervention>)session.getAttribute("interv");
+		
+		/****-AJOUT PIECE MAINTENACE PREVENTIVE ALARME INCENDIE-****/
 		if(Interv.get(0) instanceof Preventive && Interv.get(0).getOrgane() instanceof Alarme){
 		A=service.rechercheAlarmeBatiment(numB);
 		%>
@@ -180,15 +183,41 @@
     </script>
 			
 			<%
+		
 		session.setAttribute("conclusion",conclu);
 		out.println("<center><br>Intervention effectuée avec succès");
 		out.println("<center><form action =\"maintenanceprevalarmeajout.jsp\"><input type=\"submit\" value=\"Ajouter les pièces\"></center></form> ");
 		session.setAttribute("listP",listP);
 		}
-		
+		/****- FIN AJOUT PIECE MAINTENACE PREVENTIVE ALARME INCENDIE-****/
 		else {
 			for(int i=0;i<Interv.size();i++){
 				Interventionajoutee.add(service.ajoutIntervention(numB,Interv.get(i),Interv.get(i).getOrgane(), conclu));
+				
+				/****-AJOUT//MAJ OUVRANTS DESENFUMAGE NATUREL-****/
+				if(Interventionajoutee.get(0).getOrgane() instanceof DesenfumageNaturel )
+				{
+					n=((DesenfumageNaturel)Interventionajoutee.get(i).getOrgane()).getOuvrants().size();
+					if(Interventionajoutee.get(0) instanceof Installation){
+						for(int j=0;j<n;j++){
+							((DesenfumageNaturel)Interventionajoutee.get(i).getOrgane()).getOuvrants().get(j).setDesenfumagenaturel((DesenfumageNaturel)Interventionajoutee.get(i).getOrgane());
+							service.AjoutOuvrantBD(((DesenfumageNaturel)Interventionajoutee.get(i).getOrgane()).getOuvrants().get(j));
+						}
+					}
+					else {
+						for(int j=0;j<n;j++){
+							service.MAJOuvrantBD(((DesenfumageNaturel)Interventionajoutee.get(i).getOrgane()).getOuvrants().get(j));
+						}
+						if(Interventionajoutee.get(0) instanceof Preventive){
+							/****-AJOUT PIECES DESENFUMAGE NATUREL-****/
+							for(int j=0;j<Interventionajoutee.get(i).getOrgane().getPieces().size();j++){
+								service.AjoutPieceBD(Interventionajoutee.get(i).getOrgane().getPieces().get(j));
+							}
+							/****- FIN AJOUT PIECES DESENFUMAGE NATUREL-****/
+						}
+					}
+				}
+				/****- FIN AJOUT/MAJ OUVRANTS DESENFUMAGE NATUREL-****/
 			}
 			Interv.clear();
 			session.setAttribute("interv",Interv);
@@ -205,6 +234,18 @@
 	else {
 		organes=(List<Organe>)session.getAttribute("organes");
 		service.ajoutOrgane(organes);
+		/****-AJOUT OUVRANTS DESENFUMAGE NATUREL-****/
+		if(organes.get(0) instanceof DesenfumageNaturel){
+			for(int i=0;i<organes.size();i++){
+				n=((DesenfumageNaturel)organes.get(i)).getOuvrants().size();
+				out.println("<br> n = "+n);
+ 				for(int j=0;j<n;j++){
+				((DesenfumageNaturel)organes.get(i)).getOuvrants().get(j).setDesenfumagenaturel((DesenfumageNaturel)organes.get(i));
+				//service.MAJOuvrantBD(((DesenfumageNaturel)organes.get(i)).getOuvrants().get(j));
+				} 
+			}
+		}
+		/****-FIN AJOUT OUVRANTS DESENFUMAGE NATUREL-****/
 		organes.clear();
 		session.setAttribute("organes",organes);
 		if(ajout.compareTo("1")==0){

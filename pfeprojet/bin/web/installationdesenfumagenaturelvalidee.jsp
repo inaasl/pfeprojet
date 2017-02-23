@@ -49,26 +49,19 @@
 		<%@ page import= "java.util.ArrayList"%>
 		
 		
-<%! String numBat,observ,empla,ajout, ouvrant,cartouches,commande,quantiteS,commandesS,ouvrantsS;
-	int numB,numT,quantite,commandes,ouvrants;
+<%! String numBat,observ,empla,ajout,cartouches,observations;
+	int numB,numT;
 	List<Installation> interv;
-	DesenfumageNaturel Extcourant;
-   
+	DesenfumageNaturel Descourant;
+    
     List<DesenfumageNaturel> desenfumagenaturel;
+    
+    List<Ouvrant> ouvrants;
 %>
 <%
 	
-	observ =request.getParameter("observations");
 	empla=request.getParameter("emplacement");
-	ouvrant=request.getParameter("ouvrant");
-	commande=request.getParameter("commande");
 	cartouches=request.getParameter("cartouches");
-	quantiteS=request.getParameter("quantite");
-	commandesS=request.getParameter("commandes");
-	ouvrantsS=request.getParameter("ouvrants");
-	
-	
-	
 	
 	Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
 	pdf=null;
@@ -78,11 +71,13 @@
 	
 	numT=(Integer)session.getAttribute("numPersonne");
 	
-	quantite=Integer.parseInt(quantiteS);
-	commandes=Integer.parseInt(commandesS);
-	ouvrants=Integer.parseInt(ouvrantsS);
-	
 	ajout=String.valueOf(session.getAttribute("ajout"));
+	
+	ouvrants=(List<Ouvrant>)session.getAttribute("ouvrants");
+	if(ouvrants==null){
+		ouvrants=new ArrayList<Ouvrant>();
+	}
+	
 	
 	if(ajout.compareTo("0")!=0){
 		desenfumagenaturel=(List<DesenfumageNaturel>)session.getAttribute("organes");
@@ -98,22 +93,28 @@
  	String format = "yyyy-MM-dd"; 
 	java.text.SimpleDateFormat formater = new java.text.SimpleDateFormat(format);
 	java.util.Date date = new java.util.Date();
+	observations="";
+	for(int i=0;i<ouvrants.size();i++){
+		observations=observations+ouvrants.get(i).getObservation()+";";
+		out.println("<br> Nom : "+ouvrants.get(i).getNom());
+	}
 	
 	if(ajout.compareTo("0")==0){
-		Extcourant=service.ajoutDesenfumage(numB,empla, observ,ouvrant,quantite,commandes,ouvrants,cartouches,commande);
+		Descourant=service.ajoutDesenfumage(numB, empla, observ, cartouches, ouvrants);
 		interv = (List<Installation>) session.getAttribute("interv");
 		if (interv == null) {
 			interv = new ArrayList<Installation>();
 		} 
-		interv.add(service.InstallationOrgane(observ, Date.valueOf(formater.format(date)), numT, numB, Extcourant));
-		
+		interv.add(service.InstallationOrgane(observations, Date.valueOf(formater.format(date)), numT, numB, Descourant));
 		session.setAttribute("interv", interv);
 	}
 	else {
 		observ="--";
-		Extcourant=service.ajoutDesenfumage(numB,empla, observ,ouvrant,quantite,commandes,ouvrants,cartouches,commande);
-		desenfumagenaturel.add(Extcourant);
+		Descourant=service.ajoutDesenfumage(numB, empla, observ, cartouches, ouvrants);
+		desenfumagenaturel.add(Descourant);
 	}
+	ouvrants.clear();
+	session.setAttribute("ouvrants",ouvrants);
 	
 	session.setAttribute("organes",desenfumagenaturel);
 	

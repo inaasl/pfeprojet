@@ -30,6 +30,7 @@
 		$('#datatables5').dataTable();
 		$('#datatables6').dataTable();
 		$('#datatables8').dataTable();
+		$('#datatables9').dataTable();
 	})
 </script>
 </head>
@@ -164,6 +165,7 @@
 		List<Signaletique> signaletique;
 		List<Coupefeu> coupefeu;
 		List<Alarme> alarme;
+		List<DesenfumageNaturel> desenfumagenaturel;
     	int num;
     	String numeroB,marche;
    	 	List<Organe> organes;
@@ -262,6 +264,16 @@
 												alarme=new ArrayList<Alarme>();	
 											}
 											alarme.add((Alarme)organe.get(j));
+										}
+										else{
+											if(organe.get(j) instanceof DesenfumageNaturel){
+												if(desenfumagenaturel==null){
+													desenfumagenaturel=new ArrayList<DesenfumageNaturel>();
+													desenfumagenaturel.add((DesenfumageNaturel)organe.get(j));
+												}
+												else
+												desenfumagenaturel.add((DesenfumageNaturel)organe.get(j));
+											}
 										}
 									}
 								}
@@ -476,6 +488,30 @@
 			 }
 	 	 	out.print("</tbody></table><br>");
 		}
+		if(desenfumagenaturel!=null) {
+			out.println("<h4>Désenfumage Naturel</h4><br>");
+			out.print("</center>");
+			    out.print("<br/><table id=\"datatables9\" class=\"display\" >");
+			 	out.print("<thead><tr><th>N°</th><th>Emplacement</th><th>Commande</th><th>Ouvrant</th><th>Quantite</th><th>commandes</th><th>ouvrants</th><th>Cartouches</th><th>Etat</th></tr>");
+			 	out.print("</thead><tbody>");
+			 	for(i=0;i<desenfumagenaturel.size();i++){
+			if(desenfumagenaturel.get(i).isMarche()==true)
+			marche="<img src=\"marchtrue.jpg\">";
+			else
+			marche="<img src=\"marchefalse.png\">"; 
+			out.print(" <tr><td>"+desenfumagenaturel.get(i).getNumero()
+				+"</td><td>"+desenfumagenaturel.get(i).getEmplacement()
+				+"</td><td>"+desenfumagenaturel.get(i).getCommande()
+				+"</td><td>"+desenfumagenaturel.get(i).getOuvrant()
+				+"</td><td>"+desenfumagenaturel.get(i).getQuantite()
+				+"</td><td>"+desenfumagenaturel.get(i).getCommandes()
+				+"</td><td>"+desenfumagenaturel.get(i).getOuvrants()
+				+"</td><td>"+desenfumagenaturel.get(i).getCartouches()
+				+"</td><td>"+marche
+				+"</td></tr>");
+			 }
+			 out.print("</tbody></table><br>");
+			}
 		
 		organe.clear();
 		

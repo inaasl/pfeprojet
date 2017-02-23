@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Verification des portes coupe-feu </title>
+<title>Verification  </title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
@@ -60,10 +60,6 @@
 
 	<%
 		session = request.getSession();
-
-/* 		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
-		if(organes!=null) organes.clear();
-		session.setAttribute("organes",organes); */
 	
 		String ajout=String.valueOf(session.getAttribute("ajout"));
 		if(ajout!=null) ajout="0";

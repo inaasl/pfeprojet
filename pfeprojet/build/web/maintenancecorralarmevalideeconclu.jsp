@@ -204,13 +204,13 @@
 	testvoltchargeurbatterieaes=Integer.parseInt(request.getParameter("testvoltchargeurbatterieaes"));
 	
 	
-	String observationgroupee=service.ObservationsAlarme(observations,obsoptique,obsionique,obsthermique, obsthermov,obsflamme,
+/* 	String observationgroupee=service.ObservationsAlarme(observations,obsoptique,obsionique,obsthermique, obsthermov,obsflamme,
 			obsaspiration, obsreport, obsmanuel,obssonore,obslumineux);
 	
 	String Test = service.testAlarme(testvoltbatterie,testamperebatterie,testvoltchargeurbatterie,testvoltbatterieaes,
 			testamperebatterieaes, testvoltchargeurbatterieaes);
 	
-	observationgroupee = observationgroupee + Test;
+	observationgroupee = observationgroupee + Test; */
 	
 	
 	numBat=String.valueOf(session.getAttribute("numBatiment"));
@@ -238,8 +238,27 @@
 	if (interv == null) {
 		interv = new ArrayList<Corrective>();
 	}
+	String result = "";
+	result = result + observations+";";
+	result = result + obsoptique +";";
+	result = result + obsionique + ";";
+	result = result + obsthermique + ";";
+	result = result + obsthermov + ";";
+	result = result + obsflamme + ";";
+	result = result + obsaspiration + ";";
+	result = result + obsreport + ";";
+	result = result + obsmanuel + ";";
+	result = result + obssonore + ";";
+	result = result + obslumineux + ";"; 
 	
-	interv.add(service.MaintenanceCorrectiveOrgane(observationgroupee, Date.valueOf(formater.format(date)), numT, Alarmecourant));
+	result = result + String.valueOf(testvoltbatterie) + ";"; 
+	result = result + String.valueOf(testamperebatterie) + ";"; 
+	result = result + String.valueOf(testvoltchargeurbatterie) + ";"; 
+	result = result +  String.valueOf(testvoltbatterieaes) + ";"; 
+	result = result + String.valueOf(testamperebatterieaes) + ";"; 
+	result = result + String.valueOf(testvoltchargeurbatterieaes) + ";";
+	
+	interv.add(service.MaintenanceCorrectiveOrgane(result, Date.valueOf(formater.format(date)), numT, Alarmecourant));
 
 	session.setAttribute("interv", interv);
 	

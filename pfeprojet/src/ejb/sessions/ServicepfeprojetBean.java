@@ -19,57 +19,6 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	public ServicepfeprojetBean() {
 	}
 
-	// fonction observation Alarme
-	
-	public String ObservationsAlarme(String observation,String optique,String ionique
-			,String thermique, String thermov,String flamme,
-			String aspiration, String report,
-			String manuel,String sonore,String lumineux){
-		
-		String result = "Observation Globale : ";
-		result = result + observation + "\n";
-		result = result +"Observation detecteur optique : " ;
-		result = result + optique + "\n";
-		result = result + "Observation detecteur ionique : " ;
-		result = result + ionique + "\n";
-		result = result + "Observation detecteur thermique : ";
-		result = result + thermique + "\n";
-		result = result + "Observation detecteur thermovelocimetrique : ";
-		result = result + thermov + "\n";
-		result = result + "Observation detecteur de flammes : " ;
-		result = result + flamme + "\n";
-		result = result + "Observation detecteur par aspiration : ";
-		result = result + aspiration + "\n";
-		result = result + "Observation autre report : ";
-		result = result + report + "\n";
-		result = result + "Observation declencheur manuel : " ;
-		result = result + manuel + "\n";
-		result = result + "Observation diffuseur sonore : ";
-		result = result + sonore + "\n";
-		result = result + "Observation diffuseur lumineux : ";
-		result = result + lumineux + "\n";
-		return result;
-		
-	}
-	// Test alarme
-		public String testAlarme(int testvoltbatterie,int testampbatterie,int chargeur,int testvoltaes,
-				int testampaes,int testchargeuraes){
-			String result;
-			result =  "Test Batterie : " ;
-			result = result + String.valueOf(testvoltbatterie) + "Volts \n";
-			result = result + String.valueOf(testampbatterie) + "Ampère/h ";
-			result = result + "Test Chargeur : " ;
-			result = result + String.valueOf(chargeur) + "Volts";
-			result = result + "Test Batterie AES : " + "\n";
-			result = result + String.valueOf(testvoltaes) + "Volts \n";
-			result = result + String.valueOf(testampaes) + "Ampère/h \n";
-			result = result + "Test Chargeur : " ;
-			result = result + String.valueOf(testchargeuraes) + "Volts";
-			return result;
-		}
-	
-	
-	
 	
 	// fonction check
 	// fonction check batiment
@@ -390,13 +339,14 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	// Fonctions d'ajouts
 
 	// Ajout d'une entreprise
-	public Compte ajouterEntreprise(String nom, String adresse,String email, String tel, String interlocuteur) {
+	public Compte ajouterEntreprise(String nom, String adresse,String email, String tel, String nominterlocuteur,String prenomInterlocuteur) {
 		Entreprise E = new Entreprise();
 		E.setNom(nom);
 		E.setAdresse(adresse);
 		E.setAdressemail(email);
 		E.setTel(tel);
-		E.setNominterlocuteur(interlocuteur);
+		E.setNominterlocuteur(nominterlocuteur);
+		E.setPrenominterlocuteur(prenomInterlocuteur);
 		em.persist(E);
 		Compte session = new Compte();
 		session.setLogin(E.getAdressemail());
@@ -426,17 +376,24 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	}
 
 	// Ajout d'un batiment
-	public void ajouterBatiment(String nomentreprise, String nom, String adresse) throws EntrepriseInconnueException {
-		Entreprise E = rechercheEntreprise(nomentreprise).get(0);
+	public void ajouterBatiment(int num, String nom, String adresse,String nominterlocuteur,String prenominterlocuteur, String numtel) throws EntrepriseInconnueException {
+		Entreprise E = em.find(Entreprise.class, num);
+		List<Batiment> batiments =  new ArrayList<Batiment>();
 		if (E == null) {
 			System.out.print("entreprise introuvable");
 			throw new EntrepriseInconnueException();
 		} else {
 			Batiment B = new Batiment();
 			B.setNom(nom);
+			B.setNomresp(nominterlocuteur);
+			B.setPrenomresp(prenominterlocuteur);
+			B.setTelresp(numtel);
 			B.setAdresse(adresse);
 			B.setEntreprise(E);
 			B.setMarche(true);
+			if(E.getBatiments()==null){
+				E.setBatiments(batiments);
+			}
 			E.addBatiments(B);
 			em.persist(B);
 			em.merge(E);
@@ -646,7 +603,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 	}
 	// Verification Alarme
 	public Alarme verificationAlarme(Alarme A,int testvoltbatterie,int testampbatterie,int testchargeurbatterie,String optique,String obsionique,String thermique,String thermov,
-			String flamme,String aspiration,String report,String manuel,String sonore,String lumineux,int testvoltaes,int testampaes, int testchargeuraes){
+			String flamme,String aspiration,String report,String manuel,String sonore,String lumineux,int testvoltaes,int testampaes, int testchargeuraes,String observation){
 		A.setTestVoltBatterie(testvoltbatterie);
 		A.setTestAmpereBatterie(testampbatterie);
 		A.setTestVoltChargeur(testchargeurbatterie);
@@ -663,6 +620,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		A.setTestVoltBatterieAES(testvoltaes);
 		A.setTestAmpereBatterieAES(testampaes);
 		A.setTestVoltChargeurAES(testchargeuraes);
+		A.setObservation(observation);
 		em.merge(A);
 		return A;
 	}
@@ -733,6 +691,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		}
 	}
 	
+
 	// Intervention
 	public Intervention ajoutIntervention(int numbatiment, Intervention Interv, Organe O, String conclusion) throws BatimentInconnuException{
 		Batiment B = rechercheBatimentnum(numbatiment);
@@ -742,10 +701,13 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		List<Intervention> interv = new ArrayList<Intervention>();
 		O.setInterventions(interv);
 		}
-		if(Interv instanceof Verification && Interv.getOrgane() instanceof Alarme )
+		if(Interv instanceof Verification ) {
+			if( Interv.getOrgane() instanceof Alarme || Interv.getOrgane() instanceof DesenfumageNaturel)
 			em.merge(Interv);
-		else
-		em.persist(Interv);
+		}
+		else 
+			em.persist(Interv);
+		
 		O.addInterventions(Interv);
 		O.setConclusion(conclusion);
 		if(Interv instanceof Installation){
@@ -759,12 +721,22 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 				List<Intervention> interv = new ArrayList<Intervention>();
 				O.setInterventions(interv);
 				}
-			O.addInterventions(Interv);
-			O.setObservation(Interv.getObservation());
-			em.merge(O);
-			}
-			else
+				O.addInterventions(Interv);
+				String[] result;
+				String Obs;
+				Obs=Interv.getObservation();
+				result=Obs.split(";");
+				O.setObservation(result[0]);
 				em.merge(O);
+			}
+			else {
+				if (O.getInterventions() == null) {
+				List<Intervention> interv = new ArrayList<Intervention>();
+				O.setInterventions(interv);
+				}
+				O.addInterventions(Interv);
+				em.merge(O);
+			}
 		}
 		return Interv;
 	}
@@ -793,7 +765,12 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		if (T == null) {
 			throw new TechnicienInconnuException();
 		}
-		O.setObservation(Obs);
+		if(O instanceof Alarme || O instanceof DesenfumageNaturel){
+			
+		}
+		else{
+			O.setObservation(Obs);
+		}
 		O.setConclusion(conclusion);
 		O.setMarche(marche);
 		Verification V = new Verification();
@@ -1605,26 +1582,41 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		compte.setPassword(password);
 		em.merge(compte);
 	}
-
-
-	public DesenfumageNaturel ajoutDesenfumage(int numbatiment,String Emp, String Obs, String ouvrant, int quantite,int commandes,int ouvrants,String cartouche,String commande ) throws BatimentInconnuException{
+	
+	public DesenfumageNaturel ajoutDesenfumage(int numbatiment,String Emp, String Obs,String cartouches, List<Ouvrant> ouvrants ) throws BatimentInconnuException{
 		Batiment B = rechercheBatimentnum(numbatiment);
-				if (B==null)
-					throw new BatimentInconnuException();
-				DesenfumageNaturel D = new DesenfumageNaturel();
-				
-				D.setEmplacement(Emp);
-				D.setObservation(Obs);
-				D.setBatiment(B);
-				D.setCartouches(cartouche);
-				D.setCommande(commande);
-				D.setOuvrant(ouvrant);
-				D.setQuantite(quantite);
-				D.setCommandes(commandes);
-				D.setOuvrants(ouvrants);
-				D.setMarche(true);
-				return D;
-			}
+		if (B==null)
+			throw new BatimentInconnuException();
+		DesenfumageNaturel D = new DesenfumageNaturel();
+		D.setEmplacement(Emp);
+		D.setObservation(Obs);
+		D.setCartouches(cartouches);
+		D.setOuvrants(ouvrants);
+		D.setBatiment(B);
+		return D;
+	}
+	
+	public List<Ouvrant> RechercheOuvrantDesenfumage(int numeroDesenfumage){
+		return(List<Ouvrant>)em.createQuery("from Ouvrant o where o.desenfumagenaturel.numero ="+numeroDesenfumage).getResultList();
+	}
+	
+	
+	
+	
+	public Ouvrant ajoutOuvrant(String nom, String observation,String commande){
+		Ouvrant O = new Ouvrant();
+		O.setNom(nom);
+		O.setObservation(observation);
+		O.setCommande(commande);
+		return O;
+	}
+	public void MAJOuvrantBD(Ouvrant O){
+		em.merge(O);
+	}
+	public void AjoutOuvrantBD(Ouvrant O){
+		em.persist(O);
+	}
+	
 	// derniere conclusion : Verification DesenfumageNaturel
 	public String rechercheConclusionVerificationDesenfumageNaturel(int numeroBatiment) {
 		@SuppressWarnings("unchecked")
@@ -1645,6 +1637,7 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		}
 		return conclusion;
 	}
+	
 	// derniere conclusion : Maintenance Corrective DesenfumageNaturel
 	public String rechercheConclusionMaintenancecorrDesenfumageNaturel(int numeroBatiment) {
 		@SuppressWarnings("unchecked")
@@ -1674,22 +1667,20 @@ public class ServicepfeprojetBean implements ServicepfeprojetLocal, Servicepfepr
 		public List<DesenfumageNaturel> rechercheDesenfumageNaturelBatiment(int numeroBatiment){
 			return em.createQuery("from DesenfumageNaturel e WHERE e.batiment.numero = "+numeroBatiment).getResultList();
 		}
-		public DesenfumageNaturel remplacementdesenfumagenaturel(DesenfumageNaturel D, String Emp, String Obs,String ouvrant, int quantite,int commandes,int ouvrants,String cartouche,String commande,boolean marche){
-			
-			D.setEmplacement(Emp);
-			D.setObservation(Obs);
-			D.setMarche(marche);
-			D.setCartouches(cartouche);
-			D.setCommande(commande);
-			D.setOuvrant(ouvrant);
-			D.setQuantite(quantite);
-			D.setCommandes(commandes);
-			D.setOuvrants(ouvrants);
-			
-			return D;
-			
-			
+		public Ouvrant remplacementouvrant(Ouvrant O, String Commande,String Observation,String nom){
+			O.setNom(nom);
+			O.setCommande(Commande);
+			O.setObservation(Observation);
+			return O;
 		}
+		public DesenfumageNaturel remplacementdesenfumagenaturel(DesenfumageNaturel D, String observation, String Emp, List<Ouvrant> ouvrants, String cartouches){
+			D.setCartouches(cartouches);
+			D.setObservation(observation);
+			D.setEmplacement(Emp);
+			D.setOuvrants(ouvrants);
+			return D;
+		}
+
 		// derniere conclusion : Maintenance Preventive Desenfumage naturel
 		public String rechercheConclusionMaintenanceprevdesenfumagenaturel(int numeroBatiment) {
 			@SuppressWarnings("unchecked")

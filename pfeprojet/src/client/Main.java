@@ -21,11 +21,11 @@ public class Main {
 			ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
 			// Ajout Entreprises et Batiments
 			
-			service.ajouterEntreprise("Euratech","9,Lille","Admin@Euratech.com","0612523645","Dupont");
-			service.ajouterEntreprise("TechMa", "7,Loos","Admin@TechMa.com","0624587496","Dubois");
-			service.ajouterBatiment("Euratech", "BatimentA", "28, Lille");
-			service.ajouterBatiment("Euratech", "BatimentB", "57, Lille");
-			service.ajouterBatiment("TechMa", "BatimentA1", "7,Lille");
+			service.ajouterEntreprise("Euratech","9,Lille","Admin@Euratech.com","0612523645","Dupont","char");
+			service.ajouterEntreprise("TechMa", "7,Loos","Admin@TechMa.com","0624587496","Dubois","arf");
+			service.ajouterBatiment(1, "BatimentA", "28, Lille","ln","az","12");
+			service.ajouterBatiment(1, "BatimentB", "57, Lille","ln","az","12");
+			service.ajouterBatiment(2, "BatimentA1", "7,Lille","ln","az","12");
 			
 			
 			// Ajout Types extincteurs

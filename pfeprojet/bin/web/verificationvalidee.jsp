@@ -60,10 +60,6 @@
 
 	<%
 		session = request.getSession();
-
-/* 		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
-		if(organes!=null) organes.clear();
-		session.setAttribute("organes",organes); */
 	
 		String ajout=String.valueOf(session.getAttribute("ajout"));
 		if(ajout!=null) ajout="0";

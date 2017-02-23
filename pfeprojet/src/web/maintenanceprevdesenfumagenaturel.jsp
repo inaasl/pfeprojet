@@ -68,7 +68,7 @@
 
 	<%!String numBat,conclusion, observation, nomPiece;
 	int num,i,numD;
-	List<DesenfumageNaturel> E = new ArrayList<DesenfumageNaturel>();
+	List<DesenfumageNaturel> D = new ArrayList<DesenfumageNaturel>();
 	List<Piece> listP = new ArrayList<Piece>() ;
 	Piece piececourante;
 	List<Organe> organes;
@@ -84,7 +84,7 @@
 		numBat = String.valueOf(session.getAttribute("numBatiment"));
 		session.setAttribute("numBatiment", numBat);
  		num=Integer.parseInt(numBat);
-		E.clear();
+		D.clear();
 
 		List<Organe> organes=(List<Organe>)session.getAttribute("organes");
 		if(organes!=null) organes.clear();
@@ -98,122 +98,28 @@
 		pdf=null;
 		session.setAttribute("pdf",pdf);
 
-		
-		E=service.rechercheDesenfumageNaturelBatiment(num);
+		D=service.rechercheDesenfumageNaturelBatiment(num);
 		out.println("<br><center><h3>Maintenance préventive des Désenfumage Naturels</h3></center><br>");
-		out.println("<center><input type=\"button\" name=\"AjoutExt\" value=\"Ajout désenfumage naturel\"  onclick=\"self.location.href='installationdesenfumagenaturel.jsp?ajout=20'\"></button></center>");
+		out.println("<center><input type=\"button\" name=\"AjoutDes\" value=\"Ajout désenfumage naturel\"  onclick=\"self.location.href='installationdesenfumagenaturel.jsp?ajout=20'\"></button></center>");
 		out.println("<br><center><h4> Liste des Désenfumage naturels </h4></center>");
 		// Tableau
-		out.println("<br><form action=\"maintenanceprevvalidee.jsp\">");
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
-		out.print("<thead><tr><th> N° Désenfumage </th><th> Emplacement </th><th>Commande</th><th>Ouvrant</th><th>Quantité</th><th>commandes</th><th>ouvrants</th><th>cartouches</th><th>Observation</th> <th> Etat défecteux </th></tr>");
+		out.print("<thead><tr><th> N° Désenfumage </th><th> Emplacement </th><th>Nombre d'Ouvrants</th><th>cartouches</th><th></th></tr>");
 		out.print("</thead><tbody>");
-	      
-		for(i=0;i<E.size();i++){
-					observation=service.rechercheObservationMaintenanceprev(E.get(i).getNumero());
-					out.println(" <tr><td > " + E.get(i).getNumero()+
-						"</td> <td>" + E.get(i).getEmplacement()+
-						"</td> <td >" + E.get(i).getCommande()+
-						"</td> <td >" + E.get(i).getOuvrant()+
-						"</td> <td >" + E.get(i).getQuantite()+
-						"</td> <td >" + E.get(i).getCommandes()+
-						"</td> <td >" + E.get(i).getOuvrants()+
-						"</td> <td >" + E.get(i).getCartouches()+
-						"</td> <td> <input type=\"text\" name="+i+" required value="+observation+
-						"></td><td><INPUT id=\"oui\" type= \"radio\" name="+(i+100)+" required value=\"oui\"><label for=\"oui\">OUI</label>&nbsp;&nbsp;&nbsp;<INPUT id=\"non\" type= \"radio\" name="+(i+100)+" required value=\"non\"><label for=\"non\">NON</label></td></tr>"
+		for(i=0;i<D.size();i++){
+					observation=service.rechercheObservationMaintenanceprev(D.get(i).getNumero());
+					out.println(" <tr><td > " + D.get(i).getNumero()+
+						"</td> <td>" + D.get(i).getEmplacement()+
+						"</td> <td>" + D.get(i).getEmplacement()+
+						"</td> <td >" + D.get(i).getOuvrants().size()+
+						"</td> <td >" + D.get(i).getCartouches()+
+						"</td><td> <form action=\"maintenanceprevdesenfumagevalidee.jsp\" method=\"GET\" ><input type=\"hidden\" id=\"iddesenfumage\" name=\"numdesenfumage\" value="
+						+ D.get(i).getNumero()
+						+ "> <input type=\"submit\" name=\" Effectuer une Maintenance Préventive \" value=\" Effectuer une Maintenance Préventive \" /></form></td></tr>"
 						);
 		}
-		conclusion=service.rechercheConclusionMaintenanceprevdesenfumagenaturel(num);
-		out.println("</tbody></table><br><br>"); 
-		%>
-		<div class="panel panel-primary">
-        <div class="panel-heading">Pieces</div>        
-        <table class="table table-bordered table-striped">
-          <thead>
-            <tr>
-             <th class="col-sm-4">Nom de la pièce</th>
-             <th class="col-sm-4">Numéro Désenfumage</th>
-             <th class="col-sm-2"></th>
-            </tr>
-          </thead>
-		 <tbody>
-            <tr v-for="piece in pieces">
-              <td>{{ piece.nom }}</td>
-              <td>{{ piece.desenfumage }}</td> 
-              <td><button type="button" class="btn btn-warning btn-block" v-on:click="suppression($index)">Supprimer</button></td>
-            </tr>  
-            <tr>
-              <td><input name="nomPiece" type="text" class="form-control" v-model="inputNom" v-el:modif placeholder="Nom"></td>
-              <td><select name="numD" id="liste" class="class_select" v-model="inputDesenfumage">
-              <%
-              for(i=0;i<E.size();i++){
-            	  out.println("<option value=" + E.get(i).getNumero() + ">"
-							+ E.get(i).getNumero() + "</option>");
-              }
-              %>
-            </select></td>
-              <td colspan="2"><button type="button" class="btn btn-primary btn-block" v-on:click="ajouter()">Ajouter</button></td>
-            </tr>
-          </tbody>
-          </table>
-           <div class="panel-footer">
-          &nbsp
-          <button type="button" class="button btn btn-xs btn-warning" v-on:click="toutSupprimer">Tout supprimer</button>
-        </div>
-      </div>
-      
-
 		
-		<%
-		out.println("<center><table><tr><td>Conclusion</td> <td></td> <td><textarea required name=\"Conclusion\" rows=\"5\" cols=\"47\" required>"+conclusion+"</textarea></td></tr></table>");
-		out.println("<br><input type=\"submit\" value=\"Valider\"></center></form>");
-		session.setAttribute("organeslist",E);
-	%>
-	</div>
-	     <script src="http://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
-     <script type="text/javascript">
-    new Vue({
-        el: '#container',
-        data: {
-          pieces: [],
-          supprimer: [],
-          inputNom: '',
-        },
-        methods: {
-          suppression: function(index) {
-            this.supprimer.push(this.pieces[index]);
-            this.pieces.splice(index, 1);
-          },
-          toutSupprimer: function() {
-            this.supprimer = this.supprimer.concat(this.pieces);
-            this.pieces = [];
-          },
-          ajouter: function() {
-            this.pieces.push({nom: this.inputNom, desenfumage: this.inputDesenfumage});
-            $.ajax({
-                url: "maintenanceprevdesenfumagenaturel.jsp",
-                data: {
-                	nomPiece: this.inputNom,
-                	numD: this.inputDesenfumage,
-                	etatajout: 'oui'
-                },
-                });
-            <% 
-               ajout=request.getParameter("etatajout");
-         	   if(ajout!=null){
-                   nomPiece=request.getParameter("nomPiece");
-                   numD=Integer.parseInt(request.getParameter("numD"));
-                   piececourante=service.AjoutPiece(nomPiece,numD);
-				   listP.add(piececourante);
-         	   }
-			%>
-			this.inputNom = '';
-          },
-        }
-      });
-    </script>
-	<%
-     session.setAttribute("listP",listP);
+		out.println("</tbody></table><br><br>"); 
 	 }
 	 }
 	 else

@@ -222,6 +222,16 @@
  	 								if(pdf.get(i).getInterventions().get(0).getOrgane() instanceof Signaletique){
  	 									typeorgane="Signalétique";
  	 								}
+ 	 								else {
+ 	 									if(pdf.get(i).getInterventions().get(0).getOrgane() instanceof Alarme){
+ 	 										typeorgane="Alarme";
+ 	 									}
+ 	 									else {
+ 	 										if(pdf.get(i).getInterventions().get(0).getOrgane() instanceof DesenfumageNaturel){
+ 	 											typeorgane="Désenfumage Naturel";
+ 	 										}
+ 	 									}
+ 	 								}
  	 							}
  	 						}
  	 					}

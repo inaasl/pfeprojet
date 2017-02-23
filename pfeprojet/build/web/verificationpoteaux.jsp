@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Verification des Poteaux Incendie</title>
+<title>Vérification Poteaux Incendie</title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">

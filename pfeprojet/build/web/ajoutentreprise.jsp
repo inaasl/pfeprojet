@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-<title>Ajout d'une entreprise</title>
+<title>Ajout d'un client </title>
 <meta charset="UTF-8" />
 <link href="style.css" rel="stylesheet" type="text/css">
 </head>
@@ -114,6 +114,12 @@
                <label for="nomInterlocuteur"><i>  Nom de l'interlocuteur <font color="#ff0000">*</font></i></label>
                 </td> <td> 
                    <input type="text" name="nomInterlocuteur" required placeholder="Nom interlocuteur..."size="40" class="taille_input_annee"/>
+              </td>
+          </tr>   
+          <tr><td> 
+               <label for="prenomInterlocuteur"><i>  Prénom de l'interlocuteur <font color="#ff0000">*</font></i></label>
+                </td> <td> 
+                   <input type="text" name="prenomInterlocuteur" required placeholder="Prénom interlocuteur..."size="40" class="taille_input_annee"/>
               </td>
           </tr>   
           </table>

@@ -1,8 +1,8 @@
 <html>
 <head>
-<title>Maintenance Préventive : Pharmacie </title>
+<title>Maintenance Préventive : Désenfumage Naturel </title>
 <meta charset="UTF-8" />
-<link href="style.css" rel="stylesheet" type="text/css">
+<link href="style.css" rel="stylesheet" type="text/css" media="screen and (max-width: 2560px)">
 <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
@@ -19,17 +19,14 @@
     
      })
     </script>
-    
-    
 </head>
 <body>
-
 	<header class="header">
 		<a class="logo" href="http://www.desentec.fr/"><img
 			src="http://www.desentec.fr/wp-content/uploads/2015/06/logo-site.png">
 		</a>
 		<%! int statut;
-	%>
+		%>
 	<%
 	 if(session.getAttribute("statut")!=null)
 	 {
@@ -61,87 +58,114 @@
 	<%@ page import="java.io.* "%>
 	<%@ page import="ejb.sessions.*"%>
 	<%@ page import="ejb.entites.* "%>
-	<%@ page import="java.util.List"%>
-	<%@ page import="java.util.ArrayList"%>
 	<%@ page import="javax.naming.InitialContext"%>
 	<%@ page import="javax.naming.NamingException"%>
+	<%@ page import="java.util.Date"%>
+	<%@ page import="java.text.SimpleDateFormat"%>
+	<%@ page import="java.text.DateFormat"%>
+	<%@ page import="java.util.List"%>
+	<%@ page import="java.util.ArrayList"%>
 
-	<%!String numBat,conclusion, observation, nomPiece;
-	int num,i,numPharmacie;
-	List<Pharmacie> P = new ArrayList<Pharmacie>();
-	List<Piece> listP = new ArrayList<Piece>() ;
-	Piece piececourante;
-	List<Organe> organes;
-	String ajout;
-	%>
-	<%
-	
-		session = request.getSession();
-		Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
-		pdf=null;
-		InitialContext ctx = new InitialContext();
-		Object obj = ctx.lookup(
-				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
-		ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
-		numBat = String.valueOf(session.getAttribute("numBatiment"));
-		session.setAttribute("numBatiment", numBat);
- 		num=Integer.parseInt(numBat);
-		P.clear();
+		<%!String numBat,observation,observationouvrant;
+			int i,num,numdesenfumage;
+			String[] result;
+			String nomPiece;
+			List<Piece> listP = new ArrayList<Piece>();
+			Piece piececourante;
+			
+			%>
+		<%
+			session = request.getSession();
 
-		organes=(List<Organe>)session.getAttribute("organes");
-		if(organes!=null) organes.clear();
-		ajout=String.valueOf(session.getAttribute("ajout"));
-		if(ajout!=null) ajout=null;
+			List<Organe> organes=(List<Organe>)session.getAttribute("organes");
+			if(organes!=null) organes.clear();
+			session.setAttribute("organes",organes);
 		
-		P=service.recherchePharmacieBatiment(num);
-		out.println("<br><center><h3>Maintenance préventive des Pharmacies</h3></center><br>");
-		out.println("<center><input type=\"button\" name=\"AjoutExt\" value=\"Ajouter une pharmacie \"  onclick=\"self.location.href='installationpharmacie.jsp?ajout=6'\"></button></center>");
-		out.println("<br><center><h4> Liste des Pharmacies </h4></center>");
-		// Tableau
-		out.println("<br><form action=\"maintenanceprevpharmacievalidee.jsp\">");
-		out.print("<br> <table id=\"datatables\" class=\"display\" >");
-		out.print("<thead><tr><th> N° Pharmacie </th><th> Emplacement </th><th>Annee</th><th>Capacité</th><th>Observation</th> <th> Etat défecteux </th></tr>");
-		out.print("</thead><tbody>");
-	      
-		for(i=0;i<P.size();i++){
-					observation=service.rechercheObservationMaintenanceprev(P.get(i).getNumero());
-					out.println(" <tr><td > " + P.get(i).getNumero()+
-						"</td> <td>" + P.get(i).getEmplacement()+
-						"</td> <td >" + P.get(i).getAnnee()+
-						"</td> <td >" + P.get(i).getCapacite()+
-						"</td> <td> <input type=\"text\" name="+i+" value="+observation+
-						"></td><td><INPUT id=\"oui\" type= \"radio\" name="+(i+100)+" value=\"oui\"><label for=\"oui\">OUI</label>&nbsp;&nbsp;&nbsp;<INPUT id=\"non\" type= \"radio\" name="+(i+100)+" value=\"non\"><label for=\"non\">NON</label></td></tr>"
-						);
+			String ajout=String.valueOf(session.getAttribute("ajout"));
+			if(ajout!=null) ajout="0";
+			session.setAttribute("ajout",ajout);
+		
+			Pdfgenere pdf=(Pdfgenere)session.getAttribute("pdf");
+			pdf=null;
+			session.setAttribute("pdf",pdf);
+			
+			InitialContext ctx = new InitialContext();
+			Object obj = ctx.lookup(
+				"ejb:pfeprojet/pfeprojetSessions/" + "ServicepfeprojetBean!ejb.sessions.ServicepfeprojetRemote");
+			ServicepfeprojetRemote service = (ServicepfeprojetRemote) obj;
+			
+			numBat = String.valueOf(session.getAttribute("num"));
+			session.setAttribute("num", numBat);
+			
+			numdesenfumage = Integer.parseInt(request.getParameter("numdesenfumage"));
+			observation=service.rechercheObservationVerification(numdesenfumage);
+			DesenfumageNaturel D =(DesenfumageNaturel)service.rechercheOrganeNum(numdesenfumage);
+			session.setAttribute("numdesenfumage",numdesenfumage);
+		
+			out.println("<center><input type=\"button\" name=\"AjoutOuv\" value=\"Ajout ouvrants\"  onclick=\"self.location.href='ajoutouvrant.jsp?ajout=18'\"></button></center>");
+
+			%>
+		
+<form action="maintenanceprevdesenfumagevalideeconclu.jsp" method="post">
+		 <fieldset>
+	 <legend><b>Maintenance Préventive Désenfumage Naturel</b></legend>
+	<br>
+	<table id="datatables" class="display" >
+	<thead><tr><th> N° </th><th> Commande </th><th> Ouvrant </th><th>Observation</th></tr>
+	</thead><tbody>
+	<%
+		List<Ouvrant> ouvrants =  service.RechercheOuvrantDesenfumage(numdesenfumage);
+	
+		for(int i=0;i<D.getOuvrants().size();i++){
+			observation=service.rechercheObservationVerification(D.getNumero());
+			if(observation!=null){
+				if(observation.compareTo("--")!=0){
+					result=observation.split(";");
+					observationouvrant=result[i];
+					if(observationouvrant==null){
+						observationouvrant="--";
+					}
+				}
+				else 
+					observationouvrant="--";
+			}
+			else {
+				observationouvrant="--";
+			}
+			out.println("<tr><td>" + D.getOuvrants().get(i).getNumero()+
+				"</td><td>" + D.getOuvrants().get(i).getCommande()+
+				"</td><td >" + D.getOuvrants().get(i).getNom()+
+				"</td><td> <input type=\"text\" name="+i+" value="+observationouvrant+
+				"></td></tr>"
+				);
 		}
-		conclusion=service.rechercheConclusionMaintenanceprev(num);
-		out.println("</tbody></table><br><br>"); 
-		%>
+	%>
+	</tbody>
+	</table>
+	<table>
+		<tr><td> Est-ce que l'organe fonctionne correctement ? </td><td>
+		<INPUT id="oui" type= "radio" name="etat" value="oui">
+	    <label for="oui">OUI</label> &nbsp;&nbsp;&nbsp;
+		<INPUT id="non" type= "radio" name="etat" value="non"> 
+		<label for="non">NON</label> &nbsp;&nbsp;&nbsp;
+		</td></tr>
+	</table>
 		<div class="panel panel-primary">
         <div class="panel-heading">Pieces</div>        
         <table class="table table-bordered table-striped">
           <thead>
             <tr>
              <th class="col-sm-4">Nom de la pièce</th>
-             <th class="col-sm-4">Numéro Pharmacie</th>
              <th class="col-sm-2"></th>
             </tr>
           </thead>
 		 <tbody>
             <tr v-for="piece in pieces">
               <td>{{ piece.nom }}</td>
-              <td>{{ piece.pharmacie }}</td> 
               <td><button type="button" class="btn btn-warning btn-block" v-on:click="suppression($index)">Supprimer</button></td>
             </tr>  
             <tr>
               <td><input name="nomPiece" type="text" class="form-control" v-model="inputNom" v-el:modif placeholder="Nom"></td>
-              <td><select name="numPharmacie" id="liste" class="class_select" v-model="inputPharmacie">
-              <%
-              for(i=0;i<P.size();i++){
-            	  out.println("<option value=" + P.get(i).getNumero() + ">"
-							+ P.get(i).getNumero() + "</option>");
-              }
-              %>
-            </select></td>
               <td colspan="2"><button type="button" class="btn btn-primary btn-block" v-on:click="ajouter()">Ajouter</button></td>
             </tr>
           </tbody>
@@ -151,13 +175,13 @@
           <button type="button" class="button btn btn-xs btn-warning" v-on:click="toutSupprimer">Tout supprimer</button>
         </div>
       </div>
-		<%
-		out.println("<center><table><tr><td>Conclusion</td> <td></td> <td><textarea name=\"Conclusion\" rows=\"5\" cols=\"47\" required>"+conclusion+"</textarea></td></tr></table>");
-		out.println("<br><input type=\"submit\" value=\"Valider\"></center></form>");
-		session.setAttribute("Pharmacies",P);
-	%>
+      <%
+		out.println("<br><input type=\"submit\" value=\"Valider\"></center>");
+		%>
+	</fieldset>
+	</form>
 	</div>
-	     <script src="http://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
+	<script src="http://cdn.jsdelivr.net/vue/1.0.10/vue.min.js"></script>
      <script type="text/javascript">
     new Vue({
         el: '#container',
@@ -176,21 +200,19 @@
             this.pieces = [];
           },
           ajouter: function() {
-            this.pieces.push({nom: this.inputNom, pharmacie: this.inputPharmacie});
+            this.pieces.push({nom: this.inputNom});
             $.ajax({
-                url: "maintenanceprevpharmacie.jsp",
+                url: "maintenanceprevdesenfumagevalidee.jsp",
                 data: {
                 	nomPiece: this.inputNom,
-                	numExtincteur: this.inputPharmacie,
-                	ajout: 'oui'
+                	etatajout: 'oui'
                 },
                 });
             <% 
-               String ajout=request.getParameter("ajout");
+               ajout=request.getParameter("etatajout");
          	   if(ajout!=null){
                    nomPiece=request.getParameter("nomPiece");
-                   numPharmacie=Integer.parseInt(request.getParameter("numPharmacie"));
-                   piececourante=service.AjoutPiece(nomPiece,numPharmacie);
+                   piececourante=service.AjoutPiece(nomPiece,numdesenfumage);
 				   listP.add(piececourante);
          	   }
 			%>
@@ -200,7 +222,7 @@
       });
     </script>
 	<%
-     session.setAttribute("listP",listP);
+    session.setAttribute("listP",listP);
 	 }
 	 }
 	 else

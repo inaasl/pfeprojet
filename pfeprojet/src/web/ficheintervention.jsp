@@ -309,6 +309,30 @@
 													);
 										}
 									}
+									else{
+										if(interventions.get(0).getOrgane() instanceof DesenfumageNaturel){
+											out.print("<br><br> <table id=\"datatables9\" class=\"display\" >"); 
+											out.print("<thead><tr><th> Numero de l'intervention </th><th> Numero de l'organe </th><th>Emplacement</th><th>Ouvrant</th><th>Quantite</th><th>commandes</th><th>ouvrants</th><th>Cartouches</th><th> Observation </th></tr>");
+											out.print("</thead><tbody>");
+											for(i=0;i<interventions.size();i++){
+												out.println("<tr><td>"+interventions.get(i).getNumero()
+														+"</td><td>"+interventions.get(i).getOrgane().getNumero()
+														+"</td><td>"+interventions.get(i).getOrgane().getEmplacement()
+														+"</td><td>"+((DesenfumageNaturel)interventions.get(i).getOrgane()).getOuvrant()
+														+"</td><td>"+((DesenfumageNaturel)interventions.get(i).getOrgane()).getOuvrants()
+														+"</td><td>"+((DesenfumageNaturel)interventions.get(i).getOrgane()).
+														+"</td><td>"+((DesenfumageNaturel)interventions.get(i).getOrgane()).get
+														+"</td><td>"+((DesenfumageNaturel)interventions.get(i).getOrgane()).getType().getNom()
+														+"</td><td>"+((DesenfumageNaturel)interventions.get(i).getOrgane()).getType().getNom()
+														+"</td><td>"+((Alarme)interventions.get(i).getOrgane()).getType().getNom()
+														+"</td><td>"+interventions.get(i).getOrgane().getObservation()
+														+"</td><td> <form action=\"fichealarme.jsp\" method=\"GET\" ><input type=\"hidden\" id=\"idintervention\" name=\"numintervention\" value="
+														+ interventions.get(i).getNumero()
+														+ "> <input type=\"submit\" name=\" Consulter la fiche de l'alarme  \" value=\" Consulter la fiche de l'alarme \" /></form></td></tr>"
+														);
+											}
+										}
+									}
 								}
 							}
 						}

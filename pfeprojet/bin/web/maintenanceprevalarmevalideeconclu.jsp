@@ -123,7 +123,7 @@
 	Alarmecourant=service.verificationAlarme(Alarmecourant,testvoltbatterie,testamperebatterie,testvoltchargeurbatterie,obsoptique,obsionique,
 			obsthermique,obsthermov,obsflamme,obsaspiration,obsreport,obsmanuel,
 			obssonore,obslumineux,testvoltbatterieaes,testamperebatterieaes,
-			testvoltchargeurbatterieaes);
+			testvoltchargeurbatterieaes,observations);
 	
 	if(alarmes==null){
 		alarmes=new ArrayList<Alarme>();
@@ -136,15 +136,28 @@
 		interv = new ArrayList<Preventive>();
 	}
 	
-	String observationgroupee=service.ObservationsAlarme(observations,obsoptique,obsionique,obsthermique, obsthermov,obsflamme,
-			obsaspiration, obsreport, obsmanuel,obssonore,obslumineux);
+	String result = "";
+	result = result + observations+";";
+	result = result + obsoptique +";";
+	result = result + obsionique + ";";
+	result = result + obsthermique + ";";
+	result = result + obsthermov + ";";
+	result = result + obsflamme + ";";
+	result = result + obsaspiration + ";";
+	result = result + obsreport + ";";
+	result = result + obsmanuel + ";";
+	result = result + obssonore + ";";
+	result = result + obslumineux + ";"; 
 	
-	String Test = service.testAlarme(testvoltbatterie,testamperebatterie,testvoltchargeurbatterie,testvoltbatterieaes,
-			testamperebatterieaes, testvoltchargeurbatterieaes);
+	result = result + String.valueOf(testvoltbatterie) + ";"; 
+	result = result + String.valueOf(testamperebatterie) + ";"; 
+	result = result + String.valueOf(testvoltchargeurbatterie) + ";"; 
+	result = result +  String.valueOf(testvoltbatterieaes) + ";"; 
+	result = result + String.valueOf(testamperebatterieaes) + ";"; 
+	result = result + String.valueOf(testvoltchargeurbatterieaes) + ";";
 	
-	observationgroupee = observationgroupee + Test;
 	
-	interv.add(service.MaintenancePreventiveAlarme(Alarmecourant,observationgroupee,"--",numT, Date.valueOf(formater.format(date)), Etat));
+	interv.add(service.MaintenancePreventiveAlarme(Alarmecourant,result,"--",numT, Date.valueOf(formater.format(date)), Etat));
 
 	session.setAttribute("interv", interv);
 	session.setAttribute("alarmes",alarmes);

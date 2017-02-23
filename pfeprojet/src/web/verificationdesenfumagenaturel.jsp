@@ -65,7 +65,7 @@
 
 	<%!String numBat,conclusion, observation;
 	int num,i;
-	List<DesenfumageNaturel> E = new ArrayList<DesenfumageNaturel>();
+	List<DesenfumageNaturel> D = new ArrayList<DesenfumageNaturel>();
 	%>
 	<%
 		session = request.getSession();
@@ -92,39 +92,31 @@
 		numBat = String.valueOf(session.getAttribute("numBatiment"));
 		session.setAttribute("numBatiment", numBat);
  		num=Integer.parseInt(numBat);
-		E.clear();
-		E=service.rechercheDesenfumageNaturelBatiment(num);
+		D.clear();
+		D=service.rechercheDesenfumageNaturelBatiment(num);
 		out.println("<br><center><h3>Vérification des Désenfumages naturels</h3></center><br>");
 		
-		out.println("<center><input type=\"button\" name=\"AjoutExt\" value=\"Ajout desenfumage\"  onclick=\"self.location.href='installationdesenfumagenaturel.jsp?ajout=18'\"></button></center>");
+		out.println("<center><input type=\"button\" name=\"AjoutDes\" value=\"Ajout desenfumage\"  onclick=\"self.location.href='installationdesenfumagenaturel.jsp?ajout=18'\"></button></center>");
 		out.println("<br><center><h4> Liste des Désenfumage Naturels </h4></center>");
 		// Tableau
-		out.println("<br><form action=\"verificationvalidee.jsp\">");
 		out.print("<br> <table id=\"datatables\" class=\"display\" >");
-		out.print("<thead><tr><th> N° Désenfumage </th><th> Emplacement </th><th>Commande</th><th>Ouvrant</th><th>Quantité</th><th>commandes</th><th>ouvrants</th><th>cartouches</th><th>Observation</th><th> Etat défecteux </th></tr>");
+		out.print("<thead><tr><th> N° Désenfumage </th><th> Emplacement </th><th>Nombre d'Ouvrants</th><th>cartouches</th><th></th></tr>");
 		out.print("</thead><tbody>");
-	      
-		for(i=0;i<E.size();i++){
-					observation=service.rechercheObservationVerification(E.get(i).getNumero());
-					out.println(" <tr><td > " + E.get(i).getNumero()+
-							"</td> <td>" + E.get(i).getEmplacement()+
-							"</td> <td >" + E.get(i).getCommande()+
-							"</td> <td >" + E.get(i).getOuvrant()+
-							"</td> <td >" + E.get(i).getQuantite()+
-							"</td> <td >" + E.get(i).getCommandes()+
-							"</td> <td >" + E.get(i).getOuvrants()+
-							"</td> <td >" + E.get(i).getCartouches()+
-
-						"</td> <td> <input type=\"text\" name="+i+" value="+observation+
-						"></td><td><INPUT id=\"oui\" type= \"radio\" name="+(i+100)+" value=\"oui\"><label for=\"oui\">OUI</label>&nbsp;&nbsp;&nbsp;<INPUT id=\"non\" type= \"radio\" name="+(i+100)+" value=\"non\"><label for=\"non\">NON</label></td></tr>"
+	    
+		for(i=0;i<D.size();i++){
+					observation=service.rechercheObservationVerification(D.get(i).getNumero());
+					out.println(" <tr><td > " + D.get(i).getNumero()+
+							"</td> <td>" + D.get(i).getEmplacement()+
+							"</td> <td >" + D.get(i).getOuvrants().size()+
+							"</td> <td >" + D.get(i).getCartouches()+
+							"</td><td> <form action=\"verificationdesenfumagevalidee.jsp\" method=\"GET\" ><input type=\"hidden\" id=\"iddesenfumage\" name=\"numdesenfumage\" value="
+							+ D.get(i).getNumero()
+							+ "> <input type=\"submit\" name=\" Effectuer une vérification \" value=\" Effectuer une vérification \" /></form></td></tr>"
+							
 						);
-					 
 		}
-		conclusion=service.rechercheConclusionVerificationDesenfumageNaturel(num);
 		out.println("</tbody></table><br><br>"); 
-		out.println("<center><table><tr><td>Conclusion</td> <td></td> <td><textarea name=\"Conclusion\" rows=\"5\" cols=\"47\" required>"+conclusion+"</textarea></td></tr></table>");
-		out.println("<br><input type=\"submit\" value=\"Valider\"></center></form>");
-		session.setAttribute("organes",E);
+		session.setAttribute("organes",D);
 	%>
 	</div>
 	<%
